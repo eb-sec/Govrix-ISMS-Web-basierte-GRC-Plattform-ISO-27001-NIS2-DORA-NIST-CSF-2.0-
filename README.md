@@ -11,7 +11,8 @@ Eine webbasierte Plattform zur Verwaltung von Informationssicherheit nach ISO 27
 - **DORA** — eigene Seite für Finanzunternehmen, ebenfalls mit Live-Scoring
 - **NIST CSF 2.0** — 54 Subcategories trackbar
 - **Kanban-Board** — Maßnahmen per Drag & Drop durch die Spalten Offen / In Arbeit / Review / Erledigt
-- **Risikomanagement** — Risiken erfassen und bewerten
+- **Risikomanagement** — Risiken erfassen, bewerten und per KI analysieren lassen
+- **KI-gestützte Risikoanalyse** — Ollama läuft lokal und bewertet Risiken, schlägt Maßnahmen vor und ordnet sie ISO-Controls zu, ohne dass Daten das Netzwerk verlassen
 - **Asset-Management** — IT-Assets inventarisieren
 - **Login** — JWT-Authentifizierung, kein öffentlicher Zugang
 
@@ -23,12 +24,13 @@ Eine webbasierte Plattform zur Verwaltung von Informationssicherheit nach ISO 27
 - **Datenbank:** PostgreSQL
 - **Frontend:** HTML, CSS, JavaScript — kein Framework
 - **Infrastruktur:** Docker, Docker Compose, Nginx
+- **KI:** Ollama (lokal, kein Cloud-Dienst)
 
 ---
 
 ## Setup
 
-Docker muss installiert sein.
+Docker und Ollama müssen installiert sein.
 
 ```bash
 git clone https://github.com/eb-sec/Govrix-ISMS-Web-basierte-GRC-Plattform-ISO-27001-NIS2-DORA-NIST-CSF-2.0-.git
@@ -45,6 +47,14 @@ Danach ist die App unter `http://localhost:8080` erreichbar.
 
 Login: `admin@govrix.io` / `Admin1234!`
 
+### Ollama einrichten (für KI-Risikoanalyse)
+
+```bash
+ollama pull llama3
+```
+
+Ollama muss lokal laufen damit die Risikoanalyse funktioniert. Die KI-Anfragen bleiben vollständig lokal — es werden keine Daten an externe Server gesendet.
+
 ---
 
 ## Projektstruktur
@@ -56,6 +66,7 @@ Login: `admin@govrix.io` / `Admin1234!`
 │       ├── controls/
 │       ├── actions/
 │       ├── risks/
+│       ├── ai/              # Ollama Risikoanalyse
 │       └── audit/
 ├── frontend/
 │   ├── isms-login.html
