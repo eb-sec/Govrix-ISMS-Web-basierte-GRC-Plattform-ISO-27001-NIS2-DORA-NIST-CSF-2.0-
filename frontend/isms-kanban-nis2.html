@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Govrix ISMS — NIS2 / DORA Kanban</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f0f2f5;--bg2:#ffffff;--bg3:#f8f9fb;--bg4:#eef0f4;--bg5:#e8eaef;
+  --border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.13);
+  --text:#1a202c;--text2:#4a5568;--text3:#a0aec0;
+  --navy:#162040;--navy2:#0e1628;
+  --accent: #00a878;--accent2:#1847B1;--accent3:#e17055;--accent4:#6c5ce7;
+  --red:#e53e3e;--yellow:#d69e2e;--green:#38a169;--blue:#3182ce;
+  --shadow:0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.05);
+  --shadow2:0 2px 8px rgba(0,0,0,0.12);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans', sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;}
+
+/* ── SIDEBAR ──────────────── */
+.sidebar{
+  width:232px;min-height:100vh;background:var(--navy);
+  display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.sb-foot{padding:14px 20px;border-top:1px solid rgba(255,255,255,0.07);}
+.user-p{display:flex;align-items:center;gap:9px;padding:6px 0;cursor:pointer;}
+.av{width:26px;height:26px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;font-family:'DM Mono', monospace;flex-shrink:0;}
+.ur{font-size:12px;font-weight:600;color:rgba(255,255,255,0.85);}
+.by{font-size:9px;color:rgba(255,255,255,0.28);font-family:'DM Mono', monospace;margin-top:1px;}
+
+
+/* ── MAIN ─────────────────── */
+.main{margin-left:232px;flex:1;display:flex;flex-direction:column;}
+.topbar{
+  height:52px;background:var(--bg2);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;position:sticky;top:0;z-index:50;
+}
+.tbr{display:flex;align-items:center;gap:9px;}
+.page-title{font-family:'DM Sans', sans-serif;font-size:17px;font-weight:600;color:var(--text);letter-spacing:-0.01em;}
+.ps{font-size:11px;color:var(--text3);margin-top:2px}
+.pt{font-family:'DM Sans', sans-serif;font-size:17px;font-weight:600;color:var(--text)}
+
+.btn{
+  display:flex;align-items:center;gap:5px;padding:6px 13px;font-size:12px;font-weight:600;
+  cursor:pointer;border:1px solid var(--border2);transition:all 0.12s;
+  font-family:'DM Sans', sans-serif;background:var(--bg2);color:var(--text2);border-radius:2px;
+}
+.btn:hover{background:var(--bg);color:var(--text);}
+.btn-p,.btn-blue,.btn-purple{background:var(--navy);color:#fff;border-color:var(--text);border-radius:2px;}
+.btn-p:hover,.btn-blue:hover,.btn-purple:hover{background:var(--ink2);}
+.btn-g{background:var(--green);color:#fff;border-color:var(--green);border-radius:2px;}
+.btn-g:hover{opacity:0.85;}
+
+.content{padding:0;flex:1;display:flex;flex-direction:column;}
+
+/* Tabs */
+.tab-bar{
+  display:flex;border-bottom:1px solid var(--border);
+  background:var(--bg2);padding:0 28px;gap:0;
+}
+.tab{
+  padding:14px 18px;font-size:10px;font-family:'DM Mono', monospace;
+  color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;
+  letter-spacing:0.04em;transition:all 0.12s;
+}
+.tab:hover{color:var(--text);}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab-dot{display:inline-block;width:5px;height:5px;border-radius:50%;margin-right:5px;vertical-align:middle;}
+
+/* Stats row */
+.kanban-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1px;background:var(--border);border-bottom:1px solid var(--border);
+}
+.kstat{background:var(--bg2);padding:16px 22px;cursor:default;}
+.kstat-n{font-family:'DM Sans', sans-serif;font-size:28px;font-weight:700;letter-spacing:-0.02em;}
+.kstat-l{font-size:9px;color:var(--text3);font-family:'DM Mono', monospace;margin-top:4px;letter-spacing:0.03em;}
+.open{color:var(--blue);}
+.soon{color:var(--accent);}
+.overdue{color:var(--red);}
+.ok{color:var(--green);}
+
+/* Kanban board */
+.kanban-board{display:flex;flex:1;gap:1px;padding:20px 24px;background:var(--bg);overflow-x:auto;}
+.kanban-col{
+  flex:1;min-width:260px;background:var(--bg2);
+  border:1px solid var(--border);display:flex;flex-direction:column;
+}
+.kanban-header{
+  padding:12px 16px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;
+}
+.col-dot{width:6px;height:6px;flex-shrink:0;}
+.col-title{font-family:'DM Sans', sans-serif;font-size:13px;font-weight:600;color:var(--text);}
+.col-count{margin-left:auto;font-size:9px;font-family:'DM Mono', monospace;color:var(--text3);}
+.col-head{padding:8px 12px;background:var(--bg);border-bottom:1px solid var(--border);}
+.col-body{padding:10px;flex:1;display:flex;flex-direction:column;gap:8px;overflow-y:auto;}
+
+/* Kanban cards */
+.kcard{
+  background:var(--bg);border:1px solid var(--border);
+  padding:12px 14px;cursor:grab;transition:all 0.12s;
+  border-radius:8px;
+}
+.kcard:hover{border-color:var(--accent);background:var(--bg2);box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.kcard.dragging{opacity:0.4;}
+.kcard-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:7px;}
+.kcard-prio{font-size:8px;font-family:'DM Mono', monospace;padding:2px 6px;font-weight:600;letter-spacing:0.05em;border-radius:1px;}
+.kcard-menu{font-size:14px;color:var(--text3);cursor:pointer;line-height:1;}
+.kcard-title{font-size:12px;font-weight:500;color:var(--text);line-height:1.4;margin-bottom:8px;}
+.kcard-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.kchip{font-size:8px;font-family:'DM Mono', monospace;padding:2px 6px;font-weight:500;letter-spacing:0.03em;border-radius:1px;}
+.kchip-nis2{background:#e8f4fd;color:#1a5c9e;}
+.kchip-dora{background:#f3e8ff;color:#5e35b1;}
+.kchip-iso{background:#fff8ed;color:var(--accent);}
+.kcard-foot{display:flex;align-items:center;justify-content:space-between;margin-top:9px;padding-top:8px;border-top:1px solid var(--border);}
+.kcard-owner{font-size:9px;color:var(--text3);font-family:'DM Mono', monospace;}
+.kcard-due{font-size:9px;font-family:'DM Mono', monospace;font-weight:500;}
+.kcard-progress{margin-top:8px;}
+.mini-prog{height:2px;background:var(--bg4);border-radius:0;overflow:hidden;margin-top:4px;}
+.mini-fill{height:100%;transition:width 0.4s;}
+.prog-label{font-size:8px;color:var(--text3);font-family:'DM Mono', monospace;}
+.add-card-btn{
+  margin:8px;padding:8px;text-align:center;
+  font-size:10px;color:var(--text3);cursor:pointer;font-family:'DM Mono', monospace;
+  border:1px dashed var(--border2);transition:all 0.12s;letter-spacing:0.04em;
+}
+.add-card-btn:hover{border-color:var(--accent);color:var(--accent);}
+.drag-over{background:var(--bg3) !important;border-color:var(--accent) !important;}
+
+/* Framework cards */
+.framework-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);padding:24px;gap:20px;}
+.fw-card{background:var(--bg2);border:1px solid var(--border);overflow:hidden;}
+.fw-head{padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;}
+.fw-name{font-family:'DM Sans', sans-serif;font-size:16px;font-weight:600;color:var(--text);}
+.fw-sub{font-size:9px;color:var(--text3);font-family:'DM Mono', monospace;margin-top:3px;letter-spacing:0.04em;}
+.fw-badge{font-size:8px;padding:3px 8px;font-family:'DM Mono', monospace;font-weight:600;border-radius:1px;text-transform:uppercase;letter-spacing:0.05em;}
+.fw-body{padding:18px 20px;}
+.fw-score-row{display:flex;align-items:baseline;gap:12px;margin-bottom:16px;}
+.fw-score-big{font-family:'DM Sans', sans-serif;font-size:44px;font-weight:700;line-height:1;letter-spacing:-0.02em;}
+.fw-score-label{font-size:9px;font-family:'DM Mono', monospace;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;}
+.fw-score-meta{font-size:10px;color:var(--text2);}
+.fw-prog{height:3px;background:var(--bg3);overflow:hidden;margin-bottom:16px;}
+.fw-prog-fill{height:100%;transition:width 1s;}
+
+/* Req rows */
+.req-list{display:flex;flex-direction:column;}
+.req-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
+.req-row:last-child{border-bottom:none;}
+.req-status{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.req-info{flex:1;}
+.req-title{font-size:11px;font-weight:500;color:var(--text);}
+.req-art{font-size:9px;font-family:'DM Mono', monospace;color:var(--text3);}
+.req-pct{font-family:'DM Sans', sans-serif;font-size:14px;font-weight:600;}
+
+/* Article section */
+.article-section{padding:24px 28px;}
+.art-head{margin-bottom:18px;}
+.art-title{font-family:'DM Sans', sans-serif;font-size:18px;font-weight:600;color:var(--text);margin-bottom:6px;}
+.art-ref{font-size:9px;font-family:'DM Mono', monospace;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;}
+.art-table{width:100%;border-collapse:collapse;border:1px solid var(--border);}
+.art-table th{padding:9px 14px;background:var(--bg);font-size:8px;font-family:'DM Mono', monospace;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left;font-weight:500;}
+.art-table td{padding:10px 14px;font-size:11px;border-bottom:1px solid var(--border);color:var(--text2);}
+.art-table tr:hover td{background:var(--bg);}
+.pct-cell{font-family:'DM Sans', sans-serif;font-size:14px;font-weight:600;}
+.prog-bar{height:2px;background:var(--bg3);overflow:hidden;margin-top:4px;}
+.prog-fill{height:100%;}
+.fg{font-size:9px;font-family:'DM Mono', monospace;color:var(--text3);}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.15s;}
+.modal-bg.open{opacity:1;pointer-events:auto;}
+.modal{background:var(--bg2);border:1px solid var(--border);width:480px;max-height:80vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.15);}
+.modal-head{padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-family:'DM Sans', sans-serif;font-size:15px;font-weight:600;color:var(--text);}
+.modal-close{font-size:18px;cursor:pointer;color:var(--text3);line-height:1;}
+.modal-body{padding:18px 20px;display:flex;flex-direction:column;gap:14px;}
+.modal-foot{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;}
+
+.notif{position:fixed;bottom:20px;right:20px;background:var(--bg2);border:1px solid var(--border);padding:12px 16px;font-size:12px;box-shadow:var(--shadow);opacity:0;transform:translateY(8px);transition:all 0.2s;pointer-events:none;border-left:3px solid var(--green);}
+.notif.show{opacity:1;transform:translateY(0);}
+.tag-sm{display:inline-block;padding:2px 7px;font-size:8px;font-family:'DM Mono', monospace;border-radius:1px;font-weight:500;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.content>*{animation:fadeUp 0.35s ease both;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--bg4);}
+.logo {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.logo-lockup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-icon-box {
+  width: 30px; height: 30px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #fff;
+  letter-spacing: -0.5px;
+}
+.logo-name {
+  font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.01em; line-height: 1.2;
+}
+.logo-sub, .logo-ver, .logo-tag {
+  font-size: 9px; color: rgba(255,255,255,0.32);
+  font-family: 'DM Mono', monospace; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-top: 2px;
+}
+
+
+
+
+
+/* ── Page Transitions ─────────────────────────────────── */
+body { animation: pageFadeIn 0.2s ease both; }
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-leaving {
+  animation: pageFadeOut 0.15s ease forwards;
+  pointer-events: none;
+}
+@keyframes pageFadeOut {
+  to { opacity: 0; transform: translateY(-4px); }
+}
+
+/* ── Sidebar Navigation (unified, no-jump) ── */
+.nav { padding: 14px 0; flex: 1; overflow-y: auto; }
+
+.nav-section {
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  color: rgba(255,255,255,0.28);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 20px 5px;
+  font-weight: 500;
+}
+
+.nav-item {
+  text-decoration: none !important;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 18px 9px 18px;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.58);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin: 1px 8px;
+  border-radius: 7px;
+  border-left: 2px solid transparent;
+}
+.nav-item:hover {
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.9);
+}
+.nav-item.active {
+  background: rgba(255,255,255,0.12);
+  color: #fff !important;
+  border-left: 2px solid rgba(255,255,255,0.5);
+}
+.nav-item.active .icon { opacity: 1; }
+.icon { width: 14px; height: 14px; opacity: 0.55; flex-shrink: 0; }
+.badge {
+  margin-left: auto;
+  background: #e53e3e;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-family: 'DM Mono', monospace;
+}
+
+
+/* GX-NAV-FIX */
+.sidebar{width:232px;min-height:100vh;background:var(--navy);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;box-shadow:2px 0 12px rgba(0,0,0,.15)}
+.sidebar-logo{padding:20px 18px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo-mark{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.logo-text{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.3px}
+.logo-sub{font-size:9px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace;letter-spacing:1px}
+.sidebar-nav{padding:12px 10px;flex:1;overflow-y:auto}
+.nav-section{font-size:9px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:1.5px;text-transform:uppercase;padding:10px 8px 4px}
+.nav-item{display:flex !important;flex-direction:row !important;align-items:center !important;gap:9px !important;padding:8px 10px !important;border-radius:7px !important;cursor:pointer !important;transition:background .15s !important;text-decoration:none !important;margin-bottom:1px !important;border-left:none !important;font-size:unset !important;font-weight:unset !important;color:unset !important}
+.nav-item:hover{background:rgba(255,255,255,.08) !important;color:unset !important}
+.nav-item.active{background:rgba(0,168,120,.18) !important;border-left:none !important;color:unset !important}
+.nav-icon{width:16px !important;height:16px !important;opacity:.55 !important;flex-shrink:0 !important;display:block !important}
+.nav-item.active .nav-icon{opacity:1 !important}
+.nav-label{font-size:12px !important;font-weight:500 !important;color:rgba(255,255,255,.65) !important;display:block !important}
+.nav-item.active .nav-label{color:#fff !important;font-weight:600 !important}
+.sidebar-footer{padding:14px;border-top:1px solid rgba(255,255,255,.08)}
+.user-card{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:7px;background:rgba(255,255,255,.07);cursor:pointer;transition:background .15s}
+.user-card:hover{background:rgba(255,255,255,.12)}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#6c5ce7,#1847B1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.user-name{font-size:12px;font-weight:600;color:#fff}
+.user-role{font-size:10px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace}
+</style>
+</head>
+
+</head>
+<body>
+
+<div class="layout" style="display:flex;min-height:100vh;width:100%">
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">GX</div>
+    <div><div class="logo-text">Govrix</div><div class="logo-sub">ISMS PLATFORM</div></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Uebersicht</div>
+    <a href="isms-dashboard.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/></svg>
+      <span class="nav-label">Dashboard</span>
+    </a>
+    <div class="nav-section">Frameworks</div>
+    <a href="isms-iso27001.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M8 1L2 4v4c0 3.3 2.5 6.4 6 7 3.5-.6 6-3.7 6-7V4L8 1z" fill="rgba(255,255,255,.8)"/></svg>
+      <span class="nav-label">ISO 27001</span>
+    </a>
+    <a href="isms-nist.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/><path d="M5 8h6M8 5v6" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/></svg>
+      <span class="nav-label">NIST CSF 2.0</span>
+    </a>
+    <a href="isms-kanban-nis2.html" class="nav-item active">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="3" width="4" height="10" rx="1" fill="rgba(255,255,255,.6)"/><rect x="6" y="3" width="4" height="7" rx="1" fill="rgba(255,255,255,.6)"/><rect x="11" y="3" width="4" height="5" rx="1" fill="rgba(255,255,255,.6)"/></svg>
+      <span class="nav-label">NIS2 / DORA</span>
+    </a>
+    <div class="nav-section">Management</div>
+    <a href="isms-risk-analyzer.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M8 2L2 13h12L8 2z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M8 7v3M8 11.5v.5" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span class="nav-label">Risikoanalyse</span>
+    </a>
+    <a href="isms-assets.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="3" width="14" height="9" rx="1.5" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M5 12v2M11 12v2M3 14h10" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span class="nav-label">Assets</span>
+    </a>
+    <a href="isms-audit.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M4 2h8a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M5 6h6M5 9h4" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span class="nav-label">Audit Log</span>
+    </a>
+    <a href="isms-reports.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M10 2v3h3" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/></svg>
+      <span class="nav-label">Reports</span>
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="avatar" id="gx-avatar">GX</div>
+      <div>
+        <div class="user-name" id="gx-name">Benutzer</div>
+        <div class="user-role" id="gx-role">-</div>
+      </div>
+      <button onclick="logout()" title="Abmelden" style="background:transparent;border:none;cursor:pointer;padding:5px;border-radius:5px;margin-left:auto;opacity:.6" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.6'">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 14H3a1 1 0 01-1-1V3a1 1 0 011-1h3M11 11l3-3-3-3M14 8H6" stroke="rgba(255,255,255,.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</aside>
+<script>
+(function() {
+  var t = localStorage.getItem('gx_token');
+  if (!t) { window.location.replace('isms-login.html'); return; }
+  var u = {};
+  try { u = JSON.parse(localStorage.getItem('gx_user') || '{}'); } catch(e) {}
+  var c = {admin:'#e53e3e', ciso:'#0f9d7e', analyst:'#60a5fa'}[u.role] || '#60a5fa';
+  var av = document.getElementById('gx-avatar');
+  var nm = document.getElementById('gx-name');
+  var rl = document.getElementById('gx-role');
+  if (av && u.name) {
+    av.textContent = u.name.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
+    av.style.background = 'linear-gradient(135deg,'+c+',#1847B1)';
+  }
+  if (nm && u.name) nm.textContent = u.name;
+  if (rl && u.role) { rl.textContent = u.role; rl.style.color = c; }
+})();
+function logout() {
+  localStorage.removeItem('gx_token');
+  localStorage.removeItem('gx_user');
+  window.location.href = 'isms-login.html';
+}
+function getAuthHeaders() {
+  var t = localStorage.getItem('gx_token');
+  return t ? {'Authorization':'Bearer '+t,'Content-Type':'application/json'} : {'Content-Type':'application/json'};
+}
+
+// ===================== NIS2/DORA COMPLIANCE LOADER =====================
+
+// NIS2 Art. 21 → ISO control mappings
+const NIS2_MAP = [
+  { art:'Art. 21(2)(a)', title:'Risikoanalyse & Sicherheitspolitiken für IS',      iso:['A.5.1','A.6.1.2'], nist:'GV.RM', fine:'Hoch >10M€' },
+  { art:'Art. 21(2)(b)', title:'Behandlung von Sicherheitsvorfällen',              iso:['A.5.24','A.5.26'], nist:'RS.MA', fine:'Mittel' },
+  { art:'Art. 21(2)(c)', title:'Business Continuity & Krisenmanagement',           iso:['A.5.29','A.5.30'], nist:'RC.RP', fine:'Hoch >10M€' },
+  { art:'Art. 21(2)(d)', title:'Sicherheit der Lieferkette',                       iso:['A.5.21','A.5.22'], nist:'ID.RA', fine:'Mittel' },
+  { art:'Art. 21(2)(e)', title:'Sicherheit bei Erwerb, Entwicklung, Wartung',      iso:['A.8.25','A.8.29'], nist:'PR.DS', fine:'Gering' },
+  { art:'Art. 21(2)(f)', title:'Bewertung der Wirksamkeit von Risikomaßnahmen',    iso:['A.5.35','A.5.36'], nist:'GV.OC', fine:'Gering' },
+  { art:'Art. 21(2)(g)', title:'Grundlegende Cyberhygiene & Schulungen',           iso:['A.6.3'],           nist:'PR.AT', fine:'Gering' },
+  { art:'Art. 21(2)(h)', title:'Kryptographie und Verschlüsselung',                iso:['A.8.24'],          nist:'PR.DS', fine:'Gering' },
+  { art:'Art. 21(2)(i)', title:'Personalsicherheit, Zugriffskontrolle, Asset-Mgmt',iso:['A.6.1','A.5.15'],  nist:'PR.AA', fine:'Gering' },
+  { art:'Art. 21(2)(j)', title:'Multi-Faktor-Authentifizierung (MFA)',             iso:['A.8.5'],           nist:'PR.AA-03', fine:'Hoch >10M€' },
+  { art:'Art. 23(4)(a)', title:'Meldepflicht – Frühwarnung (24h)',                 iso:['A.5.24'],          nist:'RS.MA-01', fine:'Hoch >10M€' },
+  { art:'Art. 23(4)(b)', title:'Meldepflicht – Vorfallsmeldung (72h)',             iso:['A.5.26'],          nist:'RS.MA-02', fine:'Hoch >10M€' },
+  { art:'Art. 23(4)(c)', title:'Meldepflicht – Abschlussbericht (1 Monat)',        iso:['A.5.27'],          nist:'RS.MA-03', fine:'Mittel' },
+];
+
+// DORA Article → ISO control mappings
+const DORA_MAP = [
+  { art:'Kap. II Art. 5',  title:'Governance-Regelungen (IKT-Risikomanagement)',          iso:['A.5.1','A.5.2'],   nist:'GV.RM',    prio:'Hoch',     due:'31.03.26' },
+  { art:'Kap. II Art. 9',  title:'Schutz und Prävention (IKT-Systeme)',                   iso:['A.8.7','A.8.20'],  nist:'PR.DS',    prio:'Niedrig',  due:'30.06.26' },
+  { art:'Kap. III Art. 17',title:'IKT-Vorfallsmanagementprozess',                         iso:['A.5.24','A.5.26'], nist:'RS.MA',    prio:'Kritisch', due:'28.02.26' },
+  { art:'Kap. III Art. 19',title:'Klassifizierung schwerwiegender IKT-Vorfälle',          iso:['A.5.25','A.5.28'], nist:'DE.CM',    prio:'Kritisch', due:'28.02.26' },
+  { art:'Kap. IV Art. 24', title:'Programm zur Prüfung digitaler Resilienz',              iso:['A.8.29'],          nist:'ID.RA',    prio:'Kritisch', due:'01.03.26' },
+  { art:'Kap. IV Art. 26', title:'Erweiterte Resilienztests (TLPT)',                      iso:['A.8.8'],           nist:'DE.CM-09', prio:'Kritisch', due:'15.01.26' },
+  { art:'Kap. V Art. 28',  title:'IKT-Drittpartei-Risiken Strategie',                    iso:['A.5.19','A.5.21'], nist:'GV.SC',    prio:'Hoch',     due:'30.04.26' },
+  { art:'Kap. V Art. 30',  title:'Vertragliche Mindestbestimmungen (IKT-Verträge)',       iso:['A.5.20','A.5.22'], nist:'ID.RA-10', prio:'Hoch',     due:'30.04.26' },
+];
+
+function pctColor(p) {
+  if (p >= 75) return 'var(--green)';
+  if (p >= 40) return 'var(--yellow)';
+  return 'var(--red)';
+}
+
+function computePct(isoRefs, controls) {
+  const relevant = controls.filter(c => isoRefs.includes(c.control_ref));
+  if (!relevant.length) return 0;
+  const sum = relevant.reduce((acc, c) => acc + (parseInt(c.completion_pct) || 0), 0);
+  return Math.round(sum / relevant.length);
+}
+
+function renderNIS2(controls) {
+  const tbody = document.getElementById('nis2-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+
+  let totalPct = 0;
+  let criticalGaps = 0;
+
+  NIS2_MAP.forEach(req => {
+    const pct = computePct(req.iso, controls);
+    totalPct += pct;
+    const col = pctColor(pct);
+    const status = pct >= 75 ? 'Konform' : pct >= 40 ? 'In Arbeit' : 'Offen';
+    const statusColor = pct >= 75 ? 'var(--green)' : pct >= 40 ? 'var(--yellow)' : 'var(--red)';
+    if (pct < 40) criticalGaps++;
+
+    const isoChips = req.iso.map(r => `<span class="tag-sm" style="background:rgba(0,212,170,.1);color:var(--accent)">${r}</span>`).join('');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="art-ref" style="color:var(--accent4)">${req.art}</span></td>
+      <td>${req.title}</td>
+      <td>${isoChips}</td>
+      <td><span class="tag-sm" style="background:rgba(168,85,247,.1);color:var(--accent4)">${req.nist}</span></td>
+      <td><span style="display:inline-block;background:${statusColor};width:7px;height:7px;border-radius:50%;margin-right:5px;"></span>${status}</td>
+      <td><div class="pct-cell"><div class="mini-prog"><div class="mini-fill" style="width:${pct}%;background:${col}"></div></div><span style="font-family:'DM Mono',monospace;font-size:10px;color:${col}">${pct}%</span></div></td>
+      <td style="font-size:10px;color:var(--text3)">${req.fine}</td>`;
+    tbody.appendChild(tr);
+  });
+
+  const overall = Math.round(totalPct / NIS2_MAP.length);
+  const el = document.getElementById('nis2-pct-display');
+  const bar = document.getElementById('nis2-pct-bar');
+  const gaps = document.getElementById('nis2-gaps-text');
+  if (el) { el.textContent = overall + '%'; el.style.color = pctColor(overall); }
+  if (bar) bar.style.width = overall + '%';
+  if (gaps) gaps.textContent = criticalGaps > 0 ? criticalGaps + ' kritische Lücken' : 'Keine kritischen Lücken';
+
+  // Sidebar req-rows
+  const reqRows = document.getElementById('nis2-req-rows');
+  if (reqRows) {
+    const groups = [
+      { title:'Governance & Verantwortlichkeiten', arts:['Art. 21(2)(a)','Art. 21(2)(f)'] },
+      { title:'Risikomanagementmaßnahmen',          arts:['Art. 21(2)(b)','Art. 21(2)(d)','Art. 21(2)(e)'] },
+      { title:'Meldepflichten (24h/72h)',            arts:['Art. 23(4)(a)','Art. 23(4)(b)','Art. 23(4)(c)'] },
+      { title:'Business Continuity',                arts:['Art. 21(2)(c)'] },
+      { title:'Authentifizierung & MFA',            arts:['Art. 21(2)(j)','Art. 21(2)(i)'] },
+    ];
+    reqRows.innerHTML = groups.map(g => {
+      const relevant = NIS2_MAP.filter(r => g.arts.includes(r.art));
+      const pct = relevant.length ? Math.round(relevant.reduce((a,r) => a + computePct(r.iso, controls), 0) / relevant.length) : 0;
+      return `<div class="req-row"><div class="req-info"><div class="req-art">${g.arts[0].replace('(2)','').replace('(4)','')}</div><div class="req-title">${g.title}</div></div><div class="req-pct" style="color:${pctColor(pct)}">${pct}%</div></div>`;
+    }).join('');
+  }
+}
+
+function renderDORA(controls) {
+  const tbody = document.getElementById('dora-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+
+  let totalPct = 0;
+  let criticalGaps = 0;
+
+  DORA_MAP.forEach(req => {
+    const pct = computePct(req.iso, controls);
+    totalPct += pct;
+    const col = pctColor(pct);
+    if (pct < 40) criticalGaps++;
+
+    const isoChips = req.iso.map(r => `<span class="tag-sm" style="background:rgba(0,212,170,.1);color:var(--accent)">${r}</span>`).join('');
+    const nistChip = `<span class="tag-sm" style="background:rgba(0,153,255,.1);color:var(--accent2)">${req.nist}</span>`;
+    const prioBg = req.prio==='Kritisch'?'rgba(239,68,68,.12)':req.prio==='Hoch'?'rgba(255,107,53,.12)':'rgba(245,158,11,.12)';
+    const prioCol = req.prio==='Kritisch'?'var(--red)':req.prio==='Hoch'?'var(--accent3)':'var(--yellow)';
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="art-ref" style="color:var(--accent2)">${req.art}</span></td>
+      <td>${req.title}</td>
+      <td>${isoChips} ${nistChip}</td>
+      <td><div class="pct-cell"><div class="mini-prog"><div class="mini-fill" style="width:${pct}%;background:${col}"></div></div><span style="font-family:'DM Mono',monospace;font-size:10px;color:${col}">${pct}%</span></div></td>
+      <td><span style="background:${prioBg};color:${prioCol};padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600">${req.prio}</span></td>
+      <td style="font-size:10px;color:var(--accent3)">${req.due}</td>`;
+    tbody.appendChild(tr);
+  });
+
+  const overall = Math.round(totalPct / DORA_MAP.length);
+  const el = document.getElementById('dora-pct-display');
+  const bar = document.getElementById('dora-pct-bar');
+  const gaps = document.getElementById('dora-gaps-text');
+  if (el) { el.textContent = overall + '%'; el.style.color = pctColor(overall); }
+  if (bar) bar.style.width = overall + '%';
+  if (gaps) gaps.textContent = criticalGaps + ' kritische Lücken';
+
+  // DORA sidebar req-rows
+  const reqRows = document.getElementById('dora-req-rows');
+  if (reqRows) {
+    const groups = [
+      { title:'IKT-Risikomanagement-Rahmen',        arts:['Kap. II Art. 5','Kap. II Art. 9'] },
+      { title:'IKT-Vorfallsmanagement & Meldung',   arts:['Kap. III Art. 17','Kap. III Art. 19'] },
+      { title:'Resilienztests (TLPT)',               arts:['Kap. IV Art. 24','Kap. IV Art. 26'] },
+      { title:'IKT-Drittpartei-Risikomanagement',   arts:['Kap. V Art. 28','Kap. V Art. 30'] },
+    ];
+    reqRows.innerHTML = groups.map(g => {
+      const relevant = DORA_MAP.filter(r => g.arts.includes(r.art));
+      const pct = relevant.length ? Math.round(relevant.reduce((a,r) => a + computePct(r.iso, controls), 0) / relevant.length) : 0;
+      return `<div class="req-row"><div class="req-info"><div class="req-art">${g.arts[0].split(' ').slice(-2).join(' ')}</div><div class="req-title">${g.title}</div></div><div class="req-pct" style="color:${pctColor(pct)}">${pct}%</div></div>`;
+    }).join('');
+  }
+}
+
+async function loadCompliance() {
+  try {
+    const resp = await fetch(`${API}/controls/iso`, {headers: getAuthHeaders()});
+    if (resp.status === 401) { window.location.replace('isms-login.html'); return; }
+    const controls = await resp.json();
+    renderNIS2(controls);
+    renderDORA(controls);
+  } catch(err) {
+    console.warn('Compliance load failed:', err);
+    ['nis2-tbody','dora-tbody'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--red)">API nicht erreichbar</td></tr>`;
+    });
+  }
+}
+
+</script>
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="pt">Maßnahmen-Tracker &amp; Regulatorik</div>
+      <div class="ps">Kanban · NIS2 EU 2022/2555 · DORA EU 2022/2554 · Q1/2026</div>
+    </div>
+    <div class="tbr">
+      <button class="btn btn-purple" onclick="openModal()">+ Neue Maßnahme</button>
+      <button class="btn btn-blue" id="pdf-btn" onclick="generatePDF()">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 2h5l4 4v9H4V2z"/><path d="M9 2v4h4"/><path d="M6 9h4M6 12h2"/></svg>
+        SoA PDF Export
+      </button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Tabs -->
+    <div class="tab-bar">
+      <div class="tab active" id="tab-kanban" onclick="showTab('kanban')">
+        <div class="tab-dot" style="background:var(--accent)"></div>Maßnahmen-Kanban
+      </div>
+      <div class="tab" id="tab-nis2" onclick="showTab('nis2')">
+        <div class="tab-dot" style="background:var(--accent4)"></div>NIS2 Compliance
+      </div>
+      <div class="tab" id="tab-dora" onclick="showTab('dora')">
+        <div class="tab-dot" style="background:var(--accent2)"></div>DORA Compliance
+      </div>
+    </div>
+
+    <!-- =================== KANBAN TAB =================== -->
+    <div id="view-kanban">
+      <div class="kanban-header">
+        <div class="kanban-stats">
+          <div class="kstat"><div class="kstat-n" id="stat-critical" style="color:var(--red)">0</div><div class="kstat-l">Kritisch</div></div>
+          <div class="kstat"><div class="kstat-n" id="stat-open" style="color:var(--accent3)">0</div><div class="kstat-l">Offen</div></div>
+          <div class="kstat"><div class="kstat-n" id="stat-inprog" style="color:var(--yellow)">0</div><div class="kstat-l">In Arbeit</div></div>
+          <div class="kstat"><div class="kstat-n" id="stat-done" style="color:var(--green)">0</div><div class="kstat-l">Erledigt (30d)</div></div>
+          <div class="kstat"><div class="kstat-n" id="stat-overdue" style="color:var(--red)">0</div><div class="kstat-l">Überfällig</div></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <select style="font-size:11px;padding:6px 10px;border-radius:6px;width:auto;" onchange="filterCards(this.value)">
+            <option value="">Alle Frameworks</option>
+            <option value="iso">ISO 27001</option>
+            <option value="nist">NIST CSF</option>
+            <option value="nis2">NIS2</option>
+            <option value="dora">DORA</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="kanban-board" id="kanban-board">
+        <!-- Column: Offen -->
+        <div class="kanban-col" id="col-open">
+          <div class="col-head">
+            <div class="col-title"><div class="col-dot" style="background:var(--red)"></div>Offen</div>
+            <span class="col-count" id="cnt-open">5</span>
+          </div>
+          <div class="col-body" id="body-open"
+               ondragover="event.preventDefault();this.classList.add('drag-over')"
+               ondragleave="this.classList.remove('drag-over')"
+               ondrop="drop(event,'open')">
+          </div>
+        </div>
+        <!-- Column: In Arbeit -->
+        <div class="kanban-col" id="col-progress">
+          <div class="col-head">
+            <div class="col-title"><div class="col-dot" style="background:var(--yellow)"></div>In Arbeit</div>
+            <span class="col-count" id="cnt-progress">4</span>
+          </div>
+          <div class="col-body" id="body-progress"
+               ondragover="event.preventDefault();this.classList.add('drag-over')"
+               ondragleave="this.classList.remove('drag-over')"
+               ondrop="drop(event,'progress')">
+          </div>
+        </div>
+        <!-- Column: Review -->
+        <div class="kanban-col" id="col-review">
+          <div class="col-head">
+            <div class="col-title"><div class="col-dot" style="background:var(--accent2)"></div>Review</div>
+            <span class="col-count" id="cnt-review">2</span>
+          </div>
+          <div class="col-body" id="body-review"
+               ondragover="event.preventDefault();this.classList.add('drag-over')"
+               ondragleave="this.classList.remove('drag-over')"
+               ondrop="drop(event,'review')">
+          </div>
+        </div>
+        <!-- Column: Erledigt -->
+        <div class="kanban-col" id="col-done">
+          <div class="col-head">
+            <div class="col-title"><div class="col-dot" style="background:var(--green)"></div>Erledigt</div>
+            <span class="col-count" id="cnt-done">3</span>
+          </div>
+          <div class="col-body" id="body-done"
+               ondragover="event.preventDefault();this.classList.add('drag-over')"
+               ondragleave="this.classList.remove('drag-over')"
+               ondrop="drop(event,'done')">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== NIS2 TAB =================== -->
+    <div id="view-nis2" style="display:none">
+      <div class="framework-grid">
+        <div class="fw-card">
+          <div class="fw-head">
+            <div class="fw-badge" style="background:rgba(168,85,247,.12);color:var(--accent4);border:1px solid rgba(168,85,247,.25);">EU 2022/2555</div>
+            <div class="fw-name">NIS2-Richtlinie</div>
+            <div class="fw-sub">Network &amp; Information Security Directive 2 · Umsetzungsfrist: 17.10.2024</div>
+          </div>
+          <div class="fw-body">
+            <div id="nis2-fw-items"></div>
+            <div class="fw-score-row">
+              <div class="fw-score-big" id="nis2-pct-display" style="color:var(--yellow)">—%</div>
+              <div class="fw-score-meta">
+                <div class="fw-score-label">Gesamtkonformität</div>
+                <div class="fw-prog"><div class="fw-prog-fill" id="nis2-pct-bar" style="width:0%;background:linear-gradient(90deg,var(--accent4),var(--accent2))"></div></div>
+                <div style="font-size:10px;color:var(--text3);font-family:'DM Mono', monospace;margin-top:4px;"><span id="nis2-gaps-text">Wird berechnet...</span></div>
+              </div>
+            </div>
+            <div class="req-list">
+              <div class="req-row">
+                <div class="req-status" style="background:var(--green)"></div>
+                <div class="req-info"><div class="req-art">Art. 20</div><div class="req-title">Governance &amp; Verantwortlichkeiten</div></div>
+                <div class="req-pct" style="color:var(--green)">95%</div>
+              </div>
+              <div class="req-row">
+                <div class="req-status" style="background:var(--yellow)"></div>
+                <div class="req-info"><div class="req-art">Art. 21 (2)</div><div class="req-title">Risikomanagementmaßnahmen</div></div>
+                <div class="req-pct" style="color:var(--yellow)">74%</div>
+              </div>
+              <div class="req-row">
+                <div class="req-status" style="background:var(--red)"></div>
+                <div class="req-info"><div class="req-art">Art. 23</div><div class="req-title">Meldepflichten (24h/72h)</div></div>
+                <div class="req-pct" style="color:var(--red)">45%</div>
+              </div>
+              <div class="req-row">
+                <div class="req-status" style="background:var(--yellow)"></div>
+                <div class="req-info"><div class="req-art">Art. 21 (2)(d)</div><div class="req-title">Business Continuity</div></div>
+                <div class="req-pct" style="color:var(--yellow)">60%</div>
+              </div>
+              <div class="req-row">
+                <div class="req-status" style="background:var(--green)"></div>
+                <div class="req-info"><div class="req-art">Art. 21 (2)(j)</div><div class="req-title">Authentifizierung &amp; MFA</div></div>
+                <div class="req-pct" style="color:var(--green)">80%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fw-card">
+          <div class="fw-head">
+            <div class="fw-badge" style="background:rgba(0,153,255,.12);color:var(--accent2);border:1px solid rgba(0,153,255,.25);">EU 2022/2554</div>
+            <div class="fw-name">DORA</div>
+            <div class="fw-sub">Digital Operational Resilience Act · Anwendbar ab: 17.01.2025</div>
+          </div>
+          <div class="fw-body">
+            <div class="fw-score-row">
+              <div class="fw-score-big" id="dora-pct-display" style="color:var(--accent3)">—%</div>
+              <div class="fw-score-meta">
+                <div class="fw-score-label">Gesamtkonformität</div>
+                <div class="fw-prog"><div class="fw-prog-fill" id="dora-pct-bar" style="width:0%;background:linear-gradient(90deg,var(--accent2),var(--accent3))"></div></div>
+                <div style="font-size:10px;color:var(--text3);font-family:'DM Mono', monospace;margin-top:4px;">Fokus: IKT-Drittpartei-Risiken</div>
+              </div>
+            </div>
+            <div class="req-list">
+              <div class="req-row">
+                <div class="req-status" style="background:var(--yellow)"></div>
+                <div class="req-info"><div class="req-art">Art. 5-16</div><div class="req-title">IKT-Risikomanagement-Rahmen</div></div>
+                <div class="req-pct" style="color:var(--yellow)">68%</div>
+              </div>
+              <div class="req-row">
+                <div class="req-status" style="background:var(--red)"></div>
+                <div class="req-info"><div class="req-art">Art. 17-23</div><div class="req-title">IKT-Vorfallsmanagement &amp; Meldung</div></div>
+                <div class="req-pct" style="color:var(--red)">42%</div>
+              </div>
+              <div class="req-row">
+                <div class="req-status" style="background:var(--red)"></div>
+                <div class="req-info"><div class="req-art">Art. 24-27</div><div class="req-title">Resilienztests (TLPT)</div></div>
+                <div class="req-pct" style="color:var(--red)">30%</div>
+              </div>
+              <div class="req-row">
+                <div class="req-status" style="background:var(--yellow)"></div>
+                <div class="req-info"><div class="req-art">Art. 28-44</div><div class="req-title">IKT-Drittpartei-Risikomanagement</div></div>
+                <div class="req-pct" style="color:var(--yellow)">55%</div>
+              </div>
+              <div class="req-row">
+                <div class="req-status" style="background:var(--green)"></div>
+                <div class="req-info"><div class="req-art">Art. 45-49</div><div class="req-title">Informationsaustausch</div></div>
+                <div class="req-pct" style="color:var(--green)">85%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NIS2 Artikel-Tabelle -->
+      <div class="article-section">
+        <div class="art-head">
+          <span class="art-title">NIS2 — Alle Anforderungen (Art. 21) im Detail</span>
+          <button class="btn btn-blue" style="font-size:10px" onclick="showTab('dora')">Zu DORA →</button>
+        </div>
+        <table class="art-table">
+          <thead>
+            <tr>
+              <th>Artikel</th>
+              <th>Anforderung</th>
+              <th>ISO 27001 Mapping</th>
+              <th>NIST CSF 2.0</th>
+              <th>Status</th>
+              <th>Konformität</th>
+              <th>Bußgeld-Risiko</th>
+            </tr>
+          </thead>
+          <tbody id="nis2-tbody"><tr><td colspan="7" style="text-align:center;padding:20px;color:var(--text3)">Lade Daten...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- =================== DORA TAB =================== -->
+    <div id="view-dora" style="display:none">
+      <div style="background:rgba(0,153,255,.06);border:1px solid rgba(0,153,255,.2);border-radius:10px;padding:16px 20px;margin-bottom:20px;display:flex;gap:16px;align-items:center;">
+        <div style="font-size:28px">⚡</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:3px;">DORA gilt ab 17. Januar 2025 — Finanzsektor-Fokus</div>
+          <div style="font-size:11px;color:var(--text2);">Digital Operational Resilience Act (EU 2022/2554) richtet sich an Finanzunternehmen und deren IKT-Dienstleister. Bußgelder bis 1% des weltweiten Tagesumsatzes (krit. Dienstleister: bis 5M€).</div>
+        </div>
+      </div>
+
+      <div class="article-section">
+        <div class="art-head">
+          <span class="art-title">DORA — IKT-Risikomanagement &amp; Resilienztests</span>
+          <span style="font-size:10px;font-family:'DM Mono', monospace;color:var(--text3)">Gesamtkonformität: 58%</span>
+        </div>
+        <table class="art-table">
+          <thead>
+            <tr>
+              <th>Kapitel / Artikel</th>
+              <th>Anforderung</th>
+              <th>ISO 27001 / NIST Mapping</th>
+              <th>Konformität</th>
+              <th>Priorität</th>
+              <th>Frist</th>
+            </tr>
+          </thead>
+          <tbody id="dora-tbody"><tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text3)">Lade Daten...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Modal: Neue Maßnahme -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title">Neue Maßnahme erfassen</span>
+      <span class="modal-close" onclick="closeModal()">✕</span>
+    </div>
+    <div class="modal-body">
+      <div class="fg"><label>Titel</label><input type="text" id="m-title" placeholder="Maßnahmentitel"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="fg">
+          <label>Framework</label>
+          <select id="m-fw">
+            <option value="iso">ISO 27001</option>
+            <option value="nist">NIST CSF</option>
+            <option value="nis2">NIS2</option>
+            <option value="dora">DORA</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Priorität</label>
+          <select id="m-prio">
+            <option value="critical">Kritisch</option>
+            <option value="high">Hoch</option>
+            <option value="medium" selected>Mittel</option>
+            <option value="low">Niedrig</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Verantwortlicher</label>
+          <select id="m-owner">
+            <option value="DM">Dr. M. Fischer</option>
+            <option value="TM">T. Müller</option>
+            <option value="SW">S. Wolf</option>
+            <option value="KB">K. Braun</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Fällig am</label>
+          <input type="text" id="m-due" placeholder="z.B. 31.03.26">
+        </div>
+      </div>
+      <div class="fg"><label>Beschreibung</label><textarea id="m-desc" placeholder="Was ist zu tun?"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-g" onclick="closeModal()">Abbrechen</button>
+      <button class="btn btn-p" onclick="addCard()">Maßnahme erstellen</button>
+    </div>
+  </div>
+</div>
+
+<!-- Notification -->
+<div class="notif" id="notif"><span style="color:var(--accent)">✓</span><span id="notif-text"></span></div>
+
+<script>
+
+// ===================== DATA =====================
+const ownerColors = { DM:'#a855f7', TM:'#0099ff', SW:'#00d4aa', KB:'#f59e0b', MH:'#ff6b35' };
+const prioColors  = { critical:'#ef4444', high:'#ff6b35', medium:'#f59e0b', low:'#3b82f6' };
+
+let cards = [];
+
+let dragId = null;
+let nextId = 15;
+
+// ===================== RENDER =====================
+function renderBoard(filter) {
+  const cols = ['open','progress','review','done'];
+  cols.forEach(col => {
+    const body = document.getElementById('body-'+col);
+    const filtered = cards.filter(c => c.col === col && (!filter || c.fw.includes(filter)));
+    body.innerHTML = '';
+    filtered.forEach(card => body.appendChild(makeCard(card)));
+    const btn = document.createElement('div');
+    btn.className = 'add-card-btn';
+    btn.innerHTML = '+ Maßnahme hinzufügen';
+    btn.onclick = () => openModal(col);
+    body.appendChild(btn);
+    document.getElementById('cnt-'+col).textContent = filtered.length;
+  });
+  // Update stats
+  const crit = cards.filter(c=>c.col!=='done'&&c.prio==='critical').length;
+  const open = cards.filter(c=>c.col==='open').length;
+  const prog = cards.filter(c=>c.col==='progress').length;
+  const over = cards.filter(c=>c.col!=='done'&&c.dueClass==='overdue').length;
+}
+
+function makeCard(card) {
+  const div = document.createElement('div');
+  div.className = 'kcard';
+  div.draggable = true;
+  div.dataset.id = card.id;
+  div.ondragstart = e => { dragId = card.id; div.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; };
+  div.ondragend = () => div.classList.remove('dragging');
+
+  const fwChips = card.fw.map(f => {
+    const cls = f==='iso'?'kchip-iso':f==='nis2'?'kchip-nis2':f==='dora'?'kchip-dora':'';
+    const lbl = f==='iso'?'ISO 27001':f==='nist'?'NIST':f==='nis2'?'NIS2':'DORA';
+    return `<span class="kchip ${cls}">${lbl}</span>`;
+  }).join('');
+
+  const ownerInit = card.owner;
+  const ownerColor = ownerColors[ownerInit] || '#888';
+  const pctColor = card.progress===100?'var(--green)':card.progress>=50?'var(--yellow)':'var(--accent2)';
+
+  div.innerHTML = `
+    <div class="kcard-top">
+      <div class="kcard-prio" style="background:${prioColors[card.prio]}"></div>
+      <div class="kcard-title">${card.title}</div>
+    </div>
+    <div class="kcard-meta">
+      ${fwChips}
+      <span class="kchip">${card.iso}</span>
+    </div>
+    <div class="kcard-progress">
+      <div class="prog-label"><span style="color:var(--text3)">Fortschritt</span><span style="color:${pctColor}">${card.progress}%</span></div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${card.progress}%;background:${pctColor}"></div></div>
+    </div>
+    <div class="kcard-foot" style="margin-top:8px">
+      <span class="kcard-due ${card.dueClass}">📅 ${card.due}</span>
+      <div class="kcard-owner" style="background:${ownerColor}">${ownerInit}</div>
+    </div>`;
+  return div;
+}
+
+// ===================== DRAG & DROP =====================
+function drop(e, col) {
+  e.preventDefault();
+  document.querySelectorAll('.col-body').forEach(b => b.classList.remove('drag-over'));
+  if(dragId === null) return;
+  const card = cards.find(c => c.id === parseInt(dragId));
+  if(card) {
+    const prev = card.col;
+    card.col = col;
+    if(col === 'done') card.progress = 100;
+    renderBoard(currentFilter);
+    if(prev !== col) showNotif(`"${card.title.substring(0,30)}…" → ${colNames[col]}`);
+  }
+  dragId = null;
+}
+
+const colNames = { open:'Offen', progress:'In Arbeit', review:'Review', done:'Erledigt' };
+let currentFilter = '';
+
+function filterCards(val) {
+  currentFilter = val;
+  renderBoard(val);
+}
+
+// ===================== MODAL =====================
+let targetCol = 'open';
+function openModal(col) {
+  targetCol = col || 'open';
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+
+function addCard() {
+  const title = document.getElementById('m-title').value;
+  if(!title.trim()) { alert('Bitte Titel eingeben'); return; }
+  const fw = document.getElementById('m-fw').value;
+  const prio = document.getElementById('m-prio').value;
+  const owner = document.getElementById('m-owner').value.split(' ')[0].replace('Dr.','DM').replace('T.','TM').replace('S.','SW').replace('K.','KB');
+  const ownerMap = {'Dr.':'DM','T.':'TM','S.':'SW','K.':'KB'};
+  const ownerSel = document.getElementById('m-owner');
+  const ownerVal = ['DM','TM','SW','KB'][ownerSel.selectedIndex];
+  const due = document.getElementById('m-due').value || '30.06.26';
+
+  cards.push({
+    id: nextId++,
+    title, col: targetCol, prio,
+    fw: [fw], iso: 'A.5.x',
+    due, dueClass: 'ok',
+    owner: ownerVal, progress: 0, desc: ''
+  });
+  renderBoard(currentFilter);
+  closeModal();
+  showNotif('Maßnahme erfolgreich erstellt');
+  document.getElementById('m-title').value = '';
+  document.getElementById('m-due').value = '';
+}
+
+// ===================== TABS =====================
+function showTab(t) {
+  ['kanban','nis2','dora'].forEach(id => {
+    document.getElementById('view-'+id).style.display = id===t?'block':'none';
+    document.getElementById('tab-'+id).classList.toggle('active', id===t);
+  });
+}
+
+// ===================== PDF (via server) =====================
+function generatePDF() {
+  const btn = document.getElementById('pdf-btn');
+  btn.textContent = '⏳ Generiere...';
+  btn.disabled = true;
+  setTimeout(() => {
+    showNotif('PDF-Export wird serverseitig (Python) generiert — siehe isms-soa-report.pdf');
+    btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 2h5l4 4v9H4V2z"/></svg> SoA PDF Export`;
+    btn.disabled = false;
+  }, 1500);
+}
+
+// ===================== NOTIF =====================
+function showNotif(msg) {
+  const n = document.getElementById('notif');
+  document.getElementById('notif-text').textContent = msg;
+  n.classList.add('show');
+  setTimeout(() => n.classList.remove('show'), 3200);
+}
+
+// ===================== INIT =====================
+renderBoard('');
+
+
+// ============================================================
+// API VERBINDUNG — echte Daten von localhost:3000
+// ============================================================
+const API = 'http://localhost:3000/api/v1';
+
+function setApiStatus(ok, msg) {
+  const dot = document.getElementById('api-dot');
+  const txt = document.getElementById('api-msg');
+  if (dot) dot.style.background = ok ? '#38a169' : '#e53e3e';
+  if (txt) { txt.textContent = msg; txt.style.color = ok ? '#38a169' : '#a0aec0'; }
+}
+
+function mapStatus(s) {
+  return { open:'open', in_progress:'in_progress', done:'done' }[s] || 'open';
+}
+function mapPrio(p) {
+  return { 1:'critical', 2:'high', 3:'medium', 4:'low' }[p] || 'medium';
+}
+function formatDateShort(d) {
+  if (!d) return '—';
+  const dt = new Date(d);
+  const day = String(dt.getDate()).padStart(2,'0');
+  const mon = String(dt.getMonth()+1).padStart(2,'0');
+  const yr  = String(dt.getFullYear()).slice(-2);
+  return `${day}.${mon}.${yr}`;
+}
+function dueClass(d) {
+  if (!d) return '';
+  const dt = new Date(d);
+  const now = new Date();
+  const diff = (dt - now) / (1000*60*60*24);
+  if (diff < 0)  return 'overdue';
+  if (diff < 14) return 'soon';
+  return '';
+}
+
+async function loadActions() {
+  try {
+    await fetch(`${API}/health`, {headers: getAuthHeaders()});
+    setApiStatus(true, 'API verbunden · Live-Daten');
+
+    const resp = await fetch(`${API}/actions`, {headers: getAuthHeaders()});
+    if (resp.status === 401) { window.location.replace('isms-login.html'); return; }
+    const actions = await resp.json();
+
+    // Map API actions to cards format
+    const apiCards = actions.map((a, idx) => ({
+      id: a.id || idx + 100,
+      title: a.title,
+      col: a.status === 'done' ? 'done' : a.status === 'in_progress' ? 'in_progress' : a.status === 'cancelled' ? 'done' : 'open',
+      prio: mapPrio(a.priority),
+      fw: ['iso'],
+      iso: a.risk_ref || '',
+      due: formatDateShort(a.due_date),
+      dueClass: dueClass(a.due_date),
+      owner: a.owner_name ? a.owner_name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() : 'SF',
+      progress: a.status === 'done' ? 100 : a.status === 'in_progress' ? 50 : 0,
+      desc: a.description || '',
+      apiId: a.id,
+    }));
+
+    // Replace cards array and re-render
+    cards.length = 0;
+    apiCards.forEach(c => cards.push(c));
+    renderBoard();
+
+    // Update stats
+    updateStatsFromAPI(actions);
+
+  } catch(err) {
+    setApiStatus(false, 'API nicht erreichbar — Demo-Daten');
+    console.warn('API:', err.message);
+  }
+}
+
+function updateStatsFromAPI(actions) {
+  const open     = actions.filter(a => a.status === 'open').length;
+  const inProg   = actions.filter(a => a.status === 'in_progress').length;
+  const done     = actions.filter(a => a.status === 'done').length;
+  const overdue  = actions.filter(a => a.due_date && new Date(a.due_date) < new Date() && a.status !== 'done').length;
+  const critical = actions.filter(a => a.priority === 1).length;
+
+  const els = {
+    'stat-open':     open,
+    'stat-inprog':   inProg,
+    'stat-done':     done,
+    'stat-overdue':  overdue,
+    'stat-critical': critical,
+  };
+  Object.entries(els).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  });
+}
+
+// Override drag-drop status update to also call API
+const _origDrop = window.onDrop;
+async function updateActionStatus(apiId, newStatus) {
+  if (!apiId) return;
+  const statusMap = { open:'open', in_progress:'in_progress', done:'done' };
+  try {
+    await fetch(`${API}/actions/${apiId}/status`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ status: statusMap[newStatus] || newStatus })
+    });
+  } catch(e) {
+    console.warn('Status update failed:', e.message);
+  }
+}
+
+// Patch the drop handler to also sync with API
+const origHandleDrop = typeof handleDrop === 'function' ? handleDrop : null;
+window.addEventListener('drop', async (e) => {
+  const col = e.target.closest('[data-col]');
+  if (!col || dragId === null) return;
+  const card = cards.find(c => c.id === parseInt(dragId));
+  if (card && card.apiId && card.col !== col.dataset.col) {
+    await updateActionStatus(card.apiId, col.dataset.col);
+  }
+}, true);
+
+// Load on startup + refresh every 60s
+async function initKanban() {
+  await loadActions();
+  routeHash();
+}
+initKanban();
+setInterval(loadActions, 60000);
+loadCompliance();
+
+// ── Hash-basierte Navigation ──────────────────────────────
+function routeHash() {
+  const hash = window.location.hash.slice(1);
+  if (['kanban','nis2','dora'].includes(hash)) {
+    showTab(hash);
+  }
+}
+window.addEventListener('hashchange', routeHash);
+
+// ── Page Transition Handler ───────────────────────────
+document.addEventListener('click', function(e) {
+  const link = e.target.closest('a[href]');
+  if (!link) return;
+  const href = link.getAttribute('href');
+  if (!href) return;
+
+  const [file, hash] = href.split('#');
+  const currentFile = window.location.pathname.split('/').pop();
+  const isSamePage = !file || file === currentFile;
+
+  if (isSamePage) {
+    // Same page: update hash → triggers hashchange → routeHash/showTab
+    if (hash) {
+      e.preventDefault();
+      window.location.hash = hash;
+    }
+    return;
+  }
+
+  // Different page: fade out then navigate
+  if (!file.endsWith('.html')) return;
+  if (href.startsWith('http') || href.startsWith('mailto')) return;
+  e.preventDefault();
+  document.body.classList.add('page-leaving');
+  setTimeout(() => { window.location.href = href; }, 140);
+});
+</script>
+<div id="api-status" style="position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+  background:#fff;border:1px solid rgba(0,0,0,0.07);border-radius:6px;
+  padding:6px 14px;font-size:10px;font-family:'DM Mono',monospace;
+  color:#a0aec0;z-index:999;display:flex;align-items:center;gap:8px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+  <span id="api-dot" style="width:6px;height:6px;border-radius:50%;background:#a0aec0;display:inline-block"></span>
+  <span id="api-msg">Verbinde mit API...</span>
+</div>
+</body>
+</html>

@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Govrix ISMS - ISO 27001:2022</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f2f5;--bg2:#fff;--bg3:#f8f9fb;--bg4:#eef0f4;--border:rgba(0,0,0,.07);--border2:rgba(0,0,0,.13);--text:#1a202c;--text2:#4a5568;--text3:#a0aec0;--navy:#162040;--navy2:#0e1628;--accent:#00a878;--accent2:#1847B1;--accent3:#e17055;--accent4:#6c5ce7;--red:#e53e3e;--yellow:#d69e2e;--green:#38a169;--blue:#3182ce;--shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.05)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;overflow-x:hidden}
+.sidebar{width:232px;min-height:100vh;background:var(--navy);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;box-shadow:2px 0 12px rgba(0,0,0,.15)}
+.sidebar-logo{padding:20px 18px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo-mark{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.logo-text{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.3px}
+.logo-sub{font-size:9px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace;letter-spacing:1px}
+.sidebar-nav{padding:12px 10px;flex:1;overflow-y:auto}
+.nav-section{font-size:9px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:1.5px;text-transform:uppercase;padding:10px 8px 4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:7px;cursor:pointer;transition:background .15s;text-decoration:none;margin-bottom:1px}
+.nav-item:hover{background:rgba(255,255,255,.08)}
+.nav-item.active{background:rgba(0,168,120,.18)}
+.nav-icon{width:16px;height:16px;opacity:.55;flex-shrink:0}
+.nav-item.active .nav-icon{opacity:1}
+.nav-label{font-size:12px;font-weight:500;color:rgba(255,255,255,.65)}
+.nav-item.active .nav-label{color:#fff;font-weight:600}
+.sidebar-footer{padding:14px;border-top:1px solid rgba(255,255,255,.08)}
+.user-card{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:7px;background:rgba(255,255,255,.07);cursor:pointer;transition:background .15s}
+.user-card:hover{background:rgba(255,255,255,.12)}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent4),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.user-name{font-size:12px;font-weight:600;color:#fff}
+.user-role{font-size:10px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace}
+.main{margin-left:232px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+.topbar{height:58px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:50;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.page-title{font-size:16px;font-weight:700;color:var(--text)}
+.page-sub{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:1px}
+.content{padding:24px 28px;flex:1}
+.fw-hero{display:grid;grid-template-columns:1fr 2fr;gap:18px;margin-bottom:20px}
+.fw-score-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.prog-bar{flex:1;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;border-radius:2px;transition:width .4s}
+.fw-table{width:100%;border-collapse:collapse;font-size:12px}
+.fw-table th{text-align:left;font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);padding:8px 12px;border-bottom:1px solid var(--border)}
+.fw-table td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:middle}
+.fw-table tr:last-child td{border-bottom:none}
+.filter-bar{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow)}
+.filter-bar input{flex:1;border:none;background:transparent;font-size:13px;color:var(--text);outline:none;font-family:'DM Sans',sans-serif}
+.filter-bar input::placeholder{color:var(--text3)}
+.filter-bar select{border:1px solid var(--border2);background:var(--bg3);border-radius:6px;padding:5px 10px;font-size:11px;color:var(--text2);outline:none;cursor:pointer;font-family:'DM Sans',sans-serif}
+.section-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
+.section-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.section-title{font-size:13px;font-weight:700;color:var(--text)}
+.section-hint{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace}
+.fw-badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;font-family:'DM Mono',monospace}
+.badge-ok{background:rgba(56,161,105,.12);color:var(--green)}
+.badge-partial{background:rgba(214,158,46,.12);color:var(--yellow)}
+.badge-open{background:rgba(160,174,192,.12);color:var(--text3)}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;align-items:center;justify-content:center}
+.modal-box{background:#fff;border-radius:12px;padding:28px;width:460px;max-width:90vw;box-shadow:0 8px 40px rgba(0,0,0,.18)}
+.form-row{margin-bottom:14px}
+.form-row label{font-size:11px;font-weight:600;color:var(--text2);display:block;margin-bottom:4px}
+.form-row select,.form-row input{width:100%;border:1px solid var(--border2);border-radius:6px;padding:8px 10px;font-size:12px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none}
+.form-row textarea{width:100%;border:1px solid var(--border2);border-radius:6px;padding:8px 10px;font-size:12px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;resize:vertical;min-height:70px}
+.btn-save{background:var(--accent);color:#fff;border:none;border-radius:7px;padding:9px 20px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-save:hover{background:#008f66}
+.btn-cancel{background:transparent;color:var(--text3);border:1px solid var(--border2);border-radius:7px;padding:9px 16px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">GX</div>
+    <div><div class="logo-text">Govrix</div><div class="logo-sub">ISMS PLATFORM</div></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Uebersicht</div>
+    <a href="isms-dashboard.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/></svg>
+      <span class="nav-label">Dashboard</span>
+    </a>
+    <div class="nav-section">Frameworks</div>
+    <a href="isms-iso27001.html" class="nav-item active">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M8 1L2 4v4c0 3.3 2.5 6.4 6 7 3.5-.6 6-3.7 6-7V4L8 1z" fill="rgba(255,255,255,.8)"/></svg>
+      <span class="nav-label">ISO 27001</span>
+    </a>
+    <a href="isms-nist.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/><path d="M5 8h6M8 5v6" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/></svg>
+      <span class="nav-label">NIST CSF 2.0</span>
+    </a>
+    <a href="isms-kanban-nis2.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="3" width="4" height="10" rx="1" fill="rgba(255,255,255,.6)"/><rect x="6" y="3" width="4" height="7" rx="1" fill="rgba(255,255,255,.6)"/><rect x="11" y="3" width="4" height="5" rx="1" fill="rgba(255,255,255,.6)"/></svg>
+      <span class="nav-label">NIS2 / DORA</span>
+    </a>
+    <div class="nav-section">Management</div>
+    <a href="isms-risk-analyzer.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M8 2L2 13h12L8 2z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M8 7v3M8 11.5v.5" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span class="nav-label">Risikoanalyse</span>
+    </a>
+    <a href="isms-assets.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="3" width="14" height="9" rx="1.5" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M5 12v2M11 12v2M3 14h10" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span class="nav-label">Assets</span>
+    </a>
+    <a href="isms-audit.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M4 2h8a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M5 6h6M5 9h4" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span class="nav-label">Audit Log</span>
+    </a>
+    <a href="isms-reports.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M10 2v3h3" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/></svg>
+      <span class="nav-label">Reports</span>
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="avatar" id="gx-avatar">GX</div>
+      <div>
+        <div class="user-name" id="gx-name">Benutzer</div>
+        <div class="user-role" id="gx-role">-</div>
+      </div>
+      <button onclick="logout()" title="Abmelden" style="background:transparent;border:none;cursor:pointer;padding:5px;border-radius:5px;margin-left:auto;opacity:.6" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.6'">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 14H3a1 1 0 01-1-1V3a1 1 0 011-1h3M11 11l3-3-3-3M14 8H6" stroke="rgba(255,255,255,.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title">ISO/IEC 27001:2022</div>
+      <div class="page-sub">Annex A &middot; 93 Controls &middot; Govrix ISMS</div>
+    </div>
+  </div>
+  <div class="content">
+
+    <div class="fw-hero">
+      <div class="fw-score-card">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2))"></div>
+        <div style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px">Gesamt-Score</div>
+        <div id="iso-overall-pct" style="font-size:28px;font-weight:800;color:var(--accent);margin-bottom:4px">--%</div>
+        <div id="iso-overall-sub" style="font-size:11px;color:var(--text3);margin-bottom:16px">Lade...</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0"></div>
+            <span style="font-size:11px;color:var(--text2);flex:1">Umgesetzt</span>
+            <span id="cnt-impl" style="font-size:12px;font-weight:700;font-family:'DM Mono',monospace">--</span>
+            <div class="prog-bar" style="width:80px"><div class="prog-fill" id="bar-impl" style="background:var(--green)"></div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--yellow);flex-shrink:0"></div>
+            <span style="font-size:11px;color:var(--text2);flex:1">In Bearbeitung</span>
+            <span id="cnt-prog" style="font-size:12px;font-weight:700;font-family:'DM Mono',monospace">--</span>
+            <div class="prog-bar" style="width:80px"><div class="prog-fill" id="bar-prog" style="background:var(--yellow)"></div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--red);flex-shrink:0"></div>
+            <span style="font-size:11px;color:var(--text2);flex:1">Nicht umgesetzt</span>
+            <span id="cnt-open" style="font-size:12px;font-weight:700;font-family:'DM Mono',monospace">--</span>
+            <div class="prog-bar" style="width:80px"><div class="prog-fill" id="bar-open" style="background:var(--red)"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fw-score-card" style="padding:0;overflow:hidden">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent2),var(--accent4))"></div>
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border);margin-top:3px">
+          <span style="font-size:13px;font-weight:700;color:var(--text)">Annex A &mdash; Kontrollkategorien</span>
+        </div>
+        <table class="fw-table">
+          <thead><tr>
+            <th>Kapitel</th><th>Kategorie</th><th>Gesamt</th>
+            <th style="color:var(--green)">OK</th>
+            <th style="color:var(--yellow)">Teilweise</th>
+            <th style="color:var(--red)">Offen</th>
+            <th>Fortschritt</th>
+          </tr></thead>
+          <tbody id="annex-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4" stroke="var(--text3)" stroke-width="1.5"/><path d="M10 10l3 3" stroke="var(--text3)" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <input type="text" id="iso-search" placeholder="Controls suchen..." oninput="filterControls()">
+      <select id="iso-filter-cat" onchange="filterControls()">
+        <option value="">Alle Kategorien</option>
+        <option value="O">A.5 Org.</option>
+        <option value="P">A.6 Personal</option>
+        <option value="F">A.7 Physisch</option>
+        <option value="T">A.8 Technol.</option>
+      </select>
+      <select id="iso-filter-status" onchange="filterControls()">
+        <option value="">Alle Status</option>
+        <option value="implemented">Umgesetzt</option>
+        <option value="in_progress">In Bearbeitung</option>
+        <option value="not_started">Nicht begonnen</option>
+      </select>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head">
+        <span class="section-title">Control-Details</span>
+        <span class="section-hint" id="iso-count"></span>
+      </div>
+      <table class="fw-table">
+        <thead><tr>
+          <th>Control</th><th>Bezeichnung</th><th>Status</th><th>Fortschritt</th><th>Faellig</th>
+        </tr></thead>
+        <tbody id="iso-tbody"></tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal-box">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+      <span id="modal-ref" style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text3)"></span>
+      <button class="btn-cancel" style="padding:4px 10px;font-size:11px" onclick="closeModal()">x</button>
+    </div>
+    <div id="modal-title" style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:18px"></div>
+    <div class="form-row">
+      <label>Status</label>
+      <select id="modal-status">
+        <option value="not_started">Nicht begonnen</option>
+        <option value="in_progress">In Bearbeitung</option>
+        <option value="implemented">Umgesetzt</option>
+        <option value="audited">Auditiert</option>
+        <option value="not_applicable">N/A</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Fortschritt: <span id="modal-pct-label">0%</span></label>
+      <input type="range" id="modal-pct" min="0" max="100" step="5" oninput="document.getElementById('modal-pct-label').textContent=this.value+'%'">
+    </div>
+    <div class="form-row">
+      <label>Faelligkeitsdatum</label>
+      <input type="date" id="modal-due">
+    </div>
+    <div class="form-row">
+      <label>Notizen</label>
+      <textarea id="modal-notes" placeholder="Implementierungsnotizen..."></textarea>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:6px">
+      <span id="modal-msg" style="font-size:11px;align-self:center"></span>
+      <button class="btn-cancel" onclick="closeModal()">Abbrechen</button>
+      <button class="btn-save" id="modal-save-btn" onclick="saveControl()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<div id="api-status" style="position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid var(--border);border-radius:6px;padding:6px 14px;font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);z-index:999;display:flex;align-items:center;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,.08)">
+  <span id="api-dot" style="width:6px;height:6px;border-radius:50%;background:var(--text3);display:inline-block"></span>
+  <span id="api-msg">Demo-Modus</span>
+</div>
+
+<script>
+var API='http://localhost:3000/api/v1';
+var allControls=[];
+var currentRef=null;
+
+function getAuthHeaders(){var t=localStorage.getItem('gx_token');return t?{Authorization:'Bearer '+t,'Content-Type':'application/json'}:{'Content-Type':'application/json'};}
+function logout(){localStorage.removeItem('gx_token');localStorage.removeItem('gx_user');window.location.href='isms-login.html';}
+function pctColor(p){p=parseFloat(p);if(p>=75)return'var(--green)';if(p>=40)return'var(--yellow)';return'var(--red)';}
+function statusLabel(s){return{implemented:'Umgesetzt',audited:'Auditiert',in_progress:'In Bearbeitung',not_started:'Nicht begonnen',not_applicable:'N/A'}[s]||s;}
+function statusBadgeCls(s){return{implemented:'badge-ok',audited:'badge-ok',in_progress:'badge-partial'}[s]||'badge-open';}
+function setApiStatus(ok,msg){
+  var dot=document.getElementById('api-dot');var txt=document.getElementById('api-msg');
+  if(dot)dot.style.background=ok?'var(--green)':'var(--red)';
+  if(txt){txt.textContent=msg;txt.style.color=ok?'var(--green)':'var(--text3)';}
+}
+
+function renderTable(controls){
+  var tbody=document.getElementById('iso-tbody');
+  var countEl=document.getElementById('iso-count');
+  if(!tbody)return;
+  tbody.innerHTML='';
+  if(!controls.length){
+    var row=document.createElement('tr');
+    row.innerHTML='<td colspan="5" style="text-align:center;padding:24px;color:var(--text3)">Keine Controls gefunden</td>';
+    tbody.appendChild(row);
+    if(countEl)countEl.textContent='0 Controls';
+    return;
+  }
+  controls.forEach(function(c){
+    var pct=parseInt(c.completion_pct)||0;
+    var col=pctColor(pct);
+    var due=c.due_date?new Date(c.due_date).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit'}):'-';
+    var overdue=c.due_date&&new Date(c.due_date)<new Date()&&c.status!=='implemented';
+    var tr=document.createElement('tr');
+    tr.style.cursor='pointer';
+    tr.addEventListener('mouseover',function(){this.style.background='var(--bg3)';});
+    tr.addEventListener('mouseout',function(){this.style.background='';});
+    tr.addEventListener('click',function(){openModal(c.control_ref);});
+    tr.innerHTML='<td><span style="font-size:10px;color:var(--accent2)">'+c.control_ref+'</span></td>'
+      +'<td style="font-weight:500">'+c.title+'</td>'
+      +'<td><span class="fw-badge '+statusBadgeCls(c.status)+'">'+statusLabel(c.status)+'</span></td>'
+      +'<td><div style="display:flex;align-items:center;gap:8px">'
+        +'<div class="prog-bar"><div class="prog-fill" style="width:'+pct+'%;background:'+col+'"></div></div>'
+        +'<span style="font-size:10px;color:var(--text3);min-width:28px">'+pct+'%</span>'
+      +'</div></td>'
+      +'<td style="font-size:10px;color:'+(overdue?'var(--red)':'var(--text3)')+'">'+due+'</td>';
+    tbody.appendChild(tr);
+  });
+  if(countEl)countEl.textContent=controls.length+' von '+allControls.length+' Controls';
+}
+
+function filterControls(){
+  var search=(document.getElementById('iso-search').value||'').toLowerCase();
+  var cat=document.getElementById('iso-filter-cat').value;
+  var status=document.getElementById('iso-filter-status').value;
+  var f=allControls.filter(function(c){
+    return(!search||c.title.toLowerCase().indexOf(search)>=0||c.control_ref.toLowerCase().indexOf(search)>=0)
+      &&(!cat||c.category_code===cat)&&(!status||c.status===status);
+  });
+  renderTable(f);
+}
+
+function updateScoreCard(controls){
+  var total=controls.length;
+  var impl=controls.filter(function(c){return c.status==='implemented'||c.status==='audited';}).length;
+  var prog=controls.filter(function(c){return c.status==='in_progress';}).length;
+  var open=total-impl-prog;
+  var pct=total?Math.round(impl/total*100):0;
+  var el=document.getElementById('iso-overall-pct');var sub=document.getElementById('iso-overall-sub');
+  if(el){el.textContent=pct+'%';el.style.color=pctColor(pct);}
+  if(sub)sub.textContent=impl+' von '+total+' Controls umgesetzt';
+  var ci=document.getElementById('cnt-impl');if(ci)ci.textContent=impl;
+  var cp=document.getElementById('cnt-prog');if(cp)cp.textContent=prog;
+  var co=document.getElementById('cnt-open');if(co)co.textContent=open;
+  var bi=document.getElementById('bar-impl');if(bi)bi.style.width=(total?Math.round(impl/total*100):0)+'%';
+  var bp=document.getElementById('bar-prog');if(bp)bp.style.width=(total?Math.round(prog/total*100):0)+'%';
+  var bo=document.getElementById('bar-open');if(bo)bo.style.width=(total?Math.round(open/total*100):0)+'%';
+}
+
+function updateAnnexTable(controls){
+  var tbody=document.getElementById('annex-tbody');
+  if(!tbody)return;
+  var cats=[
+    {code:'O',ref:'A.5',name:'Organisatorische'},
+    {code:'P',ref:'A.6',name:'Personenbezogene'},
+    {code:'F',ref:'A.7',name:'Physische'},
+    {code:'T',ref:'A.8',name:'Technologische'}
+  ];
+  tbody.innerHTML='';
+  cats.forEach(function(cat){
+    var g=controls.filter(function(c){return c.category_code===cat.code;});
+    if(!g.length)return;
+    var impl=g.filter(function(c){return c.status==='implemented'||c.status==='audited';}).length;
+    var prog=g.filter(function(c){return c.status==='in_progress';}).length;
+    var nc=g.length-impl-prog;
+    var pct=Math.round(impl/g.length*100);
+    var col=pctColor(pct);
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td><span style="font-size:10px;color:var(--accent2)">'+cat.ref+'</span></td>'
+      +'<td style="font-weight:600">'+cat.name+'</td>'
+      +'<td style="font-size:11px">'+g.length+'</td>'
+      +'<td><span style="font-size:12px;font-weight:700;color:var(--green)">'+impl+'</span></td>'
+      +'<td><span style="font-size:12px;font-weight:700;color:var(--yellow)">'+prog+'</span></td>'
+      +'<td><span style="font-size:12px;font-weight:700;color:var(--red)">'+nc+'</span></td>'
+      +'<td><div style="display:flex;align-items:center;gap:8px">'
+        +'<div class="prog-bar" style="width:100px"><div class="prog-fill" style="width:'+pct+'%;background:'+col+'"></div></div>'
+        +'<span style="font-size:10px;color:var(--text3);min-width:28px">'+pct+'%</span>'
+      +'</div></td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function openModal(ref){
+  var c=allControls.find(function(x){return x.control_ref===ref;});
+  if(!c)return;
+  currentRef=ref;
+  document.getElementById('modal-ref').textContent=c.control_ref+(c.category_name?' - '+c.category_name:'');
+  document.getElementById('modal-title').textContent=c.title;
+  document.getElementById('modal-status').value=c.status||'not_started';
+  var pct=parseInt(c.completion_pct)||0;
+  document.getElementById('modal-pct').value=pct;
+  document.getElementById('modal-pct-label').textContent=pct+'%';
+  document.getElementById('modal-due').value=c.due_date?c.due_date.substring(0,10):'';
+  document.getElementById('modal-notes').value=c.notes||'';
+  document.getElementById('modal-msg').textContent='';
+  document.getElementById('edit-modal').style.display='flex';
+}
+function closeModal(){document.getElementById('edit-modal').style.display='none';currentRef=null;}
+document.getElementById('edit-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+async function saveControl(){
+  if(!currentRef)return;
+  var btn=document.getElementById('modal-save-btn');
+  var msg=document.getElementById('modal-msg');
+  btn.textContent='Speichere...';btn.disabled=true;
+  var body={status:document.getElementById('modal-status').value,completion_pct:parseInt(document.getElementById('modal-pct').value),due_date:document.getElementById('modal-due').value||null,notes:document.getElementById('modal-notes').value||null};
+  try{
+    var res=await fetch(API+'/controls/iso/'+encodeURIComponent(currentRef),{method:'PUT',headers:getAuthHeaders(),body:JSON.stringify(body)});
+    if(!res.ok)throw new Error('Speichern fehlgeschlagen');
+    var idx=allControls.findIndex(function(c){return c.control_ref===currentRef;});
+    if(idx>=0)Object.assign(allControls[idx],body);
+    msg.textContent='Gespeichert';msg.style.color='var(--green)';
+    filterControls();updateScoreCard(allControls);updateAnnexTable(allControls);
+    setTimeout(closeModal,700);
+  }catch(err){msg.textContent=err.message;msg.style.color='var(--red)';}
+  finally{btn.textContent='Speichern';btn.disabled=false;}
+}
+
+var DEMO=[
+  {control_ref:'A.5.1',title:'Informationssicherheitsrichtlinien',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.2',title:'Rollen und Verantwortlichkeiten',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.3',title:'Aufgabentrennung',category_code:'O',category_name:'Organisatorisch',status:'in_progress',completion_pct:60},
+  {control_ref:'A.5.4',title:'Managementverantwortung',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.5',title:'Kontakt mit Behoerden',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.6',title:'Kontakt mit Interessengruppen',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.7',title:'Threat Intelligence',category_code:'O',category_name:'Organisatorisch',status:'not_started',completion_pct:20},
+  {control_ref:'A.5.8',title:'Informationssicherheit im Projektmanagement',category_code:'O',category_name:'Organisatorisch',status:'in_progress',completion_pct:65},
+  {control_ref:'A.5.9',title:'Inventar der Informationen und Assets',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.10',title:'Akzeptable Nutzung von Assets',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.11',title:'Rueckgabe von Assets',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.12',title:'Klassifizierung von Informationen',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.13',title:'Kennzeichnung von Informationen',category_code:'O',category_name:'Organisatorisch',status:'in_progress',completion_pct:70},
+  {control_ref:'A.5.14',title:'Informationsuebertragung',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.15',title:'Zugriffskontrolle',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.16',title:'Identitaetsmanagement',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.17',title:'Authentifizierungsinformationen',category_code:'O',category_name:'Organisatorisch',status:'in_progress',completion_pct:75},
+  {control_ref:'A.5.18',title:'Zugriffsrechte',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.19',title:'Informationssicherheit bei Lieferanten',category_code:'O',category_name:'Organisatorisch',status:'in_progress',completion_pct:60},
+  {control_ref:'A.5.20',title:'Sicherheit in Lieferantenvereinbarungen',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.21',title:'Verwaltung der IKT-Lieferkette',category_code:'O',category_name:'Organisatorisch',status:'in_progress',completion_pct:50},
+  {control_ref:'A.5.22',title:'Ueberwachung von Lieferantenleistungen',category_code:'O',category_name:'Organisatorisch',status:'in_progress',completion_pct:65},
+  {control_ref:'A.5.23',title:'Sicherheit bei Cloud-Diensten',category_code:'O',category_name:'Organisatorisch',status:'not_started',completion_pct:10},
+  {control_ref:'A.5.24',title:'Planung fuer Sicherheitsvorfaelle',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.25',title:'Bewertung von Sicherheitsereignissen',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.26',title:'Reaktion auf Sicherheitsvorfaelle',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.27',title:'Lernen aus Sicherheitsvorfaellen',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.28',title:'Sammlung von Beweismitteln',category_code:'O',category_name:'Organisatorisch',status:'in_progress',completion_pct:55},
+  {control_ref:'A.5.29',title:'Informationssicherheit bei Stoerungen',category_code:'O',category_name:'Organisatorisch',status:'in_progress',completion_pct:70},
+  {control_ref:'A.5.30',title:'IKT-Bereitschaft fuer Business Continuity',category_code:'O',category_name:'Organisatorisch',status:'not_started',completion_pct:25},
+  {control_ref:'A.5.31',title:'Rechtliche und regulatorische Anforderungen',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.32',title:'Rechte des geistigen Eigentums',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.33',title:'Schutz von Aufzeichnungen',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.34',title:'Datenschutz und Schutz pers. Daten',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.35',title:'Unabhaengige Ueberpruefung der IS',category_code:'O',category_name:'Organisatorisch',status:'in_progress',completion_pct:80},
+  {control_ref:'A.5.36',title:'Einhaltung von Richtlinien und Standards',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.5.37',title:'Dokumentierte Betriebsverfahren',category_code:'O',category_name:'Organisatorisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.6.1',title:'Ueberpruefung vor der Beschaeftigung',category_code:'P',category_name:'Personal',status:'implemented',completion_pct:100},
+  {control_ref:'A.6.2',title:'Bedingungen der Beschaeftigung',category_code:'P',category_name:'Personal',status:'implemented',completion_pct:100},
+  {control_ref:'A.6.3',title:'Sensibilisierung und Schulung',category_code:'P',category_name:'Personal',status:'in_progress',completion_pct:55},
+  {control_ref:'A.6.4',title:'Disziplinarverfahren',category_code:'P',category_name:'Personal',status:'implemented',completion_pct:100},
+  {control_ref:'A.6.5',title:'Verantwortlichkeiten nach Beschaeftigung',category_code:'P',category_name:'Personal',status:'implemented',completion_pct:100},
+  {control_ref:'A.6.6',title:'Vertraulichkeitsvereinbarungen',category_code:'P',category_name:'Personal',status:'implemented',completion_pct:100},
+  {control_ref:'A.6.7',title:'Remote-Arbeit',category_code:'P',category_name:'Personal',status:'implemented',completion_pct:100},
+  {control_ref:'A.6.8',title:'Meldung von Sicherheitsereignissen',category_code:'P',category_name:'Personal',status:'implemented',completion_pct:100},
+  {control_ref:'A.7.1',title:'Physische Sicherheitszonen',category_code:'F',category_name:'Physisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.7.2',title:'Physischer Zutritt',category_code:'F',category_name:'Physisch',status:'in_progress',completion_pct:75},
+  {control_ref:'A.7.3',title:'Sicherung von Bueros und Raeumen',category_code:'F',category_name:'Physisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.7.4',title:'Physische Sicherheitsueberwachung',category_code:'F',category_name:'Physisch',status:'not_started',completion_pct:15},
+  {control_ref:'A.7.5',title:'Schutz vor physischen Bedrohungen',category_code:'F',category_name:'Physisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.7.6',title:'Arbeiten in sicheren Bereichen',category_code:'F',category_name:'Physisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.7.7',title:'Aufgeraeumter Schreibtisch und Bildschirm',category_code:'F',category_name:'Physisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.7.8',title:'Aufstellung und Schutz von Geraeten',category_code:'F',category_name:'Physisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.7.9',title:'Sicherheit von Assets ausserhalb des Gelaendes',category_code:'F',category_name:'Physisch',status:'in_progress',completion_pct:60},
+  {control_ref:'A.7.10',title:'Speichermedien',category_code:'F',category_name:'Physisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.7.11',title:'Versorgungseinrichtungen',category_code:'F',category_name:'Physisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.7.12',title:'Verkabelungssicherheit',category_code:'F',category_name:'Physisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.7.13',title:'Geraetewartung',category_code:'F',category_name:'Physisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.7.14',title:'Sichere Entsorgung von Geraeten',category_code:'F',category_name:'Physisch',status:'in_progress',completion_pct:70},
+  {control_ref:'A.8.1',title:'Endbenutzer-Endgeraete',category_code:'T',category_name:'Technologisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.8.2',title:'Privilegierte Zugriffsrechte',category_code:'T',category_name:'Technologisch',status:'in_progress',completion_pct:60},
+  {control_ref:'A.8.3',title:'Informationszugriffsbeschraenkung',category_code:'T',category_name:'Technologisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.8.4',title:'Zugriff auf Quellcode',category_code:'T',category_name:'Technologisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.8.5',title:'Sichere Authentifizierung (MFA)',category_code:'T',category_name:'Technologisch',status:'in_progress',completion_pct:45},
+  {control_ref:'A.8.6',title:'Kapazitaetsmanagement',category_code:'T',category_name:'Technologisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.8.7',title:'Schutz vor Schadsoftware',category_code:'T',category_name:'Technologisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.8.8',title:'Verwaltung technischer Schwachstellen',category_code:'T',category_name:'Technologisch',status:'in_progress',completion_pct:70},
+  {control_ref:'A.8.9',title:'Konfigurationsmanagement',category_code:'T',category_name:'Technologisch',status:'not_started',completion_pct:20},
+  {control_ref:'A.8.10',title:'Loeschung von Informationen',category_code:'T',category_name:'Technologisch',status:'not_started',completion_pct:0},
+  {control_ref:'A.8.11',title:'Datenmaskierung (DLP)',category_code:'T',category_name:'Technologisch',status:'not_started',completion_pct:0},
+  {control_ref:'A.8.12',title:'Verhinderung von Datenlecks',category_code:'T',category_name:'Technologisch',status:'not_started',completion_pct:10},
+  {control_ref:'A.8.13',title:'Datensicherung (Backup)',category_code:'T',category_name:'Technologisch',status:'not_started',completion_pct:0},
+  {control_ref:'A.8.14',title:'Redundanz von IT-Einrichtungen',category_code:'T',category_name:'Technologisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.8.15',title:'Protokollierung',category_code:'T',category_name:'Technologisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.8.16',title:'Ueberwachungsaktivitaeten',category_code:'T',category_name:'Technologisch',status:'not_started',completion_pct:15},
+  {control_ref:'A.8.17',title:'Uhrzeitsynchronisation',category_code:'T',category_name:'Technologisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.8.18',title:'Nutzung privilegierter Dienstprogramme',category_code:'T',category_name:'Technologisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.8.19',title:'Installation von Software',category_code:'T',category_name:'Technologisch',status:'in_progress',completion_pct:65},
+  {control_ref:'A.8.20',title:'Netzwerksicherheit',category_code:'T',category_name:'Technologisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.8.21',title:'Sicherheit von Netzwerkdiensten',category_code:'T',category_name:'Technologisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.8.22',title:'Netzwerktrennung',category_code:'T',category_name:'Technologisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.8.23',title:'Web-Filterung',category_code:'T',category_name:'Technologisch',status:'not_applicable',completion_pct:0},
+  {control_ref:'A.8.24',title:'Kryptographie',category_code:'T',category_name:'Technologisch',status:'in_progress',completion_pct:72},
+  {control_ref:'A.8.25',title:'Sicherer Entwicklungslebenszyklus',category_code:'T',category_name:'Technologisch',status:'in_progress',completion_pct:70},
+  {control_ref:'A.8.26',title:'Anforderungen an Anwendungssicherheit',category_code:'T',category_name:'Technologisch',status:'in_progress',completion_pct:60},
+  {control_ref:'A.8.27',title:'Sichere Systemarchitektur',category_code:'T',category_name:'Technologisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.8.28',title:'Sicheres Programmieren',category_code:'T',category_name:'Technologisch',status:'not_started',completion_pct:20},
+  {control_ref:'A.8.29',title:'Sicherheitstests in Entwicklung',category_code:'T',category_name:'Technologisch',status:'in_progress',completion_pct:75},
+  {control_ref:'A.8.30',title:'Ausgelagerte Entwicklung',category_code:'T',category_name:'Technologisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.8.31',title:'Trennung der Umgebungen',category_code:'T',category_name:'Technologisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.8.32',title:'Aenderungsmanagement',category_code:'T',category_name:'Technologisch',status:'implemented',completion_pct:100},
+  {control_ref:'A.8.33',title:'Testinformationen',category_code:'T',category_name:'Technologisch',status:'in_progress',completion_pct:65},
+  {control_ref:'A.8.34',title:'Schutz bei Audits',category_code:'T',category_name:'Technologisch',status:'in_progress',completion_pct:80}
+];
+
+function loadISO(){
+  allControls=DEMO;
+  renderTable(allControls);updateScoreCard(allControls);updateAnnexTable(allControls);
+  setApiStatus(false,'Demo-Modus');
+  var ctrl=new AbortController();
+  setTimeout(function(){ctrl.abort();},3000);
+  fetch(API+'/controls/iso',{headers:getAuthHeaders(),signal:ctrl.signal})
+    .then(function(r){if(!r.ok)throw 0;return r.json();})
+    .then(function(d){
+      allControls=d;renderTable(allControls);updateScoreCard(allControls);updateAnnexTable(allControls);
+      setApiStatus(true,'API verbunden - '+d.length+' Controls');
+    }).catch(function(){});
+}
+
+(function(){
+  try{
+    var u=JSON.parse(localStorage.getItem('gx_user')||'{}');
+    if(u.name)document.getElementById('gx-name').textContent=u.name;
+    if(u.role)document.getElementById('gx-role').textContent=u.role;
+    if(u.name)document.getElementById('gx-avatar').textContent=u.name.substring(0,2).toUpperCase();
+  }catch(e){}
+})();
+
+document.addEventListener('DOMContentLoaded',loadISO);
+
+document.addEventListener('click',function(e){
+  var link=e.target.closest('a[href]');if(!link)return;
+  var href=link.getAttribute('href');
+  if(!href||!href.endsWith('.html')||href.startsWith('http'))return;
+  e.preventDefault();document.body.style.opacity='0.7';
+  setTimeout(function(){window.location.href=href;},100);
+});
+</script>
+</body>
+</html>

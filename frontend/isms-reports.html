@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Govrix ISMS — Reports & SoA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg:      #f0f2f5;
+  --bg2:     #ffffff;
+  --bg3:     #f8f9fb;
+  --bg4:     #eef0f4;
+  --border:  rgba(0,0,0,0.07);
+  --border2: rgba(0,0,0,0.13);
+  --text:    #1a202c;
+  --text2:   #4a5568;
+  --text3:   #a0aec0;
+  --navy:    #162040;
+  --navy2:   #0e1628;
+  --accent:  #00a878;
+  --accent2: #1847B1;
+  --accent3: #e17055;
+  --accent4: #6c5ce7;
+  --red:     #e53e3e;
+  --yellow:  #d69e2e;
+  --green:   #38a169;
+  --blue:    #3182ce;
+  --shadow:  0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.05);
+  --shadow2: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; overflow-x: hidden; }
+
+.sidebar { width: 232px; min-height: 100vh; background: var(--navy); display: flex; flex-direction: column; position: fixed; left: 0; top: 0; bottom: 0; z-index: 100; box-shadow: 2px 0 12px rgba(0,0,0,0.15); }
+
+
+
+
+
+
+
+
+
+.nav-item 
+
+.nav-item 
+.sidebar-footer { padding: 14px; border-top: 1px solid rgba(255,255,255,0.08); }
+.user-card { display: flex; align-items: center; gap: 10px; padding: 9px 11px; border-radius: 7px; background: rgba(255,255,255,0.07); cursor: pointer; transition: background 0.15s; }
+.user-card:hover { background: rgba(255,255,255,0.12); }
+.avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--accent4), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; flex-shrink: 0; }
+.user-name { font-size: 12px; font-weight: 600; color: #fff; }
+.user-role { font-size: 10px; color: rgba(255,255,255,0.35); font-family: 'DM Mono', monospace; }
+
+.main { margin-left: 220px; width: calc(100vw - 220px); overflow-x: hidden; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+.topbar { height: 58px; background: var(--bg2); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.page-title { font-size: 17px; font-weight: 600; color: var(--navy); }
+.page-sub { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; margin-top: 1px; }
+.topbar-actions { display: flex; align-items: center; gap: 10px; }
+.btn { display: flex; align-items: center; gap: 6px; padding: 7px 15px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
+.btn-ghost { background: transparent; color: var(--text2); border: 1px solid var(--border2); }
+.btn-ghost:hover { background: var(--bg3); color: var(--text); }
+.btn-primary { background: var(--navy); color: #fff; box-shadow: 0 2px 6px rgba(30,45,78,0.3); }
+.btn-primary:hover { background: var(--navy2); }
+.alert-pill { display: flex; align-items: center; gap: 6px; background: #fff5f5; border: 1px solid #fed7d7; color: var(--red); font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 20px; cursor: pointer; }
+.pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+
+.content { padding: 26px 28px; flex: 1; }
+.score-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 22px; }
+.score-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 24px; position: relative; overflow: hidden; box-shadow: var(--shadow); }
+.score-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.score-card.iso::before  { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+.score-card.nist::before { background: linear-gradient(90deg, var(--accent2), var(--accent4)); }
+.score-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+.score-label { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+.score-name { font-size: 15px; font-weight: 700; color: var(--navy); }
+.score-tag { font-size: 9px; font-family: 'DM Mono', monospace; padding: 3px 9px; border-radius: 5px; font-weight: 600; letter-spacing: 0.04em; }
+.tag-active  { background: #e6fffa; color: #276749; border: 1px solid #9ae6b4; }
+.tag-partial { background: #fffbeb; color: #744210; border: 1px solid #fbd38d; }
+.score-main { display: flex; align-items: flex-end; gap: 20px; }
+.donut-wrap { position: relative; width: 90px; height: 90px; flex-shrink: 0; }
+.donut-wrap svg { transform: rotate(-90deg); }
+.donut-track { fill: none; stroke: var(--bg4); stroke-width: 8; }
+.donut-fill  { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dasharray 1s ease; }
+.donut-label { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+.donut-pct { font-size: 20px; font-weight: 800; line-height: 1; }
+.donut-sub { font-size: 9px; color: var(--text3); font-family: 'DM Mono', monospace; margin-top: 2px; }
+.score-details { flex: 1; }
+.detail-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 9px; }
+.detail-label { font-size: 11px; color: var(--text2); }
+.detail-bar { flex: 1; height: 5px; background: var(--bg4); border-radius: 3px; margin: 0 10px; overflow: hidden; }
+.detail-bar-fill { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
+.bar-green  { background: var(--green); }
+.bar-yellow { background: var(--yellow); }
+.bar-red    { background: var(--red); }
+.detail-val { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--text2); min-width: 30px; text-align: right; }
+
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 22px; }
+.stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 16px 18px 18px; cursor: pointer; box-shadow: var(--shadow); transition: box-shadow 0.2s, transform 0.2s; }
+.stat-card:hover { box-shadow: var(--shadow2); transform: translateY(-2px); }
+.stat-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.stat-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+.icon-red    { background: #fff5f5; }
+.icon-yellow { background: #fffbeb; }
+.icon-blue   { background: #ebf8ff; }
+.icon-green  { background: #f0fff4; }
+.stat-delta { font-size: 10px; font-family: 'DM Mono', monospace; }
+.delta-up { color: var(--red); }
+.delta-dn { color: var(--green); }
+.stat-num   { font-size: 30px; font-weight: 800; line-height: 1; }
+.stat-label { font-size: 11px; color: var(--text3); margin-top: 4px; font-weight: 500; }
+
+.bottom-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
+.card-header { padding: 13px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.card-title  { font-size: 13px; font-weight: 700; color: var(--navy); }
+.card-action { font-size: 11px; color: var(--accent2); cursor: pointer; font-family: 'DM Mono', monospace; font-weight: 500; }
+.card-body   { padding: 14px 20px; }
+
+.risk-item { display: flex; align-items: flex-start; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.risk-item:last-child { border-bottom: none; }
+.risk-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.dot-critical { background: var(--red); box-shadow: 0 0 5px rgba(229,62,62,0.4); }
+.dot-high     { background: var(--accent3); }
+.dot-medium   { background: var(--yellow); }
+.dot-low      { background: var(--blue); }
+.risk-info  { flex: 1; }
+.risk-title { font-size: 12px; font-weight: 600; margin-bottom: 3px; color: var(--text); }
+.risk-meta  { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; display: flex; gap: 8px; }
+.risk-score { font-size: 11px; font-family: 'DM Mono', monospace; font-weight: 700; }
+.score-critical { color: var(--red); }
+.score-high     { color: var(--accent3); }
+.score-medium   { color: var(--yellow); }
+
+.nist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.nist-fn { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 11px 13px; transition: border-color 0.15s; }
+.nist-fn:hover { border-color: var(--accent2); }
+.nist-fn-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
+.nist-code { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text3); }
+.nist-pct  { font-size: 13px; font-weight: 700; }
+.mini-bar  { height: 4px; background: var(--bg4); border-radius: 2px; overflow: hidden; }
+.mini-bar-fill { height: 100%; border-radius: 2px; transition: width 0.8s; }
+
+.audit-item { display: flex; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+.audit-item:last-child { border-bottom: none; }
+.audit-time { font-size: 9px; font-family: 'DM Mono', monospace; color: var(--text3); min-width: 40px; padding-top: 2px; }
+.audit-dot  { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.audit-info { flex: 1; }
+.audit-text { font-size: 11px; color: var(--text); line-height: 1.5; }
+.audit-user { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; margin-top: 2px; }
+
+.controls-list { display: flex; flex-direction: column; gap: 7px; }
+.control-row { display: flex; align-items: center; gap: 10px; padding: 8px 11px; background: var(--bg3); border-radius: 7px; border: 1px solid var(--border); transition: border-color 0.15s, box-shadow 0.15s; cursor: pointer; }
+.control-row:hover { border-color: var(--accent2); box-shadow: 0 2px 8px rgba(9,132,227,0.08); }
+.ctrl-status { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.ctrl-name { flex: 1; font-size: 11px; font-weight: 600; color: var(--text); }
+.ctrl-id   { font-size: 9px; font-family: 'DM Mono', monospace; color: var(--text3); }
+.ctrl-pct  { font-size: 11px; font-family: 'DM Mono', monospace; font-weight: 600; }
+.ctrl-mini { width: 55px; height: 4px; background: var(--bg4); border-radius: 2px; overflow: hidden; }
+.ctrl-mini-fill { height: 100%; border-radius: 2px; }
+
+.annex-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.annex-chip { padding: 8px 12px; border-radius: 8px; font-size: 10px; font-family: 'DM Mono', monospace; border: 1px solid var(--border2); display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; transition: all 0.15s; flex: 1; min-width: 72px; background: var(--bg3); }
+.annex-chip:hover { border-color: var(--accent); background: #e6fffa; }
+.chip-label { font-size: 9px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; }
+.chip-val   { font-size: 15px; font-weight: 800; }
+.chip-sub   { font-size: 9px; color: var(--text3); }
+
+@keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.content > * { animation: slideIn 0.3s ease both; }
+.score-row   { animation-delay: 0.05s; }
+.stats-row   { animation-delay: 0.1s; }
+.bottom-grid { animation-delay: 0.15s; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #a0aec0; }
+.logo {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.logo-lockup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-icon-box {
+  width: 30px; height: 30px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #fff;
+  letter-spacing: -0.5px;
+}
+.logo-name {
+  font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.01em; line-height: 1.2;
+}
+.logo-sub, .logo-ver, .logo-tag {
+  font-size: 9px; color: rgba(255,255,255,0.32);
+  font-family: 'DM Mono', monospace; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-top: 2px;
+}
+
+/* ── Page Transitions ─────────────────────────────────── */
+body { animation: pageFadeIn 0.2s ease both; }
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-leaving {
+  animation: pageFadeOut 0.15s ease forwards;
+  pointer-events: none;
+}
+@keyframes pageFadeOut {
+  to { opacity: 0; transform: translateY(-4px); }
+}
+
+/* ── Sidebar Navigation (unified, no-jump) ── */
+.nav { padding: 14px 0; flex: 1; overflow-y: auto; }
+
+.nav-section {
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  color: rgba(255,255,255,0.28);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 20px 5px;
+  font-weight: 500;
+}
+
+.nav-item {
+  text-decoration: none !important;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 18px 9px 18px;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.58);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin: 1px 8px;
+  border-radius: 7px;
+  border-left: 2px solid transparent;
+}
+.nav-item:hover {
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.9);
+}
+.nav-item.active {
+  background: rgba(255,255,255,0.12);
+  color: #fff !important;
+  border-left: 2px solid rgba(255,255,255,0.5);
+}
+.nav-item.active .icon { opacity: 1; }
+.icon { width: 14px; height: 14px; opacity: 0.55; flex-shrink: 0; }
+.badge {
+  margin-left: auto;
+  background: #e53e3e;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-family: 'DM Mono', monospace;
+}
+
+
+/* GX-NAV-FIX */
+.sidebar{width:232px;min-height:100vh;background:var(--navy);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;box-shadow:2px 0 12px rgba(0,0,0,.15)}
+.sidebar-logo{padding:20px 18px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo-mark{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.logo-text{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.3px}
+.logo-sub{font-size:9px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace;letter-spacing:1px}
+.sidebar-nav{padding:12px 10px;flex:1;overflow-y:auto}
+.nav-section{font-size:9px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:1.5px;text-transform:uppercase;padding:10px 8px 4px}
+.nav-item{display:flex !important;flex-direction:row !important;align-items:center !important;gap:9px !important;padding:8px 10px !important;border-radius:7px !important;cursor:pointer !important;transition:background .15s !important;text-decoration:none !important;margin-bottom:1px !important;border-left:none !important;font-size:unset !important;font-weight:unset !important;color:unset !important}
+.nav-item:hover{background:rgba(255,255,255,.08) !important;color:unset !important}
+.nav-item.active{background:rgba(0,168,120,.18) !important;border-left:none !important;color:unset !important}
+.nav-icon{width:16px !important;height:16px !important;opacity:.55 !important;flex-shrink:0 !important;display:block !important}
+.nav-item.active .nav-icon{opacity:1 !important}
+.nav-label{font-size:12px !important;font-weight:500 !important;color:rgba(255,255,255,.65) !important;display:block !important}
+.nav-item.active .nav-label{color:#fff !important;font-weight:600 !important}
+.sidebar-footer{padding:14px;border-top:1px solid rgba(255,255,255,.08)}
+.user-card{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:7px;background:rgba(255,255,255,.07);cursor:pointer;transition:background .15s}
+.user-card:hover{background:rgba(255,255,255,.12)}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#6c5ce7,#1847B1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.user-name{font-size:12px;font-weight:600;color:#fff}
+.user-role{font-size:10px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace}
+</style>
+<style>
+body { animation: pageFadeIn 0.2s ease both; }
+@keyframes pageFadeIn { from { opacity:0;transform:translateY(6px); } to { opacity:1;transform:translateY(0); } }
+.page-leaving { animation: pageFadeOut 0.15s ease forwards; pointer-events:none; }
+@keyframes pageFadeOut { to { opacity:0;transform:translateY(-4px); } }
+
+.reports-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;}
+.report-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);transition:all 0.15s;cursor:pointer;}
+.report-card:hover{border-color:var(--accent2);box-shadow:var(--shadow2);transform:translateY(-2px);}
+.report-card-head{padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:14px;}
+.report-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.report-name{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:3px;}
+.report-desc{font-size:11px;color:var(--text3);line-height:1.5;}
+.report-card-body{padding:14px 20px;}
+.report-meta{display:flex;gap:16px;margin-bottom:14px;}
+.report-meta-item{font-size:10px;}
+.report-meta-label{color:var(--text3);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;font-size:9px;margin-bottom:2px;}
+.report-meta-val{color:var(--text2);font-weight:600;}
+.report-progress{height:4px;background:var(--bg4);border-radius:2px;overflow:hidden;margin-bottom:14px;}
+.report-progress-fill{height:100%;border-radius:2px;transition:width 1s;}
+.report-actions{display:flex;gap:8px;}
+.soa-table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);}
+.soa-table{width:100%;border-collapse:collapse;}
+.soa-table th{padding:10px 14px;text-align:left;font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;background:var(--bg3);border-bottom:1px solid var(--border);font-weight:500;}
+.soa-table td{padding:10px 14px;font-size:11px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:middle;}
+.soa-table tr:last-child td{border-bottom:none;}
+.soa-table tr:hover td{background:var(--bg3);}
+.soa-status{font-size:9px;padding:3px 8px;border-radius:5px;font-family:'DM Mono',monospace;font-weight:600;letter-spacing:0.04em;}
+.soa-implemented{background:#f0fff4;color:var(--green);border:1px solid #9ae6b4;}
+.soa-partial{background:#fffbeb;color:var(--yellow);border:1px solid #fbd38d;}
+.soa-planned{background:#ebf8ff;color:var(--blue);border:1px solid #bee3f8;}
+.soa-na{background:var(--bg3);color:var(--text3);border:1px solid var(--border2);}
+
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">GX</div>
+    <div><div class="logo-text">Govrix</div><div class="logo-sub">ISMS PLATFORM</div></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Uebersicht</div>
+    <a href="isms-dashboard.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/></svg>
+      <span class="nav-label">Dashboard</span>
+    </a>
+    <div class="nav-section">Frameworks</div>
+    <a href="isms-iso27001.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M8 1L2 4v4c0 3.3 2.5 6.4 6 7 3.5-.6 6-3.7 6-7V4L8 1z" fill="rgba(255,255,255,.8)"/></svg>
+      <span class="nav-label">ISO 27001</span>
+    </a>
+    <a href="isms-nist.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/><path d="M5 8h6M8 5v6" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/></svg>
+      <span class="nav-label">NIST CSF 2.0</span>
+    </a>
+    <a href="isms-kanban-nis2.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="3" width="4" height="10" rx="1" fill="rgba(255,255,255,.6)"/><rect x="6" y="3" width="4" height="7" rx="1" fill="rgba(255,255,255,.6)"/><rect x="11" y="3" width="4" height="5" rx="1" fill="rgba(255,255,255,.6)"/></svg>
+      <span class="nav-label">NIS2 / DORA</span>
+    </a>
+    <div class="nav-section">Management</div>
+    <a href="isms-risk-analyzer.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M8 2L2 13h12L8 2z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M8 7v3M8 11.5v.5" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span class="nav-label">Risikoanalyse</span>
+    </a>
+    <a href="isms-assets.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="3" width="14" height="9" rx="1.5" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M5 12v2M11 12v2M3 14h10" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span class="nav-label">Assets</span>
+    </a>
+    <a href="isms-audit.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M4 2h8a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M5 6h6M5 9h4" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span class="nav-label">Audit Log</span>
+    </a>
+    <a href="isms-reports.html" class="nav-item active">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M10 2v3h3" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/></svg>
+      <span class="nav-label">Reports</span>
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="avatar" id="gx-avatar">GX</div>
+      <div>
+        <div class="user-name" id="gx-name">Benutzer</div>
+        <div class="user-role" id="gx-role">-</div>
+      </div>
+      <button onclick="logout()" title="Abmelden" style="background:transparent;border:none;cursor:pointer;padding:5px;border-radius:5px;margin-left:auto;opacity:.6" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.6'">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 14H3a1 1 0 01-1-1V3a1 1 0 011-1h3M11 11l3-3-3-3M14 8H6" stroke="rgba(255,255,255,.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</aside>
+<script>
+// Auth - runs immediately after sidebar HTML is parsed
+(function() {
+  var t = localStorage.getItem('gx_token');
+  if (!t) { window.location.replace('isms-login.html'); return; }
+  var u = {};
+  try { u = JSON.parse(localStorage.getItem('gx_user') || '{}'); } catch(e) {}
+  var c = {admin:'#e53e3e', ciso:'#0f9d7e', analyst:'#60a5fa'}[u.role] || '#60a5fa';
+  var av = document.getElementById('gx-avatar');
+  var nm = document.getElementById('gx-name');
+  var rl = document.getElementById('gx-role');
+  if (av && u.name) {
+    av.textContent = u.name.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
+    av.style.background = 'linear-gradient(135deg,'+c+',#1847B1)';
+  }
+  if (nm && u.name) nm.textContent = u.name;
+  if (rl && u.role) { rl.textContent = u.role; rl.style.color = c; }
+})();
+function logout() {
+  localStorage.removeItem('gx_token');
+  localStorage.removeItem('gx_user');
+  window.location.href = 'isms-login.html';
+}
+function getAuthHeaders() {
+  var t = localStorage.getItem('gx_token');
+  return t ? {'Authorization':'Bearer '+t,'Content-Type':'application/json'} : {'Content-Type':'application/json'};
+}
+</script>
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title">Reports & Statement of Applicability</div>
+      <div class="page-sub">ISO 27001 · NIST CSF 2.0 · NIS2 / DORA · Zuletzt aktualisiert: 01.03.2026</div>
+    </div>
+    <div class="topbar-actions" id="topbar-actions"></div>
+  </div>
+  <div class="content">
+<div class="reports-grid">
+  <div class="report-card" onclick="generateReport('iso27001')">
+    <div class="report-card-head">
+      <div class="report-icon" style="background:#e6fffa">📋</div>
+      <div>
+        <div class="report-name">ISO 27001:2022 Compliance Report</div>
+        <div class="report-desc">Vollständiger Compliance-Status aller 93 Controls mit Nachweis-Dokumentation</div>
+      </div>
+    </div>
+    <div class="report-card-body">
+      <div class="report-meta">
+        <div class="report-meta-item"><div class="report-meta-label">Letzter Export</div><div class="report-meta-val">28.02.2026</div></div>
+        <div class="report-meta-item"><div class="report-meta-label">Format</div><div class="report-meta-val">PDF / Excel</div></div>
+        <div class="report-meta-item"><div class="report-meta-label">Compliance</div><div class="report-meta-val" style="color:var(--green)">89%</div></div>
+      </div>
+      <div class="report-progress"><div class="report-progress-fill" style="width:89%;background:var(--green)"></div></div>
+      <div class="report-actions">
+        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();generateReport('iso27001-pdf')">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg>
+          PDF Export
+        </button>
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();generateReport('iso27001-xlsx')">Excel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="report-card" onclick="generateReport('nist')">
+    <div class="report-card-head">
+      <div class="report-icon" style="background:#ebf8ff">🛡️</div>
+      <div>
+        <div class="report-name">NIST CSF 2.0 Assessment Report</div>
+        <div class="report-desc">Bewertung aller 6 Core Functions mit Maturity-Level und Handlungsempfehlungen</div>
+      </div>
+    </div>
+    <div class="report-card-body">
+      <div class="report-meta">
+        <div class="report-meta-item"><div class="report-meta-label">Letzter Export</div><div class="report-meta-val">25.02.2026</div></div>
+        <div class="report-meta-item"><div class="report-meta-label">Format</div><div class="report-meta-val">PDF</div></div>
+        <div class="report-meta-item"><div class="report-meta-label">Reife-Level</div><div class="report-meta-val" style="color:var(--yellow)">3 / 5</div></div>
+      </div>
+      <div class="report-progress"><div class="report-progress-fill" style="width:75%;background:var(--accent2)"></div></div>
+      <div class="report-actions">
+        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();generateReport('nist-pdf')">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg>
+          PDF Export
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="report-card" onclick="generateReport('nis2')">
+    <div class="report-card-head">
+      <div class="report-icon" style="background:#faf5ff">⚖️</div>
+      <div>
+        <div class="report-name">NIS2 / DORA Compliance Report</div>
+        <div class="report-desc">Umsetzungsstand aller NIS2-Artikel und DORA-Anforderungen mit Fristenübersicht</div>
+      </div>
+    </div>
+    <div class="report-card-body">
+      <div class="report-meta">
+        <div class="report-meta-item"><div class="report-meta-label">Letzter Export</div><div class="report-meta-val">20.02.2026</div></div>
+        <div class="report-meta-item"><div class="report-meta-label">Format</div><div class="report-meta-val">PDF / Word</div></div>
+        <div class="report-meta-item"><div class="report-meta-label">Umsetzung</div><div class="report-meta-val" style="color:var(--yellow)">61%</div></div>
+      </div>
+      <div class="report-progress"><div class="report-progress-fill" style="width:61%;background:var(--accent4)"></div></div>
+      <div class="report-actions">
+        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();generateReport('nis2-pdf')">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg>
+          PDF Export
+        </button>
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();generateReport('nis2-word')">Word</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="report-card" onclick="generateReport('risiko')">
+    <div class="report-card-head">
+      <div class="report-icon" style="background:#fff5f5">⚠️</div>
+      <div>
+        <div class="report-name">Risiko-Management Report</div>
+        <div class="report-desc">Alle offenen Risiken nach Score sortiert mit Behandlungsmaßnahmen und Verantwortlichkeiten</div>
+      </div>
+    </div>
+    <div class="report-card-body">
+      <div class="report-meta">
+        <div class="report-meta-item"><div class="report-meta-label">Letzter Export</div><div class="report-meta-val">01.03.2026</div></div>
+        <div class="report-meta-item"><div class="report-meta-label">Offene Risiken</div><div class="report-meta-val" style="color:var(--red)" id="r-open">7</div></div>
+        <div class="report-meta-item"><div class="report-meta-label">Kritisch</div><div class="report-meta-val" style="color:var(--red)" id="r-crit">3</div></div>
+      </div>
+      <div class="report-progress"><div class="report-progress-fill" style="width:35%;background:var(--red)"></div></div>
+      <div class="report-actions">
+        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();generateReport('risiko-pdf')">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg>
+          PDF Export
+        </button>
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();generateReport('risiko-xlsx')">Excel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SoA Table -->
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+  <div>
+    <div style="font-size:16px;font-weight:700;color:var(--navy)">Statement of Applicability (SoA)</div>
+    <div style="font-size:11px;color:var(--text3);margin-top:2px;">ISO 27001:2022 · Annex A Controls · Stand: 01.03.2026</div>
+  </div>
+  <button class="btn btn-primary" onclick="generateReport('soa-pdf')">
+    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg>
+    SoA als PDF
+  </button>
+</div>
+
+<div class="soa-table-wrap">
+  <table class="soa-table">
+    <thead>
+      <tr>
+        <th>Control</th>
+        <th>Bezeichnung</th>
+        <th>Status</th>
+        <th>Begründung</th>
+        <th>Verantwortlich</th>
+        <th>Nachweis</th>
+      </tr>
+    </thead>
+    <tbody id="soa-tbody">
+      <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text3);font-family:'DM Mono',monospace;font-size:12px;">Lade SoA...</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" style="position:fixed;bottom:60px;right:20px;background:var(--navy);color:#fff;padding:12px 18px;border-radius:8px;font-size:12px;opacity:0;transition:opacity 0.2s;pointer-events:none;z-index:999;">
+  📄 Bericht wird generiert...
+</div>
+</div>
+</div>
+<div id="api-status" style="position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid var(--border);border-radius:6px;padding:6px 14px;font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);z-index:999;display:flex;align-items:center;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+  <span id="api-dot" style="width:6px;height:6px;border-radius:50%;background:var(--text3);display:inline-block"></span>
+  <span id="api-msg">Verbinde mit API...</span>
+</div>
+<script>
+ : { 'Content-Type': 'application/json' };
+} : { 'Content-Type': 'application/json' };
+} : { 'Content-Type': 'application/json' };
+} : { 'Content-Type': 'application/json' };
+} : { 'Content-Type': 'application/json' };
+} : { 'Content-Type': 'application/json' };
+}
+
+const API = 'http://localhost:3000/api/v1';
+function setApiStatus(ok,msg){const dot=document.getElementById('api-dot');const txt=document.getElementById('api-msg');if(dot)dot.style.background=ok?'var(--green)':'var(--red)';if(txt){txt.textContent=msg;txt.style.color=ok?'var(--green)':'var(--text3)';}}
+function formatDate(d){if(!d)return'—';return new Date(d).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit'});}
+
+const SOA_DATA = [
+  {control:'A.5.1',name:'Informationssicherheitsrichtlinien',status:'implemented',reason:'Pflicht',owner:'CISO',evidence:'ISR-2024-v3.pdf'},
+  {control:'A.5.2',name:'Rollen und Verantwortlichkeiten',status:'implemented',reason:'Pflicht',owner:'HR',evidence:'RACI-2024.xlsx'},
+  {control:'A.5.3',name:'Aufgabentrennung',status:'partial',reason:'Pflicht',owner:'IT-Ops',evidence:'Prozessdoku'},
+  {control:'A.5.8',name:'Informationssicherheit im Projektmanagement',status:'planned',reason:'Pflicht',owner:'PMO',evidence:'—'},
+  {control:'A.6.1',name:'Überprüfung',status:'implemented',reason:'Pflicht',owner:'HR',evidence:'HR-Check-2025'},
+  {control:'A.6.3',name:'Sensibilisierung',status:'partial',reason:'Pflicht',owner:'IT-Sec',evidence:'Training-Q1'},
+  {control:'A.8.1',name:'Endgeräte',status:'implemented',reason:'Pflicht',owner:'IT-Ops',evidence:'MDM-Policy'},
+  {control:'A.8.5',name:'Sichere Authentifizierung',status:'partial',reason:'Pflicht',owner:'IT-Sec',evidence:'MFA teilweise'},
+  {control:'A.8.8',name:'Schwachstellenmanagement',status:'implemented',reason:'Pflicht',owner:'IT-Sec',evidence:'Scan-Reports'},
+  {control:'A.8.13',name:'Informationssicherung',status:'partial',reason:'Pflicht',owner:'IT-Ops',evidence:'Backup-Protokoll'},
+  {control:'A.8.16',name:'Überwachungsaktivitäten',status:'implemented',reason:'Pflicht',owner:'IT-Ops',evidence:'SIEM-Config'},
+  {control:'A.8.20',name:'Netzwerksicherheit',status:'implemented',reason:'Pflicht',owner:'Network',evidence:'FW-Ruleset'},
+  {control:'A.8.23',name:'Web-Filterung',status:'na',reason:'Nicht anwendbar',owner:'—',evidence:'—'},
+  {control:'A.8.25',name:'Sicherer Entwicklungslebenszyklus',status:'planned',reason:'Pflicht',owner:'Dev-Team',evidence:'In Planung'},
+];
+
+const STATUS_MAP = {implemented:'Umgesetzt',partial:'Teilweise',planned:'Geplant',na:'Nicht anwendbar'};
+const STATUS_CSS = {implemented:'soa-implemented',partial:'soa-partial',planned:'soa-planned',na:'soa-na'};
+
+function renderSoA(data) {
+  const tbody = document.getElementById('soa-tbody');
+  tbody.innerHTML = data.map(r => `
+    <tr>
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">${r.control}</span></td>
+      <td style="font-weight:500;color:var(--text)">${r.name}</td>
+      <td><span class="soa-status ${STATUS_CSS[r.status]}">${STATUS_MAP[r.status]}</span></td>
+      <td style="font-size:11px;color:var(--text3)">${r.reason}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:10px">${r.owner}</td>
+      <td><span style="font-size:10px;color:var(--accent2);font-family:'DM Mono',monospace">${r.evidence}</span></td>
+    </tr>`).join('');
+}
+
+function generateReport(type) {
+  const toast = document.getElementById('toast');
+  const labels = {
+    'iso27001':'ISO 27001 Compliance Report',
+    'iso27001-pdf':'ISO 27001 PDF',
+    'iso27001-xlsx':'ISO 27001 Excel',
+    'nist-pdf':'NIST CSF 2.0 PDF',
+    'nis2-pdf':'NIS2/DORA PDF',
+    'nis2-word':'NIS2/DORA Word',
+    'risiko-pdf':'Risiko Report PDF',
+    'risiko-xlsx':'Risiko Excel',
+    'soa-pdf':'Statement of Applicability PDF',
+  };
+  toast.textContent = '📄 ' + (labels[type]||'Bericht') + ' wird generiert...';
+  toast.style.opacity = '1';
+  setTimeout(() => { toast.style.opacity='0'; }, 2500);
+}
+
+async function loadReports() {
+  try {
+    const risks = await (await fetch(API+'/risks')).json();
+    const open = risks.filter(r=>r.status!=='closed').length;
+    const crit = risks.filter(r=>parseFloat(r.risk_score)>=15).length;
+    document.getElementById('r-open').textContent = open;
+    document.getElementById('r-crit').textContent = crit;
+    setApiStatus(true,'API verbunden · Live-Daten');
+  } catch {
+    setApiStatus(false,'API nicht erreichbar — Demo-Daten');
+  }
+  renderSoA(SOA_DATA);
+}
+
+loadReports();
+
+document.addEventListener('click',function(e){const link=e.target.closest('a[href]');if(!link)return;const href=link.getAttribute('href');if(!href||href.startsWith('#')||href.startsWith('http'))return;if(!href.endsWith('.html')&&!href.includes('.html#'))return;e.preventDefault();document.body.classList.add('page-leaving');setTimeout(()=>{window.location.href=href;},140);});
+</script>
+</body>
+</html>

@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Govrix ISMS — Risiko-Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f0f2f5;--bg2:#ffffff;--bg3:#f8f9fb;--bg4:#eef0f4;--bg5:#e8eaef;
+  --border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.13);
+  --text:#1a202c;--text2:#4a5568;--text3:#a0aec0;
+  --navy:#162040;--navy2:#0e1628;
+  --accent: #00a878;--accent2:#1847B1;--accent3:#e17055;--accent4:#6c5ce7;
+  --red:#e53e3e;--yellow:#d69e2e;--green:#38a169;--blue:#3182ce;
+  --shadow:0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.05);
+  --shadow2:0 2px 8px rgba(0,0,0,0.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{height:100%;}
+body{font-family:'DM Sans', sans-serif;background:var(--bg);color:var(--text);min-height:100vh;height:100%;}
+
+/* Layout */
+.layout{display:flex;background:var(--bg);}
+.sidebar{background:var(--navy);border-right:none;box-shadow:2px 0 12px rgba(0,0,0,0.15);display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;width:220px;z-index:100;}
+
+/* Logo */
+
+
+
+
+
+
+
+
+
+
+.nav-item 
+.nav-item .badge-y{margin-left:auto;background:var(--yellow);color:#000;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;}
+.nav-icon{width:15px;height:15px;flex-shrink:0;}
+
+.sidebar-bottom{padding:14px;border-top:1px solid rgba(255,255,255,0.08);}
+.user-pill{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:7px;background:rgba(255,255,255,0.08);cursor:pointer;}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent4),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;}
+.user-n{font-size:12px;font-weight:600;}
+.user-r{font-size:10px;color:var(--text3);font-family:'DM Mono', monospace;}
+
+/* Main */
+.main-col{margin-left:220px;width:calc(100vw - 220px);overflow-x:hidden;flex:1;display:flex;flex-direction:column;min-height:100vh;background:var(--bg);}
+.topbar{background:#fff;border-bottom:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,0.06);padding:0 26px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.page-title{font-size:17px;font-weight: 600;}
+.page-sub{font-size:11px;color:var(--text3);font-family:'DM Mono', monospace;margin-top:1px;}
+.topbar-r{display:flex;align-items:center;gap:10px;}
+.btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s;font-family:'DM Sans', sans-serif;}
+.btn-ghost{background:transparent;color:rgba(255,255,255,0.6);border:1px solid var(--border2);}
+.btn-ghost:hover{background:var(--bg3);color:var(--text);}
+.btn-primary{background:var(--navy);color:#fff;}
+.btn-primary:hover{opacity:.85;}
+.btn-danger{background:var(--red);color:#fff;}
+.btn-sm{padding:5px 10px;font-size:11px;}
+
+/* Content */
+.content{padding:26px;flex:1;}
+
+/* Tabs */
+.tab-bar{display:flex;gap:4px;background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:4px;margin-bottom:24px;width:fit-content;}
+.tab{padding:8px 18px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text3);transition:all .15s;}
+.tab:hover{color:var(--text);background:var(--bg3);}
+.tab.active{background:var(--navy);color:#fff;}
+
+/* Panel: Risk Builder */
+.panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.panel{box-shadow:var(--shadow);background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;}
+.panel-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.panel-title{font-size:13px;font-weight:700;}
+.panel-hint{font-size:10px;color:var(--text3);font-family:'DM Mono', monospace;}
+.panel-body{padding:18px 20px;}
+
+/* Form */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-group.full{grid-column:1/-1;}
+label{font-size:11px;font-weight:600;color:rgba(255,255,255,0.6);font-family:'DM Mono', monospace;letter-spacing:.04em;text-transform:uppercase;}
+input[type=text],input[type=number],select,textarea{
+  background:var(--bg3);border:1px solid var(--border2);color:var(--text);
+  border-radius:7px;padding:9px 12px;font-size:13px;font-family:'DM Sans', sans-serif;
+  width:100%;transition:border-color .15s;outline:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);}
+textarea{resize:vertical;min-height:72px;}
+select option{background:var(--bg3);}
+
+/* Slider */
+.slider-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+.slider-group label{display:flex;justify-content:space-between;align-items:center;}
+.slider-val{font-size:13px;font-weight:700;font-family:'DM Mono', monospace;}
+input[type=range]{
+  width:100%;height:4px;margin-top:8px;
+  -webkit-appearance:none;background:var(--bg4);border-radius:2px;outline:none;cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:16px;height:16px;border-radius:50%;
+  background:var(--accent);cursor:pointer;transition:transform .1s;
+}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);}
+
+/* Risk Score Display */
+.score-display{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;background:var(--bg3);border:1px solid var(--border2);
+  border-radius:9px;margin-bottom:16px;
+}
+.score-label-sm{font-size:11px;color:rgba(255,255,255,0.6);font-family:'DM Mono', monospace;text-transform:uppercase;}
+.score-big{font-size:32px;font-weight:800;font-family:'DM Mono', monospace;transition:color .3s;}
+.score-matrix{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.matrix-cell{text-align:center;padding:10px;background:var(--bg4);border-radius:7px;}
+.mc-label{font-size:9px;color:var(--text3);font-family:'DM Mono', monospace;text-transform:uppercase;margin-bottom:4px;}
+.mc-val{font-size:18px;font-weight:700;font-family:'DM Mono', monospace;}
+
+/* AI Panel */
+.ai-panel{grid-column:1/-1;}
+.ai-output{
+  min-height:200px;background:var(--bg3);border:1px solid var(--border2);
+  border-radius:9px;padding:16px;font-size:13px;line-height:1.7;color:var(--text);
+  font-family:'DM Mono', monospace;position:relative;
+}
+.ai-placeholder{color:var(--text3);text-align:center;padding-top:60px;}
+.ai-loading{display:flex;align-items:center;gap:10px;color:var(--accent);padding-top:60px;justify-content:center;}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:bounce .8s infinite;}
+.ai-dot:nth-child(2){animation-delay:.15s;}
+.ai-dot:nth-child(3){animation-delay:.3s;}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+.ai-content{display:none;}
+.ai-content.visible{display:block;}
+
+/* Streaming cursor */
+.cursor{display:inline-block;width:2px;height:13px;background:var(--accent);animation:blink .7s infinite;vertical-align:text-bottom;margin-left:1px;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* Tag chips */
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.tag{font-size:10px;font-family:'DM Mono', monospace;padding:3px 8px;border-radius:4px;border:1px solid var(--border2);color:rgba(255,255,255,0.6);cursor:pointer;transition:all .15s;}
+.tag:hover,.tag.selected{border-color:var(--accent);color:var(--accent);background:rgba(0,212,170,.08);}
+
+/* Risk table */
+.risk-table{width:100%;border-collapse:collapse;}
+.risk-table th{text-align:left;font-size:10px;font-family:'DM Mono', monospace;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;padding:8px 12px;border-bottom:1px solid var(--border);}
+.risk-table td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;vertical-align:middle;}
+.risk-table tr:last-child td{border-bottom:none;}
+.risk-table tr:hover td{background:var(--bg3);}
+.score-badge{font-family:'DM Mono', monospace;font-size:11px;font-weight:600;padding:3px 8px;border-radius:5px;}
+.sb-critical{background:rgba(239,68,68,.15);color:var(--red);}
+.sb-high{background:rgba(255,107,53,.15);color:var(--accent3);}
+.sb-medium{background:rgba(245,158,11,.15);color:var(--yellow);}
+.sb-low{background:rgba(59,130,246,.15);color:#60a5fa;}
+.status-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:6px;}
+
+/* Section full width */
+.full-panel{background:var(--bg2);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;margin-top:20px;min-height:calc(100vh - 175px);}
+
+/* Notification */
+.notif{
+  position:fixed;bottom:24px;right:24px;
+  background:var(--bg4);border:1px solid var(--border2);
+  border-radius:9px;padding:12px 18px;font-size:12px;
+  transform:translateY(80px);opacity:0;transition:all .3s;z-index:999;
+  display:flex;align-items:center;gap:10px;
+}
+.notif.show{transform:translateY(0);opacity:1;}
+.notif-success{border-color:rgba(0,212,170,.3);}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.content>*{animation:fadeIn .3s ease both;}
+.logo {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.logo-lockup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-icon-box {
+  width: 30px; height: 30px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #fff;
+  letter-spacing: -0.5px;
+}
+.logo-name {
+  font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.01em; line-height: 1.2;
+}
+.logo-sub, .logo-ver, .logo-tag {
+  font-size: 9px; color: rgba(255,255,255,0.32);
+  font-family: 'DM Mono', monospace; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-top: 2px;
+}
+
+
+
+
+
+/* ── Page Transitions ─────────────────────────────────── */
+body { animation: pageFadeIn 0.2s ease both; }
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-leaving {
+  animation: pageFadeOut 0.15s ease forwards;
+  pointer-events: none;
+}
+@keyframes pageFadeOut {
+  to { opacity: 0; transform: translateY(-4px); }
+}
+
+/* ── Sidebar Navigation (unified, no-jump) ── */
+.nav { padding: 14px 0; flex: 1; overflow-y: auto; }
+
+.nav-section {
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  color: rgba(255,255,255,0.28);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 20px 5px;
+  font-weight: 500;
+}
+
+.nav-item {
+  text-decoration: none !important;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 18px 9px 18px;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.58);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin: 1px 8px;
+  border-radius: 7px;
+  border-left: 2px solid transparent;
+}
+.nav-item:hover {
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.9);
+}
+.nav-item.active {
+  background: rgba(255,255,255,0.12);
+  color: #fff !important;
+  border-left: 2px solid rgba(255,255,255,0.5);
+}
+.nav-item.active .icon { opacity: 1; }
+.icon { width: 14px; height: 14px; opacity: 0.55; flex-shrink: 0; }
+.badge {
+  margin-left: auto;
+  background: #e53e3e;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-family: 'DM Mono', monospace;
+}
+
+
+@keyframes aiPulse { 0%,100%{opacity:0.3;transform:scale(0.8)} 50%{opacity:1;transform:scale(1.1)} }
+.ai-section { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:20px; margin-bottom:16px; }
+.ai-section-title { font-size:13px; font-weight:700; color:var(--navy); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+.ai-risk-item { padding:12px 14px; background:var(--bg3); border-radius:8px; margin-bottom:8px; border-left:3px solid var(--border2); }
+.ai-risk-item.critical { border-left-color: var(--red); }
+.ai-risk-item.high { border-left-color: var(--yellow); }
+.ai-risk-item.medium { border-left-color: var(--accent2); }
+
+
+/* GX-NAV-FIX */
+.sidebar{width:232px;min-height:100vh;background:var(--navy);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;box-shadow:2px 0 12px rgba(0,0,0,.15)}
+.sidebar-logo{padding:20px 18px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo-mark{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.logo-text{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.3px}
+.logo-sub{font-size:9px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace;letter-spacing:1px}
+.sidebar-nav{padding:12px 10px;flex:1;overflow-y:auto}
+.nav-section{font-size:9px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:1.5px;text-transform:uppercase;padding:10px 8px 4px}
+.nav-item{display:flex !important;flex-direction:row !important;align-items:center !important;gap:9px !important;padding:8px 10px !important;border-radius:7px !important;cursor:pointer !important;transition:background .15s !important;text-decoration:none !important;margin-bottom:1px !important;border-left:none !important;font-size:unset !important;font-weight:unset !important;color:unset !important}
+.nav-item:hover{background:rgba(255,255,255,.08) !important;color:unset !important}
+.nav-item.active{background:rgba(0,168,120,.18) !important;border-left:none !important;color:unset !important}
+.nav-icon{width:16px !important;height:16px !important;opacity:.55 !important;flex-shrink:0 !important;display:block !important}
+.nav-item.active .nav-icon{opacity:1 !important}
+.nav-label{font-size:12px !important;font-weight:500 !important;color:rgba(255,255,255,.65) !important;display:block !important}
+.nav-item.active .nav-label{color:#fff !important;font-weight:600 !important}
+.sidebar-footer{padding:14px;border-top:1px solid rgba(255,255,255,.08)}
+.user-card{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:7px;background:rgba(255,255,255,.07);cursor:pointer;transition:background .15s}
+.user-card:hover{background:rgba(255,255,255,.12)}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#6c5ce7,#1847B1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.user-name{font-size:12px;font-weight:600;color:#fff}
+.user-role{font-size:10px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace}
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">GX</div>
+    <div><div class="logo-text">Govrix</div><div class="logo-sub">ISMS PLATFORM</div></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Uebersicht</div>
+    <a href="isms-dashboard.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/></svg>
+      <span class="nav-label">Dashboard</span>
+    </a>
+    <div class="nav-section">Frameworks</div>
+    <a href="isms-iso27001.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M8 1L2 4v4c0 3.3 2.5 6.4 6 7 3.5-.6 6-3.7 6-7V4L8 1z" fill="rgba(255,255,255,.8)"/></svg>
+      <span class="nav-label">ISO 27001</span>
+    </a>
+    <a href="isms-nist.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/><path d="M5 8h6M8 5v6" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/></svg>
+      <span class="nav-label">NIST CSF 2.0</span>
+    </a>
+    <a href="isms-kanban-nis2.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="3" width="4" height="10" rx="1" fill="rgba(255,255,255,.6)"/><rect x="6" y="3" width="4" height="7" rx="1" fill="rgba(255,255,255,.6)"/><rect x="11" y="3" width="4" height="5" rx="1" fill="rgba(255,255,255,.6)"/></svg>
+      <span class="nav-label">NIS2 / DORA</span>
+    </a>
+    <div class="nav-section">Management</div>
+    <a href="isms-risk-analyzer.html" class="nav-item active">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M8 2L2 13h12L8 2z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M8 7v3M8 11.5v.5" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span class="nav-label">Risikoanalyse</span>
+    </a>
+    <a href="isms-assets.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="3" width="14" height="9" rx="1.5" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M5 12v2M11 12v2M3 14h10" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span class="nav-label">Assets</span>
+    </a>
+    <a href="isms-audit.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M4 2h8a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M5 6h6M5 9h4" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span class="nav-label">Audit Log</span>
+    </a>
+    <a href="isms-reports.html" class="nav-item">
+      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M10 2v3h3" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/></svg>
+      <span class="nav-label">Reports</span>
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="avatar" id="gx-avatar">GX</div>
+      <div>
+        <div class="user-name" id="gx-name">Benutzer</div>
+        <div class="user-role" id="gx-role">-</div>
+      </div>
+      <button onclick="logout()" title="Abmelden" style="background:transparent;border:none;cursor:pointer;padding:5px;border-radius:5px;margin-left:auto;opacity:.6" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.6'">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 14H3a1 1 0 01-1-1V3a1 1 0 011-1h3M11 11l3-3-3-3M14 8H6" stroke="rgba(255,255,255,.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</aside>
+<script>
+(function() {
+  var t = localStorage.getItem('gx_token');
+  if (!t) { window.location.replace('isms-login.html'); return; }
+  var u = {};
+  try { u = JSON.parse(localStorage.getItem('gx_user') || '{}'); } catch(e) {}
+  var c = {admin:'#e53e3e', ciso:'#0f9d7e', analyst:'#60a5fa'}[u.role] || '#60a5fa';
+  var av = document.getElementById('gx-avatar');
+  var nm = document.getElementById('gx-name');
+  var rl = document.getElementById('gx-role');
+  if (av && u.name) {
+    av.textContent = u.name.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
+    av.style.background = 'linear-gradient(135deg,'+c+',#1847B1)';
+  }
+  if (nm && u.name) nm.textContent = u.name;
+  if (rl && u.role) { rl.textContent = u.role; rl.style.color = c; }
+})();
+function logout() {
+  localStorage.removeItem('gx_token');
+  localStorage.removeItem('gx_user');
+  window.location.href = 'isms-login.html';
+}
+function getAuthHeaders() {
+  var t = localStorage.getItem('gx_token');
+  return t ? {'Authorization':'Bearer '+t,'Content-Type':'application/json'} : {'Content-Type':'application/json'};
+}
+</script>
+  
+<script>
+(function() {
+  var t = localStorage.getItem('gx_token');
+  if (!t) { window.location.replace('isms-login.html'); return; }
+  var u = {};
+  try { u = JSON.parse(localStorage.getItem('gx_user') || '{}'); } catch(e) {}
+  var c = {admin:'#e53e3e', ciso:'#0f9d7e', analyst:'#60a5fa'}[u.role] || '#60a5fa';
+  var av = document.getElementById('gx-avatar');
+  var nm = document.getElementById('gx-name');
+  var rl = document.getElementById('gx-role');
+  if (av && u.name) {
+    av.textContent = u.name.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
+    av.style.background = 'linear-gradient(135deg,'+c+',#1847B1)';
+  }
+  if (nm && u.name) nm.textContent = u.name;
+  if (rl && u.role) { rl.textContent = u.role; rl.style.color = c; }
+})();
+function logout() {
+  localStorage.removeItem('gx_token');
+  localStorage.removeItem('gx_user');
+  window.location.href = 'isms-login.html';
+}
+function getAuthHeaders() {
+  var t = localStorage.getItem('gx_token');
+  return t ? {'Authorization':'Bearer '+t,'Content-Type':'application/json'} : {'Content-Type':'application/json'};
+}
+</script>
+<!-- MAIN -->
+  <div class="main-col">
+    <div class="topbar">
+      <div>
+        <div class="page-title">Risikomanagement &amp; KI-Analyse</div>
+        <div class="page-sub">ISO 27001 §6.1 · NIST CSF 2.0 ID.RA · Audit-Zyklus Q1/2026</div>
+      </div>
+      <div class="topbar-r">
+        <button class="btn btn-ghost btn-sm">Export CSV</button>
+        <button class="btn btn-primary btn-sm" onclick="showTab('new')">+ Neues Risiko</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- Tabs -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+        <div class="tab-bar">
+          <div class="tab active" id="tab-register" onclick="showTab('register')">Risiko-Register</div>
+          <div class="tab" id="tab-new" onclick="showTab('new')">+ Neues Risiko</div>
+        </div>
+        <button id="tab-ai" onclick="showTab('ai')" style="display:flex;align-items:center;gap:8px;padding:9px 18px;background:linear-gradient(135deg,#1847B1,#0f9d7e);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;box-shadow:0 2px 8px rgba(24,71,177,0.3);transition:all 0.15s;" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 16px rgba(24,71,177,0.4)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(24,71,177,0.3)'">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 10l-3.7 2.5 1.4-4.3L2 5.5h4.5z"/></svg>
+            ✦ KI-Analyse
+          </button>
+      </div>
+
+      <!-- REGISTER TAB -->
+      <div id="view-register" style="display:flex;flex-direction:column;flex:1;">
+        <div class="full-panel">
+          <div class="panel-head">
+            <span class="panel-title">Offene Risiken — sortiert nach Score</span>
+            <span class="panel-hint">Letzte Aktualisierung: heute 09:14</span>
+          </div>
+          <div style="padding:0 8px;">
+          <table class="risk-table">
+            <thead>
+              <tr>
+                <th>Ref</th>
+                <th>Risiko</th>
+                <th>Control</th>
+                <th>L×I</th>
+                <th>Score</th>
+                <th>Status</th>
+                <th>Fällig</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span style="font-family:'DM Mono', monospace;font-size:10px;color:var(--text3)">RIS-2026-001</span></td>
+                <td style="font-weight:600">Fehlende MFA für Admin-Zugänge</td>
+                <td><span style="font-family:'DM Mono', monospace;font-size:10px;color:var(--accent2)">A.8.5 / PR.AA-03</span></td>
+                <td><span style="font-family:'DM Mono', monospace;font-size:11px;color:var(--text2)">5×4</span></td>
+                <td><span class="score-badge sb-critical">20.0</span></td>
+                <td><span class="status-dot" style="background:var(--red)"></span>Offen</td>
+                <td style="font-family:'DM Mono', monospace;font-size:11px;color:var(--red)">28.02.26</td>
+                <td><button onclick="event.stopPropagation();quickAnalyse(this,'Fehlende MFA für Admin-Zugänge','A.8.5','20.0','Offen','28.02.26')" style="font-size:10px;padding:4px 10px;background:linear-gradient(135deg,#1847B1,#0f9d7e);color:#fff;border:none;border-radius:5px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;white-space:nowrap;">✦ KI</button></td>
+              </tr>
+              <tr>
+                <td><span style="font-family:'DM Mono', monospace;font-size:10px;color:var(--text3)">RIS-2026-002</span></td>
+                <td style="font-weight:600">Backup-Verschlüsselung fehlt</td>
+                <td><span style="font-family:'DM Mono', monospace;font-size:10px;color:var(--accent2)">A.8.13 / PR.DS-11</span></td>
+                <td><span style="font-family:'DM Mono', monospace;font-size:11px;color:var(--text2)">4×5</span></td>
+                <td><span class="score-badge sb-critical">20.0</span></td>
+                <td><span class="status-dot" style="background:var(--red)"></span>Offen</td>
+                <td style="font-family:'DM Mono', monospace;font-size:11px;color:var(--red)">05.03.26</td>
+                <td><button onclick="event.stopPropagation();quickAnalyse(this,'Backup-Verschlüsselung fehlt','A.8.13','20.0','Offen','05.03.26')" style="font-size:10px;padding:4px 10px;background:linear-gradient(135deg,#1847B1,#0f9d7e);color:#fff;border:none;border-radius:5px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;white-space:nowrap;">✦ KI</button></td>
+              </tr>
+              <tr>
+                <td><span style="font-family:'DM Mono', monospace;font-size:10px;color:var(--text3)">RIS-2026-003</span></td>
+                <td style="font-weight:600">DRP nicht getestet (&gt;12 Monate)</td>
+                <td><span style="font-family:'DM Mono', monospace;font-size:10px;color:var(--accent2)">A.5.30 / RC.RP-03</span></td>
+                <td><span style="font-family:'DM Mono', monospace;font-size:11px;color:var(--text2)">3×5</span></td>
+                <td><span class="score-badge sb-high">15.0</span></td>
+                <td><span class="status-dot" style="background:var(--accent3)"></span>In Bearbeitung</td>
+                <td style="font-family:'DM Mono', monospace;font-size:11px;color:var(--yellow)">10.03.26</td>
+                <td><button onclick="event.stopPropagation();quickAnalyse(this,'DRP nicht getestet (>12 Monate)','A.5.30','15.0','In Bearbeitung','10.03.26')" style="font-size:10px;padding:4px 10px;background:linear-gradient(135deg,#1847B1,#0f9d7e);color:#fff;border:none;border-radius:5px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;white-space:nowrap;">✦ KI</button></td>
+              </tr>
+              <tr>
+                <td><span style="font-family:'DM Mono', monospace;font-size:10px;color:var(--text3)">RIS-2026-004</span></td>
+                <td style="font-weight:600">Lieferanten-Assessment ausstehend</td>
+                <td><span style="font-family:'DM Mono', monospace;font-size:10px;color:var(--accent2)">A.5.21 / GV.RM-06</span></td>
+                <td><span style="font-family:'DM Mono', monospace;font-size:11px;color:var(--text2)">3×4</span></td>
+                <td><span class="score-badge sb-high">12.0</span></td>
+                <td><span class="status-dot" style="background:var(--accent3)"></span>In Bearbeitung</td>
+                <td style="font-family:'DM Mono', monospace;font-size:11px;color:var(--yellow)">20.03.26</td>
+                <td><button onclick="event.stopPropagation();quickAnalyse(this,'Lieferanten-Assessment ausstehend','A.5.21','12.0','In Bearbeitung','20.03.26')" style="font-size:10px;padding:4px 10px;background:linear-gradient(135deg,#1847B1,#0f9d7e);color:#fff;border:none;border-radius:5px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;white-space:nowrap;">✦ KI</button></td>
+              </tr>
+              <tr>
+                <td><span style="font-family:'DM Mono', monospace;font-size:10px;color:var(--text3)">RIS-2026-005</span></td>
+                <td style="font-weight:600">Threat Intelligence nicht etabliert</td>
+                <td><span style="font-family:'DM Mono', monospace;font-size:10px;color:var(--accent2)">A.5.7 / ID.RA-02</span></td>
+                <td><span style="font-family:'DM Mono', monospace;font-size:11px;color:var(--text2)">3×3</span></td>
+                <td><span class="score-badge sb-medium">9.0</span></td>
+                <td><span class="status-dot" style="background:var(--red)"></span>Offen</td>
+                <td style="font-family:'DM Mono', monospace;font-size:11px;color:var(--text2)">01.04.26</td>
+                <td><button onclick="event.stopPropagation();quickAnalyse(this,'Threat Intelligence nicht etabliert','A.5.7','9.0','Offen','01.04.26')" style="font-size:10px;padding:4px 10px;background:linear-gradient(135deg,#1847B1,#0f9d7e);color:#fff;border:none;border-radius:5px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;white-space:nowrap;">✦ KI</button></td>
+              </tr>
+              <tr>
+                <td><span style="font-family:'DM Mono', monospace;font-size:10px;color:var(--text3)">RIS-2026-006</span></td>
+                <td style="font-weight:600">Awareness-Training unvollständig</td>
+                <td><span style="font-family:'DM Mono', monospace;font-size:10px;color:var(--accent2)">A.6.3 / PR.AT-01</span></td>
+                <td><span style="font-family:'DM Mono', monospace;font-size:11px;color:var(--text2)">2×3</span></td>
+                <td><span class="score-badge sb-medium">6.0</span></td>
+                <td><span class="status-dot" style="background:var(--yellow)"></span>In Bearbeitung</td>
+                <td style="font-family:'DM Mono', monospace;font-size:11px;color:var(--text2)">31.03.26</td>
+                <td><button onclick="event.stopPropagation();quickAnalyse(this,'Awareness-Training unvollständig','A.6.3','6.0','In Bearbeitung','31.03.26')" style="font-size:10px;padding:4px 10px;background:linear-gradient(135deg,#1847B1,#0f9d7e);color:#fff;border:none;border-radius:5px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;white-space:nowrap;">✦ KI</button></td>
+              </tr>
+              <tr>
+                <td><span style="font-family:'DM Mono', monospace;font-size:10px;color:var(--text3)">RIS-2026-007</span></td>
+                <td style="font-weight:600">Datenmaskierung (DLP) nicht implementiert</td>
+                <td><span style="font-family:'DM Mono', monospace;font-size:10px;color:var(--accent2)">A.8.11 / PR.DS-01</span></td>
+                <td><span style="font-family:'DM Mono', monospace;font-size:11px;color:var(--text2)">2×2</span></td>
+                <td><span class="score-badge sb-low">4.0</span></td>
+                <td><span class="status-dot" style="background:var(--yellow)"></span>Akzeptiert</td>
+                <td style="font-family:'DM Mono', monospace;font-size:11px;color:var(--text2)">30.06.26</td>
+                <td><button onclick="event.stopPropagation();quickAnalyse(this,'Datenmaskierung (DLP) nicht implementiert','A.8.11','4.0','Akzeptiert','30.06.26')" style="font-size:10px;padding:4px 10px;background:linear-gradient(135deg,#1847B1,#0f9d7e);color:#fff;border:none;border-radius:5px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;white-space:nowrap;">✦ KI</button></td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      <!-- ISO 27001 TAB -->
+      <div id="view-iso" style="display:none">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+          <!-- Score Card -->
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px;box-shadow:var(--shadow);position:relative;overflow:hidden;">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2))"></div>
+            <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;">Compliance Score</div>
+            <div style="font-size:17px;font-weight:700;color:var(--navy);margin-bottom:20px;">ISO/IEC 27001:2022</div>
+            <div style="display:flex;align-items:center;gap:24px;">
+              <div style="position:relative;width:90px;height:90px;flex-shrink:0;">
+                <svg width="90" height="90" style="transform:rotate(-90deg)"><circle cx="45" cy="45" r="38" fill="none" stroke="var(--bg4)" stroke-width="8"/><circle cx="45" cy="45" r="38" fill="none" stroke="var(--accent)" stroke-width="8" stroke-linecap="round" stroke-dasharray="214 239"/></svg>
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
+                  <div style="font-size:20px;font-weight:800;color:var(--accent)" id="iso-pct">89%</div>
+                  <div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;">Score</div>
+                </div>
+              </div>
+              <div style="flex:1;">
+                <div style="display:flex;align-items:center;margin-bottom:9px;gap:10px;">
+                  <span style="font-size:11px;color:var(--text2);min-width:130px;">Konform</span>
+                  <div style="flex:1;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;"><div style="width:88%;height:100%;background:var(--green);border-radius:3px;" id="iso-bar-konform"></div></div>
+                  <span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text2);min-width:40px;text-align:right;" id="iso-konform">82/93</span>
+                </div>
+                <div style="display:flex;align-items:center;margin-bottom:9px;gap:10px;">
+                  <span style="font-size:11px;color:var(--text2);min-width:130px;">In Bearbeitung</span>
+                  <div style="flex:1;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;"><div style="width:8%;height:100%;background:var(--yellow);border-radius:3px;" id="iso-bar-partial"></div></div>
+                  <span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text2);min-width:40px;text-align:right;" id="iso-partial">7/93</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span style="font-size:11px;color:var(--text2);min-width:130px;">Nicht konform</span>
+                  <div style="flex:1;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;"><div style="width:4%;height:100%;background:var(--red);border-radius:3px;" id="iso-bar-nc"></div></div>
+                  <span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text2);min-width:40px;text-align:right;" id="iso-nc">4/93</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Annex A Categories -->
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px;box-shadow:var(--shadow);">
+            <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:16px;">Annex A — Kategorien</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;" id="iso-annex-grid">
+              <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;">
+                <div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">Organisatorisch</div>
+                <div style="font-size:22px;font-weight:800;color:var(--accent)">91%</div>
+                <div style="font-size:10px;color:var(--text3);">34/37 Controls</div>
+              </div>
+              <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;">
+                <div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">Personell</div>
+                <div style="font-size:22px;font-weight:800;color:var(--accent2)">100%</div>
+                <div style="font-size:10px;color:var(--text3);">8/8 Controls</div>
+              </div>
+              <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;">
+                <div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">Physisch</div>
+                <div style="font-size:22px;font-weight:800;color:var(--yellow)">86%</div>
+                <div style="font-size:10px;color:var(--text3);">12/14 Controls</div>
+              </div>
+              <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;">
+                <div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">Technisch</div>
+                <div style="font-size:22px;font-weight:800;color:var(--yellow)">82%</div>
+                <div style="font-size:10px;color:var(--text3);">28/34 Controls</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ISO Controls Detail Table -->
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);">
+          <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+            <div style="font-size:13px;font-weight:700;color:var(--navy);">Control-Details</div>
+            <span style="font-size:11px;color:var(--accent2);font-family:'DM Mono',monospace;cursor:pointer;">Alle 93 Controls</span>
+          </div>
+          <table style="width:100%;border-collapse:collapse;" id="iso-controls-table">
+            <thead>
+              <tr style="background:var(--bg3);">
+                <th style="padding:9px 16px;text-align:left;font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:500;">Control</th>
+                <th style="padding:9px 16px;text-align:left;font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:500;">Bezeichnung</th>
+                <th style="padding:9px 16px;text-align:left;font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:500;">Status</th>
+                <th style="padding:9px 16px;text-align:left;font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:500;">Fortschritt</th>
+              </tr>
+            </thead>
+            <tbody id="iso-controls-tbody">
+              <tr><td colspan="4" style="text-align:center;padding:32px;color:var(--text3);font-family:'DM Mono',monospace;font-size:12px;">Lade Controls...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- NIST TAB -->
+      <div id="view-nist" style="display:none">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px;box-shadow:var(--shadow);position:relative;overflow:hidden;">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent2),var(--accent4))"></div>
+            <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;">Framework Score</div>
+            <div style="font-size:17px;font-weight:700;color:var(--navy);margin-bottom:20px;">NIST CSF 2.0</div>
+            <div style="display:flex;align-items:center;gap:24px;">
+              <div style="position:relative;width:90px;height:90px;flex-shrink:0;">
+                <svg width="90" height="90" style="transform:rotate(-90deg)"><circle cx="45" cy="45" r="38" fill="none" stroke="var(--bg4)" stroke-width="8"/><circle cx="45" cy="45" r="38" fill="none" stroke="var(--accent2)" stroke-width="8" stroke-linecap="round" stroke-dasharray="179 239"/></svg>
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
+                  <div style="font-size:20px;font-weight:800;color:var(--accent2)" id="nist-pct">75%</div>
+                  <div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;">Score</div>
+                </div>
+              </div>
+              <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:8px;" id="nist-functions">
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;">
+                  <div style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);">GOVERN</div>
+                  <div style="font-size:16px;font-weight:700;color:var(--accent2)">82%</div>
+                  <div style="height:3px;background:var(--bg4);border-radius:2px;margin-top:4px;"><div style="width:82%;height:100%;background:var(--accent2);border-radius:2px;"></div></div>
+                </div>
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;">
+                  <div style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);">IDENTIFY</div>
+                  <div style="font-size:16px;font-weight:700;color:var(--accent2)">78%</div>
+                  <div style="height:3px;background:var(--bg4);border-radius:2px;margin-top:4px;"><div style="width:78%;height:100%;background:var(--accent2);border-radius:2px;"></div></div>
+                </div>
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;">
+                  <div style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);">PROTECT</div>
+                  <div style="font-size:16px;font-weight:700;color:var(--yellow)">71%</div>
+                  <div style="height:3px;background:var(--bg4);border-radius:2px;margin-top:4px;"><div style="width:71%;height:100%;background:var(--yellow);border-radius:2px;"></div></div>
+                </div>
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;">
+                  <div style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);">DETECT</div>
+                  <div style="font-size:16px;font-weight:700;color:var(--yellow)">68%</div>
+                  <div style="height:3px;background:var(--bg4);border-radius:2px;margin-top:4px;"><div style="width:68%;height:100%;background:var(--yellow);border-radius:2px;"></div></div>
+                </div>
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;">
+                  <div style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);">RESPOND</div>
+                  <div style="font-size:16px;font-weight:700;color:var(--yellow)">74%</div>
+                  <div style="height:3px;background:var(--bg4);border-radius:2px;margin-top:4px;"><div style="width:74%;height:100%;background:var(--yellow);border-radius:2px;"></div></div>
+                </div>
+                <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;">
+                  <div style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);">RECOVER</div>
+                  <div style="font-size:16px;font-weight:700;color:var(--accent)">80%</div>
+                  <div style="height:3px;background:var(--bg4);border-radius:2px;margin-top:4px;"><div style="width:80%;height:100%;background:var(--accent);border-radius:2px;"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px;box-shadow:var(--shadow);">
+            <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:6px;">Reife-Level Bewertung</div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:16px;">NIST CSF 2.0 Implementation Tiers</div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:12px;font-weight:600;">Tier 3 — Wiederholbar</span><span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--yellow);">Aktuell</span></div>
+                <div style="height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;"><div style="width:60%;height:100%;background:var(--yellow);border-radius:3px;"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:12px;color:var(--text2);">Tier 4 — Adaptiv</span><span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);">Ziel</span></div>
+                <div style="height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;"><div style="width:80%;height:100%;background:var(--accent2);border-radius:3px;"></div></div>
+              </div>
+              <div style="margin-top:8px;padding:12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);">
+                <div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:4px;">Handlungsschwerpunkte</div>
+                <div style="font-size:11px;color:var(--text2);line-height:1.6;">▸ DETECT verbessern — SIEM-Regeln erweitern<br>▸ PROTECT: MFA für alle Admin-Zugänge<br>▸ RESPOND: Incident-Response-Plan testen</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+
+      <!-- NEW RISK TAB -->
+      <div id="view-new" style="display:none">
+        <div class="panel-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <span class="panel-title">Risiko erfassen</span>
+              <span class="panel-hint">ISO 27001 §6.1.2</span>
+            </div>
+            <div class="panel-body">
+              <div class="form-row">
+                <div class="form-group full">
+                  <label>Risikotitel</label>
+                  <input type="text" id="risk-title" placeholder="z.B. Unzureichende MFA für Admin-Zugänge">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>ISO 27001 Control</label>
+                  <select id="risk-iso">
+                    <option value="">— Wählen —</option>
+                    <option value="A.5.1">A.5.1 · Informationssicherheitspolitiken</option>
+                    <option value="A.5.7">A.5.7 · Threat Intelligence (neu 2022)</option>
+                    <option value="A.5.21">A.5.21 · IKT-Lieferkette</option>
+                    <option value="A.5.23">A.5.23 · Cloud-Dienste (neu 2022)</option>
+                    <option value="A.5.30">A.5.30 · IKT Business Continuity (neu 2022)</option>
+                    <option value="A.6.3">A.6.3 · Awareness &amp; Training</option>
+                    <option value="A.8.2">A.8.2 · Privilegierte Zugriffsrechte</option>
+                    <option value="A.8.5">A.8.5 · Sichere Authentifizierung</option>
+                    <option value="A.8.9">A.8.9 · Konfigurationsmanagement (neu 2022)</option>
+                    <option value="A.8.11">A.8.11 · Datenmaskierung (neu 2022)</option>
+                    <option value="A.8.12">A.8.12 · DLP (neu 2022)</option>
+                    <option value="A.8.13">A.8.13 · Sicherung von Informationen</option>
+                    <option value="A.8.24">A.8.24 · Kryptographie</option>
+                    <option value="A.8.28">A.8.28 · Sichere Codierung (neu 2022)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>NIST CSF 2.0 Subcategory</label>
+                  <select id="risk-nist">
+                    <option value="">— Wählen —</option>
+                    <option value="GV.RM-01">GV.RM-01 · Risikosteuerungsziele</option>
+                    <option value="GV.RM-06">GV.RM-06 · Risikodokumentation & -priorisierung</option>
+                    <option value="ID.RA-02">ID.RA-02 · Threat Intelligence empfangen</option>
+                    <option value="ID.RA-03">ID.RA-03 · Bedrohungen identifizieren</option>
+                    <option value="ID.RA-10">ID.RA-10 · Kritische Lieferanten prüfen</option>
+                    <option value="PR.AA-03">PR.AA-03 · Authentifizierung</option>
+                    <option value="PR.DS-01">PR.DS-01 · Ruhende Daten schützen</option>
+                    <option value="PR.DS-11">PR.DS-11 · Backup testen</option>
+                    <option value="DE.CM-01">DE.CM-01 · Netzwerk-Monitoring</option>
+                    <option value="RS.MA-01">RS.MA-01 · Incident Response</option>
+                    <option value="RC.RP-03">RC.RP-03 · Backup-Integrität vor Wiederherstellung prüfen</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Behandlung</label>
+                  <select id="risk-treatment">
+                    <option value="mitigate">Mindern (Mitigate)</option>
+                    <option value="accept">Akzeptieren (Accept)</option>
+                    <option value="transfer">Übertragen (Transfer)</option>
+                    <option value="avoid">Vermeiden (Avoid)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Verantwortlicher</label>
+                  <select id="risk-owner">
+                    <option>Dr. M. Fischer (CISO)</option>
+                    <option>T. Müller (IT-Security)</option>
+                    <option>S. Wolf (Operations)</option>
+                    <option>K. Braun (Compliance)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group full">
+                  <label>Beschreibung</label>
+                  <textarea id="risk-desc" placeholder="Beschreibe das Risiko, betroffene Assets und mögliche Auswirkungen…"></textarea>
+                </div>
+              </div>
+
+              <!-- Sliders -->
+              <div class="slider-row">
+                <div class="slider-group">
+                  <label>
+                    <span>Eintrittswahrscheinlichkeit</span>
+                    <span class="slider-val" id="lval" style="color:var(--yellow)">3</span>
+                  </label>
+                  <input type="range" id="likelihood" min="1" max="5" value="3" oninput="updateScore()">
+                  <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);font-family:'DM Mono', monospace;margin-top:4px;">
+                    <span>Selten</span><span>Sicher</span>
+                  </div>
+                </div>
+                <div class="slider-group">
+                  <label>
+                    <span>Schadensausmaß</span>
+                    <span class="slider-val" id="ival" style="color:var(--yellow)">3</span>
+                  </label>
+                  <input type="range" id="impact" min="1" max="5" value="3" oninput="updateScore()">
+                  <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);font-family:'DM Mono', monospace;margin-top:4px;">
+                    <span>Gering</span><span>Kritisch</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="score-display">
+                <div>
+                  <div class="score-label-sm">Risikoscore (L × I)</div>
+                  <div class="score-big" id="risk-score-display">9</div>
+                </div>
+                <div class="score-matrix">
+                  <div class="matrix-cell">
+                    <div class="mc-label">Likelihood</div>
+                    <div class="mc-val" id="mc-l">3 / 5</div>
+                  </div>
+                  <div class="matrix-cell">
+                    <div class="mc-label">Impact</div>
+                    <div class="mc-val" id="mc-i">3 / 5</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:flex;gap:10px;">
+                <button class="btn btn-ghost" style="flex:1" onclick="clearForm()">Zurücksetzen</button>
+                <button class="btn btn-primary" style="flex:2" onclick="saveAndAnalyze()">
+                  Risiko speichern &amp; KI-Analyse starten →
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Reference -->
+          <div class="panel">
+            <div class="panel-head">
+              <span class="panel-title">Risikomatrix &amp; Skala</span>
+              <span class="panel-hint">Gem. ISO 27001 §6.1.2c</span>
+            </div>
+            <div class="panel-body">
+              <div id="matrix-visual" style="margin-bottom:20px;">
+                <!-- 5×5 Matrix -->
+                <div style="font-size:10px;color:var(--text3);font-family:'DM Mono', monospace;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;">Impact →</div>
+                <div style="display:grid;grid-template-columns:20px repeat(5,1fr);gap:3px;">
+                  <div></div>
+                  <div style="text-align:center;font-size:9px;font-family:'DM Mono', monospace;color:var(--text3);padding-bottom:4px;">1</div>
+                  <div style="text-align:center;font-size:9px;font-family:'DM Mono', monospace;color:var(--text3)">2</div>
+                  <div style="text-align:center;font-size:9px;font-family:'DM Mono', monospace;color:var(--text3)">3</div>
+                  <div style="text-align:center;font-size:9px;font-family:'DM Mono', monospace;color:var(--text3)">4</div>
+                  <div style="text-align:center;font-size:9px;font-family:'DM Mono', monospace;color:var(--text3)">5</div>
+                  <!-- Rows: Likelihood 5 to 1 -->
+                  <script>
+                  (function(){
+                    const colors = {
+                      1:'rgba(59,130,246,.25)', 2:'rgba(59,130,246,.35)', 3:'rgba(245,158,11,.35)',
+                      4:'rgba(255,107,53,.4)', 5:'rgba(239,68,68,.45)', 6:'rgba(239,68,68,.6)',
+                      8:'rgba(239,68,68,.7)', 9:'rgba(239,68,68,.55)', 10:'rgba(239,68,68,.8)',
+                      12:'rgba(239,68,68,.85)', 15:'rgba(239,68,68,.9)', 16:'rgba(239,68,68,.95)',
+                      20:'rgba(239,68,68,1)', 25:'rgba(239,68,68,1)'
+                    };
+                    let html = '';
+                    for(let l=5;l>=1;l--){
+                      html += `<div style="text-align:center;font-size:9px;font-family:'DM Mono', monospace;color:var(--text3)">${l}</div>`;
+                      for(let i=1;i<=5;i++){
+                        const s=l*i;
+                        const c = colors[s] || (s<=2?'rgba(59,130,246,.25)':s<=4?'rgba(59,130,246,.35)':s<=6?'rgba(245,158,11,.35)':'rgba(255,107,53,.4)');
+                        html += `<div id="cell-${l}-${i}" style="height:28px;border-radius:4px;background:${c};display:flex;align-items:center;justify-content:center;font-size:10px;font-family:'DM Mono', monospace;font-weight:600;color:rgba(255,255,255,.7)">${s}</div>`;
+                      }
+                    }
+                    document.write(html);
+                  })();
+                  </script>
+                </div>
+                <div style="font-size:9px;color:var(--text3);font-family:'DM Mono', monospace;margin-top:4px;text-align:right">← Likelihood</div>
+              </div>
+
+              <div style="margin-bottom:16px;">
+                <div style="font-size:11px;font-weight:600;margin-bottom:8px;">Schnell-Tags für häufige Risikotypen:</div>
+                <div class="tag-row">
+                  <span class="tag" onclick="fillTag('Phishing / Social Engineering','A.6.3','ID.RA-03')">Phishing</span>
+                  <span class="tag" onclick="fillTag('Ransomware-Angriff','A.8.7','DE.CM-01')">Ransomware</span>
+                  <span class="tag" onclick="fillTag('Datenpanne / Data Breach','A.8.12','PR.DS-01')">Data Breach</span>
+                  <span class="tag" onclick="fillTag('Insider Threat','A.5.3','ID.RA-03')">Insider Threat</span>
+                  <span class="tag" onclick="fillTag('Ungepatzte Schwachstelle','A.8.8','ID.RA-01')">CVE / Patch</span>
+                  <span class="tag" onclick="fillTag('Cloud-Fehlkonfiguration','A.5.23','DE.CM-01')">Cloud Config</span>
+                  <span class="tag" onclick="fillTag('Ausfall kritischer Infrastruktur','A.5.30','RC.RP-03')">Ausfall Infra</span>
+                  <span class="tag" onclick="fillTag('Supply-Chain-Angriff','A.5.21','ID.RA-10')">Supply Chain</span>
+                  <span class="tag" onclick="fillTag('Zugangsdaten-Kompromittierung','A.8.5','PR.AA-03')">Credentials</span>
+                  <span class="tag" onclick="fillTag('DDoS-Attacke','A.8.20','DE.CM-01')">DDoS</span>
+                </div>
+              </div>
+
+              <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px 14px;">
+                <div style="font-size:10px;font-family:'DM Mono', monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Score-Legende</div>
+                <div style="display:flex;flex-direction:column;gap:5px;">
+                  <div style="display:flex;align-items:center;gap:8px;font-size:11px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--red);flex-shrink:0"></span> <strong>15–25</strong> <span style="color:var(--text3)">Kritisch — sofortiger Handlungsbedarf</span></div>
+                  <div style="display:flex;align-items:center;gap:8px;font-size:11px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent3);flex-shrink:0"></span> <strong>10–14</strong> <span style="color:var(--text3)">Hoch — innerhalb 30 Tage beheben</span></div>
+                  <div style="display:flex;align-items:center;gap:8px;font-size:11px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--yellow);flex-shrink:0"></span> <strong>5–9</strong> <span style="color:var(--text3)">Mittel — innerhalb 90 Tage</span></div>
+                  <div style="display:flex;align-items:center;gap:8px;font-size:11px;"><span style="width:8px;height:8px;border-radius:50%;background:#60a5fa;flex-shrink:0"></span> <strong>1–4</strong> <span style="color:var(--text3)">Niedrig — monitoren</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI TAB -->
+      <div id="view-ai" style="display:none">
+        <div class="panel">
+          <div class="panel-head">
+            <span class="panel-title">
+              <span style="color:var(--accent)">✦</span> KI-gestützte Risikoanalyse
+              <span style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;font-weight:400;margin-left:8px">powered by Ollama (lokal)</span>
+            </span>
+            <button class="btn btn-ghost btn-sm" onclick="clearAI()">Zurücksetzen</button>
+          </div>
+          <div class="panel-body">
+            <div style="background:#f0f7ff;border:1px solid #bee3f8;border-radius:10px;padding:16px;margin-bottom:20px;display:flex;align-items:flex-start;gap:14px;">
+              <div style="font-size:24px;flex-shrink:0">🤖</div>
+              <div>
+                <div style="font-size:13px;font-weight:600;color:#2b6cb0;margin-bottom:4px">Vollständiger KI-Sicherheitsreport</div>
+                <div style="font-size:12px;color:#4a90c4">Ollama analysiert alle deine Risiken und erstellt einen Report mit: Risiko-Priorisierung · Maßnahmenempfehlungen · Compliance-Lücken (ISO 27001, NIST CSF 2.0, NIS2)</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;margin-bottom:20px;">
+              <button class="btn btn-primary" style="flex:1;padding:13px" onclick="runFullAIReport()">
+                ✦ Vollständigen KI-Report generieren
+              </button>
+            </div>
+            <div id="ai-output" style="min-height:200px;">
+              <div id="ai-placeholder" style="text-align:center;padding:40px;color:var(--text3);">
+                <div style="font-size:40px;margin-bottom:12px">✦</div>
+                <div style="font-size:13px;color:var(--text2);font-weight:600">Bereit zur Analyse</div>
+                <div style="font-size:11px;color:var(--text3);margin-top:6px">Ollama analysiert alle offenen Risiken gegen ISO 27001:2022,<br>NIST CSF 2.0 und NIS2/DORA Anforderungen.</div>
+              </div>
+              <div id="ai-loading" style="display:none;text-align:center;padding:40px;">
+                <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;">
+                  <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);animation:aiPulse 1.2s ease-in-out infinite"></div>
+                  <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);animation:aiPulse 1.2s ease-in-out 0.4s infinite"></div>
+                  <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);animation:aiPulse 1.2s ease-in-out 0.8s infinite"></div>
+                </div>
+                <div style="font-size:13px;color:var(--text2)" id="ai-status-msg">Ollama analysiert deine Risiken…</div>
+              </div>
+              <div id="ai-content"></div>
+            </div>
+          </div>
+        </div>             <span style="font-size:12px;color:var(--text2)">Analysiere mit ISO 27001 + NIST CSF 2.0…</span>
+              </div>
+              <div class="ai-content" id="ai-content"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Notification -->
+<div class="notif notif-success" id="notif">
+  <span style="color:var(--accent)">✓</span>
+  <span id="notif-text">Risiko gespeichert</span>
+</div>
+
+<script>
+// ============================================================
+// TAB MANAGEMENT
+// ============================================================
+function showTab(t) {
+  ['register','iso','nist','new','ai'].forEach(id => {
+    const view = document.getElementById('view-'+id);
+    const tab  = document.getElementById('tab-'+id);
+    if (view) view.style.display = id===t?'block':'none';
+    if (tab) {
+      if (id === 'ai') {
+        // AI button uses gradient styling
+        tab.style.opacity = id===t ? '1' : '0.7';
+        tab.style.background = id===t
+          ? 'linear-gradient(135deg,#0f9d7e,#1847B1)'
+          : 'linear-gradient(135deg,#1847B1,#0f9d7e)';
+      } else {
+        tab.classList.toggle('active', id===t);
+      }
+    }
+  });
+  // Update hash
+  window.history.replaceState(null, '', '#'+t);
+}
+
+// Hash-based tab routing
+function routeHash() {
+  const hash = window.location.hash.slice(1);
+  if (['iso','nist','register','new','ai'].includes(hash)) {
+    showTab(hash);
+  }
+}
+window.addEventListener('load', routeHash);
+window.addEventListener('hashchange', routeHash);
+
+
+// ============================================================
+// RISK SCORE CALCULATOR
+// ============================================================
+function updateScore() {
+  const l = parseInt(document.getElementById('likelihood').value);
+  const i = parseInt(document.getElementById('impact').value);
+  const s = l * i;
+
+  document.getElementById('lval').textContent = l;
+  document.getElementById('ival').textContent = i;
+  document.getElementById('mc-l').textContent = l + ' / 5';
+  document.getElementById('mc-i').textContent = i + ' / 5';
+
+  const el = document.getElementById('risk-score-display');
+  el.textContent = s;
+  el.style.color = s>=15?'var(--red)':s>=10?'var(--accent3)':s>=5?'var(--yellow)':'#60a5fa';
+
+  // Highlight matrix cell
+  document.querySelectorAll('[id^=cell-]').forEach(c => c.style.outline='none');
+  const cell = document.getElementById(`cell-${l}-${i}`);
+  if(cell) cell.style.outline = '2px solid var(--accent)';
+}
+
+updateScore();
+
+// ============================================================
+// QUICK FILL TAGS
+// ============================================================
+function fillTag(title, iso, nist) {
+  document.getElementById('risk-title').value = title;
+  document.getElementById('risk-iso').value = iso;
+  document.getElementById('risk-nist').value = nist || '';
+  showTab('new');
+}
+
+// ============================================================
+// FORM ACTIONS
+// ============================================================
+function clearForm() {
+  ['risk-title','risk-iso','risk-nist','risk-desc'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = '';
+  });
+  document.getElementById('likelihood').value = 3;
+  document.getElementById('impact').value = 3;
+  updateScore();
+}
+
+function saveAndAnalyze() {
+  const title = document.getElementById('risk-title').value;
+  if(!title.trim()) { alert('Bitte Risikotitel eingeben.'); return; }
+
+  const iso = document.getElementById('risk-iso').value;
+  const l = document.getElementById('likelihood').value;
+  const i = document.getElementById('impact').value;
+
+  showNotif('Risiko gespeichert — KI-Analyse wird gestartet');
+
+  setTimeout(() => {
+    document.getElementById('ai-title').value = title;
+    document.getElementById('ai-control').value = iso;
+    showTab('ai');
+    setTimeout(() => runAIAnalysis(), 300);
+  }, 800);
+}
+
+
+
+// ============================================================
+// ANALYZE FROM REGISTER
+// ============================================================
+function analyzeRisk(title, iso, l, i) {
+  document.getElementById('ai-title').value = title;
+  document.getElementById('ai-control').value = iso;
+  showTab('ai');
+  setTimeout(() => runAIAnalysis(), 300);
+}
+
+// ============================================================
+// NOTIFICATION
+// ============================================================
+function showNotif(msg) {
+  const n = document.getElementById('notif');
+  document.getElementById('notif-text').textContent = msg;
+  n.classList.add('show');
+  setTimeout(() => n.classList.remove('show'), 3000);
+}
+
+// ============================================================
+// AI ANALYSIS — Ollama API
+// ============================================================
+async function runAIAnalysis(mode) {
+  const title = document.getElementById('ai-title').value || 'Allgemeines Sicherheitsrisiko';
+  const control = document.getElementById('ai-control').value || '';
+  const context = document.getElementById('ai-context').value || 'Mittelständisches Unternehmen';
+
+  const output = document.getElementById('ai-output');
+  output.innerHTML = `<div class="ai-loading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span style="font-size:12px;color:var(--text2)">Analysiere gegen ISO 27001:2022 + NIST CSF 2.0…</span></div>`;
+
+  let systemPrompt = `Du bist ein zertifizierter ISO 27001 Lead Auditor und NIST CSF 2.0 Experte. Antworte immer auf Deutsch. Formatiere deine Antworten klar und strukturiert. Nutze ▸ für Aufzählungen und === für Abschnittstrennungen.`;
+
+  let userPrompt;
+
+  if(mode === 'nist') {
+    userPrompt = `Analysiere dieses ISMS-Risiko ausschließlich nach NIST CSF 2.0:
+
+Risikotitel: ${title}
+ISO Control Referenz: ${control}
+Unternehmenskontext: ${context}
+
+Gib aus:
+1. NIST CSF 2.0 Functions und Subcategories die betroffen sind
+2. Aktuelles Tier-Level (0-4) und Ziel-Tier
+3. Konkrete Maßnahmen je NIST-Funktion (GV/ID/PR/DE/RS/RC)
+4. Abhängigkeiten zu anderen Functions`;
+  } else if(mode === 'nis2') {
+    userPrompt = `Bewerte dieses Risiko im Kontext der NIS2-Richtlinie (EU 2022/2555):
+
+Risikotitel: ${title}
+ISO Control Referenz: ${control}
+Unternehmenskontext: ${context}
+
+Analysiere:
+1. Relevanz für NIS2 Art. 21 (Risikomanagementmaßnahmen)
+2. Meldepflichten nach NIS2 Art. 23
+3. Mögliche Bußgelder bei Verletzung (Art. 34)
+4. Überschneidungen mit DORA (falls relevant)
+5. Konkrete Umsetzungsempfehlungen`;
+  } else {
+    userPrompt = `Führe eine vollständige ISMS-Risikoanalyse durch:
+
+Risikotitel: ${title}
+ISO 27001:2022 Control-Referenz: ${control}
+Unternehmenskontext: ${context}
+
+Erstelle eine strukturierte Analyse mit:
+
+=== 1. RISIKOKLASSIFIZIERUNG ===
+- Risikokategorie und betroffene Assets
+- Bedrohungsvektor (technisch/organisatorisch/physisch)
+
+=== 2. ISO 27001:2022 MAPPING ===
+- Primärer Control (${control}) mit Beschreibung
+- Weitere betroffene Annex A Controls
+- PDCA-Zyklus-Phase (Plan/Do/Check/Act)
+
+=== 3. NIST CSF 2.0 MAPPING ===
+- Betroffene Functions (GV/ID/PR/DE/RS/RC)
+- Konkrete Subcategories mit Codes
+- Empfohlener Ziel-Tier (1-4)
+
+=== 4. MASSNAHMENPLAN ===
+- 3 sofortige Maßnahmen (Quick Wins, <30 Tage)
+- 2 mittelfristige Maßnahmen (30-90 Tage)
+- 1 strategische Maßnahme (>90 Tage)
+
+=== 5. REGULATORISCHE RELEVANZ ===
+- NIS2 Artikel-Referenz (falls zutreffend)
+- DORA (falls Finanzsektor)
+- KRITIS-Verordnung (falls relevant)
+
+=== 6. KPIs ZUR ERFOLGSMESSUNG ===
+- 2-3 messbare Indikatoren`;
+  }
+
+  try {
+    const response = await fetch(API + '/ai/analyse', {
+      method: 'POST',
+      headers: Object.assign({'Content-Type':'application/json'}, getAuthHeaders()),
+      body: JSON.stringify({ prompt: systemPrompt + '\n\n' + userPrompt, max_tokens: 1000 })
+    });
+
+    const data = await response.json();
+    const text = data.text || 'Keine Antwort erhalten.';
+
+    // Format output
+    const formatted = text
+      .replace(/===(.*?)===/g, '<div style="color:var(--accent);font-weight:600;margin:14px 0 6px;font-size:11px;letter-spacing:.06em;text-transform:uppercase">$1</div>')
+      .replace(/▸/g, '<span style="color:var(--accent2)">▸</span>')
+      .replace(/\n/g, '<br>');
+
+    output.innerHTML = `<div style="line-height:1.8;font-size:12px;">${formatted}</div>`;
+
+  } catch(err) {
+    output.innerHTML = `
+      <div style="color:rgba(255,255,255,0.6);line-height:1.8;font-size:12px;">
+        <div style="color:var(--yellow);font-weight:600;margin-bottom:12px;">Demo-Modus (API-Key nicht konfiguriert)</div>
+
+        <div style="color:var(--accent);font-weight:600;margin-bottom:6px;font-size:11px;text-transform:uppercase">1. RISIKOKLASSIFIZIERUNG</div>
+        ▸ <strong>Risiko:</strong> ${title}<br>
+        ▸ Kategorie: Technisch / Zugriffskontrolle<br>
+        ▸ Bedrohungsvektor: Externes Angreifer-Szenario + Insider Threat<br>
+        ▸ Betroffene Assets: Identitäts- und Authentifizierungsinfrastruktur<br><br>
+
+        <div style="color:var(--accent);font-weight:600;margin-bottom:6px;font-size:11px;text-transform:uppercase">2. ISO 27001:2022 MAPPING</div>
+        ▸ Primär-Control: <span style="color:var(--accent2)">${control || 'A.8.5'}</span> – Sichere Authentifizierung<br>
+        ▸ Weitere Controls: A.5.15 (Zugriffskontrolle), A.5.16 (Identitätsmanagement), A.8.2 (Privilegierte Zugriffsrechte)<br>
+        ▸ NEU in 2022: A.8.5 fordert explizit MFA für privilegierte Zugänge<br>
+        ▸ PDCA-Phase: <span style="color:var(--yellow)">Do</span> – Implementierung ausstehend<br><br>
+
+        <div style="color:var(--accent);font-weight:600;margin-bottom:6px;font-size:11px;text-transform:uppercase">3. NIST CSF 2.0 MAPPING</div>
+        ▸ <span style="color:var(--accent4)">PR</span>.AA-03 – Authentifizierung (Tier-Ziel: 3)<br>
+        ▸ <span style="color:var(--accent4)">PR</span>.AA-05 – Privilegierten Zugriff verwalten<br>
+        ▸ <span style="color:var(--accent4)">DE</span>.CM-03 – Personalaktivität überwachen<br>
+        ▸ Aktueller Tier: 1 | Empfohlener Ziel-Tier: 3<br><br>
+
+        <div style="color:var(--accent);font-weight:600;margin-bottom:6px;font-size:11px;text-transform:uppercase">4. MASSNAHMENPLAN</div>
+        ▸ <strong>Sofort (0-7 Tage):</strong> MFA für alle Admin-Accounts via Microsoft Entra ID aktivieren<br>
+        ▸ <strong>Sofort (7-14 Tage):</strong> Privileged Access Workstations (PAW) einrichten<br>
+        ▸ <strong>Kurzfristig (30 Tage):</strong> Privileged Identity Management (PIM) einführen<br>
+        ▸ <strong>Mittelfristig (60 Tage):</strong> Just-in-Time (JIT) Zugriff implementieren<br>
+        ▸ <strong>Strategisch (90 Tage):</strong> Zero-Trust-Architektur für privilegierte Zugänge<br><br>
+
+        <div style="color:var(--accent);font-weight:600;margin-bottom:6px;font-size:11px;text-transform:uppercase">5. REGULATORISCHE RELEVANZ</div>
+        ▸ <span style="color:var(--red)">NIS2</span> Art. 21(2)(j): Authentifizierung als explizite Anforderung<br>
+        ▸ <span style="color:var(--accent2)">BSI-KritisV</span>: Für KRITIS-Betreiber Pflichtmaßnahme<br>
+        ▸ Meldepflicht bei Ausnutzung: 24h Erstmeldung nach NIS2 Art. 23<br><br>
+
+        <div style="color:var(--accent);font-weight:600;margin-bottom:6px;font-size:11px;text-transform:uppercase">6. KPIs ZUR ERFOLGSMESSUNG</div>
+        ▸ MFA-Abdeckung Admin-Accounts: Ziel 100% (aktuell: ~40%)<br>
+        ▸ Durchschnittliche Privilege-Session-Dauer: Ziel &lt;4h<br>
+        ▸ Failed Login Attempts: Monitoring-Baseline + Alert-Schwellwert<br>
+      </div>`;
+  }
+}
+
+
+// ============================================================
+// API VERBINDUNG — echte Daten von localhost:3000
+// ============================================================
+const API = 'http://localhost:3000/api/v1';
+
+function setApiStatus(ok, msg) {
+  const dot = document.getElementById('api-dot');
+  const txt = document.getElementById('api-msg');
+  if (dot) dot.style.background = ok ? 'var(--green)' : 'var(--red)';
+  if (txt) { txt.textContent = msg; txt.style.color = ok ? 'var(--green)' : 'var(--text3)'; }
+}
+
+function riskColor(score) {
+  if (score >= 15) return 'var(--red)';
+  if (score >= 10) return 'var(--accent3)';
+  if (score >= 5)  return 'var(--yellow)';
+  return 'var(--blue)';
+}
+function riskBadgeClass(score) {
+  if (score >= 15) return 'sb-critical';
+  if (score >= 10) return 'sb-high';
+  if (score >= 5)  return 'sb-medium';
+  return 'sb-low';
+}
+function statusLabel(s) {
+  return { open: 'Offen', in_treatment: 'In Bearbeitung', closed: 'Geschlossen', accepted: 'Akzeptiert' }[s] || s;
+}
+function formatDate(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit', year:'2-digit'});
+}
+
+async function loadRisks() {
+  try {
+    const res = await fetch(`${API}/health`);
+    if (!res.ok) throw new Error('API nicht erreichbar');
+    setApiStatus(true, 'API verbunden · Live-Daten');
+
+    const risks = await (await fetch(`${API}/risks`)).json();
+
+    // Update risk register table
+    const tbody = document.querySelector('.risk-table tbody');
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+    risks.forEach(r => {
+      const score = parseFloat(r.risk_score);
+      const isOverdue = r.due_date && new Date(r.due_date) < new Date();
+      tbody.innerHTML += `
+        <tr onclick="selectRisk(this, '${r.title.replace(/'/g,"\'")}', '${r.iso_control_ref||''}', '${r.risk_ref||''}')">
+          <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">${r.risk_ref || '—'}</span></td>
+          <td style="font-weight:600">${r.title}</td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">${r.iso_control_ref || '—'}${r.nist_sub_code ? ' / '+r.nist_sub_code : ''}</span></td>
+          <td>${r.likelihood} × ${r.impact}</td>
+          <td><span class="score-badge ${riskBadgeClass(score)}">${score.toFixed(0)}</span></td>
+          <td><span style="font-size:10px;padding:2px 7px;border-radius:4px;background:var(--bg3);font-family:'DM Mono',monospace">${statusLabel(r.status)}</span></td>
+          <td style="${isOverdue ? 'color:var(--red)' : 'color:var(--text3)'};font-family:'DM Mono',monospace;font-size:10px">${formatDate(r.due_date)}</td>
+          <td><button onclick="event.stopPropagation();quickRisk(this)" data-title="${r.title}" data-control="${r.iso_control_ref||''}" data-score="${r.risk_score||0}" data-status="${r.status||''}" data-due="${r.due_date||''}" style="font-size:10px;padding:4px 10px;background:linear-gradient(135deg,#1847B1,#0f9d7e);color:#fff;border:none;border-radius:5px;cursor:pointer;font-weight:600;">✦ KI</button></td>
+        </tr>`;
+    });
+
+    // Update header count
+    const header = document.querySelector('#view-register .panel-hint');
+    if (header) header.textContent = `${risks.length} Risiken · Live-Daten`;
+
+  } catch(err) {
+    setApiStatus(false, 'API nicht erreichbar — Demo-Daten');
+    console.warn('API Fehler:', err.message);
+  }
+}
+
+// Submit new risk to API
+async function submitRiskToAPI() {
+  const title = document.getElementById('risk-title')?.value?.trim();
+  if (!title) { alert('Bitte Risikotitel eingeben.'); return; }
+
+  const body = {
+    title,
+    description: document.getElementById('risk-desc')?.value || '',
+    iso_control_ref: document.getElementById('risk-iso')?.value || '',
+    nist_sub_code: document.getElementById('risk-nist')?.value || '',
+    likelihood: parseInt(document.getElementById('likelihood')?.value) || 3,
+    impact: parseInt(document.getElementById('impact')?.value) || 3,
+    treatment: document.getElementById('risk-treatment')?.value || 'mitigate',
+  };
+
+  try {
+    const res = await fetch(`${API}/risks`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) throw new Error('Speichern fehlgeschlagen');
+
+    showNotif('Risiko gespeichert ✓');
+    clearForm();
+    loadRisks(); // Tabelle aktualisieren
+    showTab('register');
+  } catch(err) {
+    // Fallback: lokale Demo-Logik
+    saveAndAnalyze();
+  }
+}
+
+// Laden beim Start
+async function initRiskAnalyzer() {
+  await loadRisks();
+  routeHash();
+}
+initRiskAnalyzer();
+setInterval(loadRisks, 60000);
+
+// ── Hash-basierte Navigation ──────────────────────────────
+function handleHash() {
+  const hash = window.location.hash;
+  if (hash === '#iso' || hash === '#nist') {
+    // Scroll to / highlight the relevant score section
+    const target = document.getElementById('score-' + hash.slice(1));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Update active nav
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    const activeLink = document.querySelector(`.nav-item[href*="${hash}"]`);
+    if (activeLink) activeLink.classList.add('active');
+  }
+}
+window.addEventListener('hashchange', handleHash);
+window.addEventListener('load', handleHash);
+
+// ── Page Transition Handler ───────────────────────────
+document.addEventListener('click', function(e) {
+  const link = e.target.closest('a[href]');
+  if (!link) return;
+  const href = link.getAttribute('href');
+  if (!href) return;
+
+  const [file, hash] = href.split('#');
+  const currentFile = window.location.pathname.split('/').pop();
+  const isSamePage = !file || file === currentFile;
+
+  if (isSamePage) {
+    // Same page: update hash → triggers hashchange → routeHash/showTab
+    if (hash) {
+      e.preventDefault();
+      window.location.hash = hash;
+    }
+    return;
+  }
+
+  // Different page: fade out then navigate
+  if (!file.endsWith('.html')) return;
+  if (href.startsWith('http') || href.startsWith('mailto')) return;
+  e.preventDefault();
+  document.body.classList.add('page-leaving');
+  setTimeout(() => { window.location.href = href; }, 140);
+});
+
+// Load ISO controls into ISO tab
+async function loadISOControls() {
+  try {
+    const data = await (await fetch(API+'/controls/iso')).json();
+    const tbody = document.getElementById('iso-controls-tbody');
+    if (!tbody || !data.length) return;
+    tbody.innerHTML = data.slice(0,15).map(c => {
+      const pct = c.compliance_percentage || c.score || 0;
+      const color = pct>=80?'var(--green)':pct>=50?'var(--yellow)':'var(--red)';
+      return `<tr>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">${c.control_id||c.id}</td>
+        <td style="font-size:12px;font-weight:500;color:var(--text)">${c.name||c.title}</td>
+        <td><span style="font-size:9px;padding:3px 8px;border-radius:5px;background:var(--bg3);font-family:'DM Mono',monospace;color:${color}">${pct>=80?'Konform':pct>=50?'Teilweise':'Offen'}</span></td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="flex:1;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden;"><div style="width:${pct}%;height:100%;background:${color};border-radius:2px;"></div></div>
+            <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);min-width:30px;">${pct}%</span>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+    // Update score
+    const scores = await (await fetch(API+'/controls/score')).json();
+    if (scores.iso) {
+      document.getElementById('iso-pct').textContent = Math.round(scores.iso.overall_score)+'%';
+    }
+  } catch(e) { console.warn('ISO load:', e); }
+}
+loadISOControls();
+
+
+
+// ── Global severity helpers (used by quickAnalyse + runFullAIReport) ──────────
+function sevColor(s) {
+  var n = parseFloat(s);
+  if (n >= 20) return '#e53e3e';
+  if (n >= 12) return '#d97706';
+  if (n >= 6)  return '#0f9d7e';
+  return '#1847B1';
+}
+function sevLabel(s) {
+  var n = parseFloat(s);
+  if (n >= 20) return 'KRITISCH';
+  if (n >= 12) return 'HOCH';
+  if (n >= 6)  return 'MITTEL';
+  return 'NIEDRIG';
+}
+
+async function runFullAIReport() {
+  document.getElementById('ai-placeholder').style.display = 'none';
+  document.getElementById('ai-content').innerHTML = '';
+  document.getElementById('ai-loading').style.display = 'block';
+
+  var risks = [];
+  var rows = document.querySelectorAll('#risk-tbody tr');
+  rows.forEach(function(row) {
+    var cells = row.querySelectorAll('td');
+    if (cells.length >= 6) {
+      risks.push({
+        ref:     cells[0] ? cells[0].textContent.trim() : '',
+        title:   cells[1] ? cells[1].textContent.trim() : '',
+        control: cells[2] ? cells[2].textContent.trim() : '',
+        score:   cells[4] ? cells[4].textContent.trim() : '',
+        status:  cells[5] ? cells[5].textContent.trim() : '',
+        due:     cells[6] ? cells[6].textContent.trim() : ''
+      });
+    }
+  });
+
+  if (risks.length === 0) {
+    risks = [
+      {ref:'RIS-2026-001', title:'Fehlende MFA für Admin-Zugänge',            control:'A.8.5 / PR.AA-03',  score:'20', status:'Offen',           due:'28.02.26'},
+      {ref:'RIS-2026-002', title:'Backup-Verschlüsselung fehlt',               control:'A.8.13 / PR.DS-11', score:'20', status:'Offen',           due:'05.03.26'},
+      {ref:'RIS-2026-003', title:'DRP nicht getestet (>12 Monate)',            control:'A.5.30 / RC.RP-03', score:'15', status:'In Bearbeitung',  due:'10.03.26'},
+      {ref:'RIS-2026-004', title:'Lieferanten-Assessment ausstehend',          control:'A.5.21 / GV.RM-06', score:'12', status:'In Bearbeitung',  due:'20.03.26'},
+      {ref:'RIS-2026-005', title:'Threat Intelligence nicht etabliert',        control:'A.5.7 / ID.RA-02',  score:'9',  status:'Offen',           due:'01.04.26'},
+      {ref:'RIS-2026-006', title:'Security Awareness Training Q1 unvollständig', control:'A.6.3',           score:'6',  status:'In Bearbeitung',  due:'31.03.26'},
+      {ref:'RIS-2026-007', title:'Datenmaskierung (DLP) nicht implementiert',  control:'A.8.11 / PR.DS-01', score:'4',  status:'Akzeptiert',      due:'30.06.26'}
+    ];
+  }
+
+  var totalScore = risks.reduce(function(a,r){ return a + parseFloat(r.score||0); }, 0);
+  var avgScore   = totalScore / risks.length;
+  var overall    = sevLabel(avgScore);
+  var overallC   = sevColor(avgScore);
+  var critical   = risks.filter(function(r){ return parseFloat(r.score) >= 20; });
+  var high       = risks.filter(function(r){ return parseFloat(r.score) >= 12 && parseFloat(r.score) < 20; });
+  var medium     = risks.filter(function(r){ return parseFloat(r.score) >= 6  && parseFloat(r.score) < 12; });
+  var low        = risks.filter(function(r){ return parseFloat(r.score) < 6;  });
+
+  // Ollama für kurze Schadensbeschreibungen der Top-3 Risiken
+  var aiMeasures = {};
+  var topRisks = risks.slice().sort(function(a,b){ return parseFloat(b.score)-parseFloat(a.score); }).slice(0,3);
+  var el = document.getElementById('ai-status-msg');
+
+  for (var i = 0; i < topRisks.length; i++) {
+    var r = topRisks[i];
+    if (el) el.textContent = 'Analysiere ' + r.ref + '…';
+    try {
+      var p = 'Nenne für das Risiko "' + r.title + '" (Control: ' + r.control + ') auf Deutsch:\n1. Schadensszenario (1 Satz): Was passiert wenn dieses Risiko eintritt?\n2. Sofortmaßnahme (1 Satz): Was muss sofort getan werden?\nNur diese 2 nummerierten Sätze, keine Einleitung.';
+      var res = await fetch(API + '/ai/analyse', {
+        method: 'POST',
+        headers: Object.assign({'Content-Type':'application/json'}, getAuthHeaders()),
+        body: JSON.stringify({ prompt: p, max_tokens: 120 })
+      });
+      if (res.ok) {
+        var d = await res.json();
+        var txt = (d.text || '').trim();
+        // Filter out template responses
+        if (txt && !txt.match(/\[.*\]/) && !txt.match(/Sicherheitsaudit/i)) {
+          aiMeasures[r.ref] = txt;
+        }
+      }
+    } catch(e) { /* weiter */ }
+  }
+
+  // HTML mit String-Konkatenation bauen (keine verschachtelten Backticks)
+  function riskRowHTML(r) {
+    var c = sevColor(r.score);
+    var lbl = sevLabel(r.score);
+    var ai = '';
+    if (aiMeasures[r.ref]) {
+      ai = '<div style="margin-top:6px;font-size:11px;color:#4a5568;background:#f8f9fb;border-left:3px solid ' + c + ';padding:6px 10px;border-radius:0 5px 5px 0;">🦙 ' + aiMeasures[r.ref].replace(/\n/g,'<br>') + '</div>';
+    }
+    return '<div style="display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid #eef0f4;">'
+      + '<span style="flex-shrink:0;font-size:9px;font-weight:700;padding:3px 7px;border-radius:4px;background:' + c + ';color:#fff;font-family:DM Mono,monospace;margin-top:2px">' + lbl + '</span>'
+      + '<div style="flex:1;">'
+        + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;">'
+          + '<span style="font-size:9px;color:#a0aec0;font-family:DM Mono,monospace">' + r.ref + '</span>'
+          + '<span style="font-size:13px;font-weight:600;color:#1a202c">' + r.title + '</span>'
+        + '</div>'
+        + '<div style="font-size:11px;color:#718096">Control: ' + r.control + ' &nbsp;·&nbsp; Score: ' + r.score + '/25 &nbsp;·&nbsp; Status: ' + r.status + ' &nbsp;·&nbsp; Fällig: ' + r.due + '</div>'
+        + ai
+      + '</div>'
+      + '<span style="flex-shrink:0;font-size:18px;font-weight:800;color:' + c + ';font-family:DM Mono,monospace">' + r.score + '</span>'
+      + '</div>';
+  }
+
+  function sectionHTML(title, color, list) {
+    if (!list.length) return '';
+    return '<div style="margin-bottom:20px;">'
+      + '<div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:' + color + ';font-family:DM Mono,monospace;margin-bottom:8px;padding-bottom:4px;border-bottom:2px solid ' + color + '40">' + title + ' (' + list.length + ')</div>'
+      + list.map(riskRowHTML).join('')
+      + '</div>';
+  }
+
+  function roadmapHTML(list, phase, desc) {
+    if (!list.length) return '';
+    var items = list.map(function(r) {
+      return '<div style="font-size:11px;padding:3px 0;color:#2d3748">▸ <strong>' + r.ref + '</strong>: ' + r.title + ' (Score ' + r.score + ')</div>';
+    }).join('');
+    return '<div style="margin-bottom:14px;padding:12px;background:#f8f9fb;border-radius:8px;border-left:3px solid var(--accent2)">'
+      + '<div style="font-size:10px;font-weight:700;color:var(--accent2);font-family:DM Mono,monospace;margin-bottom:6px;text-transform:uppercase">' + phase + '</div>'
+      + '<div style="font-size:11px;color:#4a5568;margin-bottom:6px">' + desc + '</div>'
+      + items
+      + '</div>';
+  }
+
+  var header = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;padding:14px 18px;background:' + overallC + '12;border:1px solid ' + overallC + '40;border-radius:10px;">'
+    + '<span style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:5px;background:' + overallC + ';color:#fff;font-family:DM Mono,monospace">' + overall + '</span>'
+    + '<div>'
+      + '<div style="font-size:14px;font-weight:700;color:var(--navy)">Sicherheitsreport · ' + new Date().toLocaleDateString('de-DE') + '</div>'
+      + '<div style="font-size:11px;color:#718096;margin-top:1px">' + risks.length + ' Risiken analysiert · Ø Score ' + avgScore.toFixed(1) + ' · ' + critical.length + ' kritisch · ' + high.length + ' hoch</div>'
+    + '</div>'
+    + '<span style="margin-left:auto;font-size:10px;color:var(--text3);font-family:DM Mono,monospace">🦙 Ollama · lokal</span>'
+    + '</div>';
+
+  var sectionHeader = function(t) {
+    return '<div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);font-family:DM Mono,monospace;margin:24px 0 12px;padding-bottom:4px;border-bottom:2px solid var(--accent)">' + t + '</div>';
+  };
+
+  var html = '<div style="padding:4px;">'
+    + header
+    + sectionHeader('ALLE RISIKEN — PRIORISIERT NACH SCORE')
+    + sectionHTML('🔴 KRITISCH (Score ≥ 20)', '#e53e3e', critical)
+    + sectionHTML('🟠 HOCH (Score 12–19)', '#d97706', high)
+    + sectionHTML('🟢 MITTEL (Score 6–11)', '#0f9d7e', medium)
+    + sectionHTML('🔵 NIEDRIG (Score < 6)', '#1847B1', low)
+    + sectionHeader('90-TAGE MASSNAHMENPLAN')
+    + roadmapHTML(critical.concat(high.filter(function(r){return parseFloat(r.score)>=15;})), 'WOCHE 1–2 — SOFORTMASSNAHMEN', 'Kritische Risiken und hohe Risiken (Score ≥ 15) sofort adressieren:')
+    + roadmapHTML(high.filter(function(r){return parseFloat(r.score)<15;}), 'MONAT 1 — HOHE RISIKEN', 'Verbleibende hohe Risiken beheben:')
+    + roadmapHTML(medium.concat(low), 'MONAT 2–3 — STRUKTURELLE MASSNAHMEN', 'Mittlere und niedrige Risiken sowie strukturelle Verbesserungen:')
+    + '<div style="margin-top:16px;font-size:10px;color:#a0aec0;font-family:DM Mono,monospace;text-align:center;">🦙 Generiert von Ollama (lokal) · ' + new Date().toLocaleDateString('de-DE') + ' · Govrix ISMS</div>'
+    + '</div>';
+
+  document.getElementById('ai-loading').style.display = 'none';
+  document.getElementById('ai-content').innerHTML = html;
+}
+
+function renderAIReport(r) {
+  const riskColors = { KRITISCH:'#e53e3e', HOCH:'#d97706', MITTEL:'#0f9d7e', NIEDRIG:'#1847B1' };
+  const color = riskColors[r.overall_risk] || '#1847B1';
+
+  let html = '';
+
+  // Header
+  html += '<div style="background:linear-gradient(135deg,var(--navy),#2d3a5e);border-radius:12px;padding:20px;margin-bottom:16px;color:#fff;">';
+  html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">';
+  html += '<div style="font-size:16px;font-weight:700">KI-Sicherheitsreport</div>';
+  html += '<div style="padding:5px 14px;border-radius:20px;background:'+color+';font-size:11px;font-weight:700;font-family:DM Mono,monospace">'+r.overall_risk+'</div>';
+  html += '</div>';
+  html += '<div style="font-size:12px;opacity:0.85;line-height:1.6">'+r.summary+'</div>';
+  html += '<div style="font-size:11px;opacity:0.6;margin-top:8px;font-family:DM Mono,monospace">'+r.overall_risk_reason+'</div>';
+  html += '</div>';
+
+  // Top Risks
+  html += '<div class="ai-section">';
+  html += '<div class="ai-section-title">🎯 Risiko-Priorisierung</div>';
+  r.top_risks.forEach(function(risk) {
+    html += '<div class="ai-risk-item '+risk.severity+'">';
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">';
+    html += '<div style="font-size:12px;font-weight:700;color:var(--navy)">#'+risk.priority+' — '+risk.title+'</div>';
+    html += '<div style="display:flex;gap:6px;">';
+    html += '<span style="font-size:9px;font-family:DM Mono,monospace;padding:2px 8px;border-radius:4px;background:var(--bg4);color:var(--text3)">'+risk.ref+'</span>';
+    html += '<span style="font-size:9px;font-family:DM Mono,monospace;padding:2px 8px;border-radius:4px;background:var(--accent);color:#fff">'+risk.timeline+'</span>';
+    html += '</div></div>';
+    html += '<div style="font-size:11px;color:var(--text3);margin-bottom:8px">'+risk.priority_reason+'</div>';
+    html += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
+    risk.measures.forEach(function(m) {
+      html += '<div style="font-size:11px;padding:3px 10px;background:var(--bg3);border-radius:5px;color:var(--text2)">→ '+m+'</div>';
+    });
+    html += '</div></div>';
+  });
+  html += '</div>';
+
+  // Compliance Gaps
+  html += '<div class="ai-section">';
+  html += '<div class="ai-section-title">⚠️ Compliance-Lücken</div>';
+  const fwColors = {'ISO 27001':'#1847B1','NIST CSF 2.0':'#0f9d7e','NIS2':'#7c3aed','DORA':'#d97706'};
+  r.compliance_gaps.forEach(function(gap) {
+    const fc = fwColors[gap.framework] || '#666';
+    html += '<div style="padding:12px 14px;background:var(--bg3);border-radius:8px;margin-bottom:8px;">';
+    html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">';
+    html += '<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:'+fc+';color:#fff;font-family:DM Mono,monospace">'+gap.framework+'</span>';
+    html += '<span style="font-size:12px;font-weight:600;color:var(--navy)">'+gap.gap+'</span>';
+    html += '</div>';
+    html += '<div style="font-size:11px;color:var(--text3);margin-bottom:4px">Betroffene Controls: '+gap.affected_controls.join(', ')+'</div>';
+    html += '<div style="font-size:11px;color:var(--accent2)">→ '+gap.recommendation+'</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // Quick Wins
+  html += '<div class="ai-section">';
+  html += '<div class="ai-section-title">⚡ Quick Wins</div>';
+  html += '<div style="display:flex;flex-direction:column;gap:8px;">';
+  r.quick_wins.forEach(function(qw, i) {
+    html += '<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg3);border-radius:8px;">';
+    html += '<div style="width:22px;height:22px;border-radius:50%;background:var(--accent2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0">'+(i+1)+'</div>';
+    html += '<div style="font-size:12px;color:var(--text)">'+qw+'</div>';
+    html += '</div>';
+  });
+  html += '</div></div>';
+
+  // Roadmap
+  html += '<div class="ai-section">';
+  html += '<div class="ai-section-title">🗓 Maßnahmen-Roadmap</div>';
+  const phaseColors = ['#e53e3e','#d97706','#0f9d7e'];
+  r.roadmap.forEach(function(phase, idx) {
+    html += '<div style="margin-bottom:14px;">';
+    html += '<div style="font-size:11px;font-weight:700;color:'+phaseColors[idx]+';font-family:DM Mono,monospace;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">'+phase.phase+'</div>';
+    phase.actions.forEach(function(a) {
+      html += '<div style="font-size:12px;color:var(--text2);padding:5px 0 5px 14px;border-left:2px solid '+phaseColors[idx]+'20;margin-bottom:4px;">'+a+'</div>';
+    });
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // Footer
+  html += '<div style="text-align:center;font-size:10px;color:var(--text3);font-family:DM Mono,monospace;padding:10px">🦙 Generiert von Ollama (lokal) · '+new Date().toLocaleDateString('de-DE')+' · Govrix ISMS</div>';
+
+  document.getElementById('ai-content').innerHTML = html;
+}
+
+function clearAI() {
+  document.getElementById('ai-placeholder').style.display = 'block';
+  document.getElementById('ai-loading').style.display = 'none';
+  document.getElementById('ai-content').innerHTML = '';
+}
+
+
+// ── Quick AI Analysis per Risk ─────────────────────────────
+async function quickAnalyse(btn, title, control, score, status, dueDate) {
+  // Remove any existing quick analysis row
+  const existing = document.getElementById('quick-ai-row');
+  if (existing) existing.remove();
+
+  // If same button clicked again → just close
+  if (btn.dataset.open === '1') {
+    btn.dataset.open = '0';
+    btn.innerHTML = '✦ KI';
+    btn.style.background = 'linear-gradient(135deg,#1847B1,#0f9d7e)';
+    return;
+  }
+
+  // Reset all other buttons
+  document.querySelectorAll('[data-open="1"]').forEach(function(b) {
+    b.dataset.open = '0';
+    b.innerHTML = '✦ KI';
+    b.style.background = 'linear-gradient(135deg,#1847B1,#0f9d7e)';
+  });
+
+  btn.dataset.open = '1';
+  btn.innerHTML = '⏳';
+  btn.style.background = '#6b7280';
+
+  // Insert loading row below current row
+  const tr = btn.closest('tr');
+  const loadingRow = document.createElement('tr');
+  loadingRow.id = 'quick-ai-row';
+  loadingRow.innerHTML = `<td colspan="8" style="padding:0;border-bottom:2px solid #1847B1;">
+    <div style="padding:16px 20px;background:linear-gradient(135deg,#f0f7ff,#f0fff8);border-left:3px solid #1847B1;">
+      <div style="display:flex;align-items:center;gap:10px;color:#1847B1;font-size:12px;font-weight:600;">
+        <span style="animation:aiPulse 1s infinite">✦</span> Ollama analysiert "${title}"…
+      </div>
+    </div>
+  </td>`;
+  tr.parentNode.insertBefore(loadingRow, tr.nextSibling);
+
+  // Schweregrad direkt aus Score berechnen
+  const scoreNum = parseFloat(score) || 0;
+  const calcSev  = sevLabel(scoreNum);
+  const calcCol  = sevColor(scoreNum);
+
+  // Ollama nur für 3 kurze Texte fragen
+  const prompt = `Beantworte für das Risiko "${title}" (Score ${score}/25, Control ${control || 'ISO 27001'}) genau drei Punkte auf Deutsch. Keine Einleitung, direkt antworten:
+
+1. Schadensszenario (1 Satz): Was passiert konkret wenn "${title}" eintritt?
+2. Sofortmaßnahme (1 Satz): Was muss sofort diese Woche getan werden?
+3. Dauerhafte Lösung (1 Satz): Wie wird dieses Risiko dauerhaft behoben?`;
+
+  try {
+    const res = await fetch(API + '/ai/analyse', {
+      method: 'POST',
+      headers: Object.assign({'Content-Type':'application/json'}, getAuthHeaders()),
+      body: JSON.stringify({ prompt: prompt, max_tokens: 600 })
+    });
+    if (!res.ok) throw new Error('Backend Fehler: ' + res.status);
+    const data = await res.json();
+    const text = (data.text || '').trim();
+    if (!text) throw new Error('Keine Antwort von Ollama');
+
+    // Zeilen aufteilen nach Nummern 1. / 2. / 3.
+    const allLines = text.split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
+    
+    // Generische Audit-Antworten erkennen und ignorieren
+    const isGeneric = text.match(/Sicherheitsaudit|Name des (Unternehmens|Auditors)|\[Name\]|\[Datum\]|Zusammenfassung:/i);
+    
+    var part1 = '', part2 = '', part3 = '';
+    if (!isGeneric) {
+      // Extrahiere die 3 nummerierten Punkte
+      var fullText = text.replace(/\n/g, ' ');
+      var m1 = fullText.match(/1\.\s*(.*?)(?=2\.|$)/);
+      var m2 = fullText.match(/2\.\s*(.*?)(?=3\.|$)/);
+      var m3 = fullText.match(/3\.\s*(.*?)$/);
+      part1 = m1 ? m1[1].trim() : '';
+      part2 = m2 ? m2[1].trim() : '';
+      part3 = m3 ? m3[1].trim() : '';
+    }
+
+    // Fallback: wenn Parsing nicht klappt, gesamten Text zeigen
+    const showRaw = isGeneric || (!part1 && !part2);
+    const displayText = showRaw 
+      ? '<em style="color:#a0aec0">Ollama hat eine generische Antwort geliefert — Schadensszenario und Maßnahmen werden aus Risikodaten abgeleitet.</em>'
+      : '';
+
+    // Schadensszenario aus Risikodaten ableiten (immer korrekt)
+    const riskKnowledge = {
+      'mfa':          'Angreifer können sich mit gestohlenen Passwörtern ungehindert als Admin einloggen — kein zweiter Faktor stoppt sie.',
+      'backup':       'Bei Ransomware oder Datenverlust sind Backups ohne Verschlüsselung unbrauchbar oder wurden bereits kompromittiert.',
+      'drp':          'Im Notfall (Systemausfall, Cyberangriff) fehlt ein erprobter Wiederherstellungsplan — Ausfallzeiten werden massiv verlängert.',
+      'lieferant':    'Ungeprüfte Lieferanten können Einfallstore für Supply-Chain-Angriffe oder Datenlecks sein.',
+      'threat':       'Unbekannte aktuelle Bedrohungslagen führen dazu, dass gezielte Angriffe nicht rechtzeitig erkannt und abgewehrt werden.',
+      'awareness':    'Mitarbeiter fallen auf Phishing und Social Engineering herein, da sie nicht ausreichend sensibilisiert wurden.',
+      'dlp':          'Sensible Daten können unbemerkt exfiltriert oder intern missbraucht werden ohne Erkennungsmechanismus.',
+      'patch':        'Bekannte Schwachstellen bleiben offen und werden aktiv von Angreifern ausgenutzt.',
+      'cloud':        'Fehlkonfigurierte Cloud-Dienste ermöglichen unbefugten Datenzugriff oder Datenverlust.',
+      'default':      'Das Risiko kann zu Datenverlust, Betriebsunterbrechung oder Compliance-Verstößen führen.'
+    };
+    var titleLow = title.toLowerCase();
+    var autoScenario = riskKnowledge.default;
+    if (titleLow.includes('mfa') || titleLow.includes('authentif')) autoScenario = riskKnowledge.mfa;
+    else if (titleLow.includes('backup') || titleLow.includes('verschlüssel')) autoScenario = riskKnowledge.backup;
+    else if (titleLow.includes('drp') || titleLow.includes('disaster') || titleLow.includes('wiederher')) autoScenario = riskKnowledge.drp;
+    else if (titleLow.includes('liefer') || titleLow.includes('supply')) autoScenario = riskKnowledge.lieferant;
+    else if (titleLow.includes('threat') || titleLow.includes('intelligence')) autoScenario = riskKnowledge.threat;
+    else if (titleLow.includes('awareness') || titleLow.includes('training') || titleLow.includes('schulung')) autoScenario = riskKnowledge.awareness;
+    else if (titleLow.includes('dlp') || titleLow.includes('maskier')) autoScenario = riskKnowledge.dlp;
+    else if (titleLow.includes('patch') || titleLow.includes('schwachstelle')) autoScenario = riskKnowledge.patch;
+    else if (titleLow.includes('cloud')) autoScenario = riskKnowledge.cloud;
+
+    const scenarioText = (!isGeneric && part1) ? part1 : autoScenario;
+    const massnahmeText = (!isGeneric && (part2 || part3)) 
+      ? (part2 ? '1. ' + part2 + (part3 ? '<br>2. ' + part3 : '') : part3)
+      : 'Sofortmaßnahme: Control <strong>' + (control||'ISO 27001') + '</strong> implementieren und Status auf "In Bearbeitung" setzen.';
+
+    loadingRow.innerHTML = '<td colspan="8" style="padding:0;border-bottom:2px solid ' + calcCol + ';">'
+      + '<div style="padding:16px 20px;background:linear-gradient(135deg,#f8faff,#f0fff8);border-left:3px solid ' + calcCol + ';">'
+        + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;">'
+          + '<div style="flex:1;">'
+            + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">'
+              + '<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:' + calcCol + ';color:#fff;font-family:DM Mono,monospace">' + calcSev + '</span>'
+              + '<span style="font-size:12px;font-weight:700;color:#1a202c">' + title + '</span>'
+              + '<span style="font-size:10px;color:#718096;font-family:DM Mono,monospace">Score ' + score + '/25 · ' + status + ' · Fällig ' + (dueDate||'–') + '</span>'
+            + '</div>'
+            + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">'
+              + '<div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:10px;">'
+                + '<div style="font-size:9px;font-weight:700;color:' + calcCol + ';text-transform:uppercase;font-family:DM Mono,monospace;margin-bottom:4px;">⚠ Schadensszenario</div>'
+                + '<div style="font-size:11px;color:#2d3748;line-height:1.6;">' + scenarioText + '</div>'
+              + '</div>'
+              + '<div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:10px;">'
+                + '<div style="font-size:9px;font-weight:700;color:var(--accent2);text-transform:uppercase;font-family:DM Mono,monospace;margin-bottom:4px;">✓ Maßnahmen</div>'
+                + '<div style="font-size:11px;color:#2d3748;line-height:1.6;">' + massnahmeText + '</div>'
+              + '</div>'
+            + '</div>'
+            + '<div style="font-size:10px;color:#718096;background:#f7fafc;border-radius:4px;padding:6px 8px;">Control: <strong>' + (control||'ISO 27001') + '</strong> · Fälligkeit: ' + (dueDate||'nicht gesetzt') + '</div>'
+          + '</div>'
+          + '<button onclick="document.getElementById(\'quick-ai-row\').remove();this.closest(\'tr\').previousSibling.querySelector(\'[data-open]\').dataset.open=\'0\';this.closest(\'tr\').previousSibling.querySelector(\'[data-open]\').innerHTML=\'✦ KI\';this.closest(\'tr\').previousSibling.querySelector(\'[data-open]\').style.background=\'linear-gradient(135deg,#1847B1,#0f9d7e)\';" style="flex-shrink:0;font-size:10px;padding:4px 12px;background:transparent;border:1px solid #e2e8f0;border-radius:5px;cursor:pointer;color:#a0aec0;">✕</button>'
+        + '</div>'
+        + '<div style="margin-top:6px;font-size:9px;color:#a0aec0;font-family:DM Mono,monospace;">🦙 Analysiert von Ollama (lokal) · Govrix ISMS</div>'
+      + '</div>'
+      + '</td>';
+
+    btn.innerHTML = '✦ KI';
+    btn.style.background = calcCol;
+
+  } catch(err) {
+    loadingRow.innerHTML = `<td colspan="8" style="padding:12px 20px;background:#fff5f5;border-left:3px solid #e53e3e;font-size:12px;color:#c53030;">
+      Fehler: ${err.message} — Stelle sicher dass das Backend läuft (npm run start:dev)
+    </td>`;
+    btn.innerHTML = '✦ KI';
+    btn.style.background = 'linear-gradient(135deg,#1847B1,#0f9d7e)';
+    btn.dataset.open = '0';
+  }
+}
+
+
+function quickRisk(btn) {
+  quickAnalyse(btn,
+    btn.dataset.title,
+    btn.dataset.control,
+    btn.dataset.score,
+    btn.dataset.status,
+    formatDate(btn.dataset.due)
+  );
+}
+</script>
+<div id="api-status" style="position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+  background:#fff;border:1px solid var(--border);border-radius:6px;
+  padding:6px 14px;font-size:10px;font-family:'DM Mono',monospace;
+  color:var(--text3);z-index:999;display:flex;align-items:center;gap:8px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+  <span id="api-dot" style="width:6px;height:6px;border-radius:50%;background:var(--text3);display:inline-block"></span>
+  <span id="api-msg">Verbinde mit API...</span>
+</div>
+</body>
+</html>

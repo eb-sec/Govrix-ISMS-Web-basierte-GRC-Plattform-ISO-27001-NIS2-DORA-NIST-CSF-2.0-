@@ -1,0 +1,209 @@
+{
+  // ============================================================
+  // SecureFrame ISMS — VS Code Workspace Settings
+  // Datei: secureframe-isms.code-workspace
+  // Öffnen mit: code secureframe-isms.code-workspace
+  // ============================================================
+  "folders": [
+    { "name": "🎯 Root",        "path": "." },
+    { "name": "🖥️  Frontend",   "path": "./frontend" },
+    { "name": "⚙️  Backend",    "path": "./backend" },
+    { "name": "🗄️  Database",   "path": "./database" },
+    { "name": "📄  Reports",    "path": "./reports" }
+  ],
+
+  "settings": {
+    // Editor
+    "editor.fontSize": 13,
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs": true,
+
+    // TypeScript
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    // SQL
+    "[sql]": {
+      "editor.defaultFormatter": "mtxr.sqltools"
+    },
+
+    // HTML
+    "[html]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    // Python (für PDF-Generator)
+    "[python]": {
+      "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "python.analysis.typeCheckingMode": "basic",
+
+    // SQLTools Datenbankverbindung (lokale Dev-DB)
+    "sqltools.connections": [
+      {
+        "name": "ISMS Dev DB (Docker)",
+        "driver": "PostgreSQL",
+        "server": "localhost",
+        "port": 5432,
+        "database": "isms_db",
+        "username": "isms_user",
+        "password": "${env:DB_PASSWORD}"
+      }
+    ],
+
+    // File Nesting — zusammengehörige Dateien gruppieren
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+      "*.ts": "${capture}.js, ${capture}.d.ts, ${capture}.spec.ts",
+      "docker-compose.yml": "docker-compose.*.yml, .env, .env.*",
+      "README.md": "CHANGELOG.md, CONTRIBUTING.md, LICENSE"
+    },
+
+    // Datei-Highlighting für ISMS-spezifische Dateien
+    "files.associations": {
+      "*.sql": "sql",
+      "*.env.example": "dotenv",
+      "nginx.conf": "nginx"
+    },
+
+    // Ausgeblendete Dateien im Explorer
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/.git": true,
+      "**/__pycache__": true,
+      "**/.pytest_cache": true,
+      "**/dist": true
+    }
+  },
+
+  // ============================================================
+  // Empfohlene Extensions — beim Öffnen des Workspace
+  // automatisch vorgeschlagen
+  // ============================================================
+  "extensions": {
+    "recommendations": [
+      // TypeScript / NestJS
+      "ms-vscode.vscode-typescript-next",
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+
+      // Datenbank
+      "mtxr.sqltools",
+      "mtxr.sqltools-driver-pg",
+
+      // Python
+      "ms-python.python",
+      "ms-python.black-formatter",
+
+      // Docker
+      "ms-azuretools.vscode-docker",
+      "ms-vscode-remote.remote-containers",
+
+      // Git
+      "eamodio.gitlens",
+      "mhutchie.git-graph",
+
+      // HTML/CSS
+      "ritwickdey.liveserver",
+      "bradlc.vscode-tailwindcss",
+
+      // REST API Testing
+      "humao.rest-client",
+      "rangav.vscode-thunder-client",
+
+      // Allgemein
+      "formulahendry.auto-rename-tag",
+      "christian-kohler.path-intellisense",
+      "wayou.vscode-todo-highlight",
+      "gruntfuggly.todo-tree",
+      "oderwat.indent-rainbow",
+      "pkief.material-icon-theme"
+    ]
+  },
+
+  // ============================================================
+  // Launch Configs — F5 zum Debuggen
+  // ============================================================
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "🚀 NestJS API (Dev)",
+        "type": "node",
+        "request": "launch",
+        "program": "${workspaceFolder}/backend/dist/main.js",
+        "preLaunchTask": "npm: build",
+        "envFile": "${workspaceFolder}/.env",
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen"
+      },
+      {
+        "name": "🐍 PDF Generator",
+        "type": "debugpy",
+        "request": "launch",
+        "program": "${workspaceFolder}/reports/generate_soa_pdf.py",
+        "console": "integratedTerminal"
+      }
+    ]
+  },
+
+  // ============================================================
+  // Tasks — Ctrl+Shift+B oder Terminal > Run Task
+  // ============================================================
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "🐳 Docker: Start All",
+        "type": "shell",
+        "command": "docker compose up -d",
+        "group": "build",
+        "presentation": { "reveal": "always", "panel": "shared" }
+      },
+      {
+        "label": "🐳 Docker: Stop All",
+        "type": "shell",
+        "command": "docker compose down",
+        "group": "build"
+      },
+      {
+        "label": "🗄️  DB: Apply Schema",
+        "type": "shell",
+        "command": "psql postgresql://isms_user:${DB_PASSWORD}@localhost:5432/isms_db < database/01_schema.sql",
+        "group": "build"
+      },
+      {
+        "label": "🌱 DB: Seed Demo Data",
+        "type": "shell",
+        "command": "psql postgresql://isms_user:${DB_PASSWORD}@localhost:5432/isms_db < database/03_seed_demo_data.sql",
+        "group": "build"
+      },
+      {
+        "label": "📄 PDF: Generate SoA Report",
+        "type": "shell",
+        "command": "python reports/generate_soa_pdf.py",
+        "group": "build",
+        "presentation": { "reveal": "always" }
+      },
+      {
+        "label": "⚙️  API: Install Dependencies",
+        "type": "shell",
+        "command": "cd backend && npm install",
+        "group": "build"
+      },
+      {
+        "label": "⚙️  API: Dev Server",
+        "type": "shell",
+        "command": "cd backend && npm run start:dev",
+        "group": "build",
+        "isBackground": true
+      }
+    ]
+  }
+}

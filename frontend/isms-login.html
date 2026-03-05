@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Govrix ISMS — Login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--navy:#162040;--accent:#1847B1;--accent2:#0f9d7e;--red:#e53e3e;--text:#1a202c;--text2:#4a5568;--text3:#a0aec0;--border:rgba(0,0,0,0.1);}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+body::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;opacity:0.15;}
+.blob-1{width:400px;height:400px;background:var(--accent);top:-100px;left:-100px;}
+.blob-2{width:300px;height:300px;background:var(--accent2);bottom:-80px;right:-80px;}
+.card{background:#fff;border-radius:16px;width:420px;padding:40px;box-shadow:0 24px 64px rgba(0,0,0,0.3);position:relative;z-index:1;}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:32px;}
+.logo-box{width:40px;height:40px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;}
+.logo-name{font-size:18px;font-weight:700;color:var(--navy);}
+.logo-sub{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;}
+h1{font-size:22px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+.sub{font-size:13px;color:var(--text3);margin-bottom:28px;}
+.field{margin-bottom:18px;}
+label{display:block;font-size:11px;font-weight:600;color:var(--text2);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:7px;}
+input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);outline:none;background:#fafafa;transition:border-color 0.15s,box-shadow 0.15s;}
+input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(24,71,177,0.1);background:#fff;}
+.err{display:none;background:#fff5f5;border:1px solid #fed7d7;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);margin-bottom:18px;}
+.err.show{display:block;}
+.btn{width:100%;padding:13px;background:var(--navy);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.15s;}
+.btn:hover{background:var(--accent);}
+.btn:disabled{opacity:0.7;cursor:not-allowed;}
+.demos{margin-top:24px;padding:14px;background:#f7fafc;border-radius:8px;border:1px solid var(--border);}
+.demos-title{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;}
+.demo-row{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:6px;cursor:pointer;transition:background 0.12s;margin-bottom:4px;}
+.demo-row:last-child{margin-bottom:0;}
+.demo-row:hover{background:#edf2f7;}
+.demo-email{font-size:12px;font-family:'DM Mono',monospace;color:var(--text2);}
+.demo-badge{font-size:9px;padding:2px 8px;border-radius:4px;font-weight:600;font-family:'DM Mono',monospace;}
+.badge-admin{background:#ebf8ff;color:#2b6cb0;}
+.badge-ciso{background:#f0fff4;color:#276749;}
+.badge-analyst{background:#faf5ff;color:#553c9a;}
+.footer{text-align:center;margin-top:20px;font-size:11px;color:var(--text3);}
+.already{background:#f0fff4;border:1px solid #9ae6b4;border-radius:8px;padding:12px 16px;margin-bottom:20px;}
+.already-name{font-size:12px;font-weight:600;color:#276749;}
+.already-email{font-size:11px;color:#48bb78;margin-top:2px;}
+.already-btns{display:flex;gap:8px;margin-top:10px;}
+.btn-sm{padding:5px 12px;border-radius:6px;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;}
+.btn-go{background:#276749;color:#fff;}
+.btn-switch{background:transparent;border:1px solid #9ae6b4 !important;color:#276749;border:none;}
+</style>
+</head>
+<body>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="card">
+  <div class="logo">
+    <div class="logo-box">GX</div>
+    <div>
+      <div class="logo-name">Govrix</div>
+      <div class="logo-sub">ISMS Platform</div>
+    </div>
+  </div>
+
+  <div id="already-box" style="display:none" class="already">
+    <div class="already-name" id="already-name"></div>
+    <div class="already-email" id="already-email"></div>
+    <div class="already-btns">
+      <button class="btn-sm btn-go" onclick="gotoDashboard()">Dashboard öffnen</button>
+      <button class="btn-sm btn-switch" onclick="switchUser()">Benutzer wechseln</button>
+    </div>
+  </div>
+
+  <h1>Willkommen zurück</h1>
+  <p class="sub">Melde dich an, um auf das ISMS-Dashboard zuzugreifen.</p>
+
+  <div id="err-box" class="err"></div>
+
+  <div class="field">
+    <label>E-Mail-Adresse</label>
+    <input type="email" id="f-email" placeholder="name@unternehmen.de" autocomplete="username">
+  </div>
+  <div class="field">
+    <label>Passwort</label>
+    <input type="password" id="f-pass" placeholder="••••••••••" autocomplete="current-password">
+  </div>
+  <button class="btn" id="btn-login" onclick="doLogin()">Anmelden</button>
+
+  <div class="demos">
+    <div class="demos-title">Demo-Zugänge · Passwort: Govrix2026!</div>
+    <div class="demo-row" onclick="fill('admin')">
+      <span class="demo-email" id="d1"></span>
+      <span class="demo-badge badge-admin">Admin</span>
+    </div>
+    <div class="demo-row" onclick="fill('ciso')">
+      <span class="demo-email" id="d2"></span>
+      <span class="demo-badge badge-ciso">CISO</span>
+    </div>
+    <div class="demo-row" onclick="fill('analyst')">
+      <span class="demo-email" id="d3"></span>
+      <span class="demo-badge badge-analyst">Analyst</span>
+    </div>
+  </div>
+  <div class="footer">Govrix ISMS v2.0 · © 2026</div>
+</div>
+
+<script>
+const API = 'http://localhost:3000/api/v1';
+const PW  = 'Govrix2026!';
+const ACCOUNTS = {
+  admin:   'admin@govrix.io',
+  ciso:    'ciso@govrix.io',
+  analyst: 'analyst@govrix.io',
+};
+const DEMO_USERS = {
+  'admin@govrix.io':   {id:1,name:'Admin User',  email:'admin@govrix.io',  role:'admin'},
+  'ciso@govrix.io':    {id:2,name:'CISO User',   email:'ciso@govrix.io',   role:'ciso'},
+  'analyst@govrix.io': {id:3,name:'Max Analyst', email:'analyst@govrix.io',role:'analyst'},
+};
+
+// Render emails without @ in HTML to avoid browser masking
+document.getElementById('d1').textContent = 'admin'   + '\u0040' + 'govrix.io';
+document.getElementById('d2').textContent = 'ciso'    + '\u0040' + 'govrix.io';
+document.getElementById('d3').textContent = 'analyst' + '\u0040' + 'govrix.io';
+
+// Check if already logged in
+const tok = localStorage.getItem('gx_token');
+if (tok) {
+  const u = JSON.parse(localStorage.getItem('gx_user') || '{}');
+  if (u.name) {
+    document.getElementById('already-box').style.display = 'block';
+    document.getElementById('already-name').textContent = 'Eingeloggt als ' + u.name;
+    document.getElementById('already-email').textContent = u.email || '';
+  }
+}
+
+function fill(key) {
+  document.getElementById('f-email').value = ACCOUNTS[key];
+  document.getElementById('f-pass').value  = PW;
+}
+
+function gotoDashboard() {
+  window.location.href = 'isms-dashboard.html';
+}
+
+function switchUser() {
+  localStorage.removeItem('gx_token');
+  localStorage.removeItem('gx_user');
+  document.getElementById('already-box').style.display = 'none';
+}
+
+function showErr(msg) {
+  const el = document.getElementById('err-box');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+async function doLogin() {
+  document.getElementById('err-box').classList.remove('show');
+  const email = document.getElementById('f-email').value.trim();
+  const pass  = document.getElementById('f-pass').value;
+  if (!email || !pass) { showErr('Bitte E-Mail und Passwort eingeben.'); return; }
+
+  const btn = document.getElementById('btn-login');
+  btn.disabled = true;
+  btn.textContent = 'Anmelden...';
+
+  try {
+    const res = await fetch(API + '/auth/login', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email, password: pass}),
+    });
+    if (!res.ok) {
+      const e = await res.json().catch(()=>({}));
+      throw new Error(e.message || 'Falsche Zugangsdaten');
+    }
+    const data = await res.json();
+    localStorage.setItem('gx_token', data.access_token);
+    localStorage.setItem('gx_user',  JSON.stringify(data.user));
+    window.location.href = 'isms-dashboard.html';
+  } catch(err) {
+    // Offline demo fallback
+    if (DEMO_USERS[email] && pass === PW) {
+      localStorage.setItem('gx_token', 'demo_offline');
+      localStorage.setItem('gx_user',  JSON.stringify(DEMO_USERS[email]));
+      window.location.href = 'isms-dashboard.html';
+      return;
+    }
+    showErr(err.message || 'Anmeldung fehlgeschlagen');
+    btn.disabled = false;
+    btn.textContent = 'Anmelden';
+  }
+}
+
+// Enter key support
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doLogin();
+});
+</script>
+</body>
+</html>
