@@ -52,7 +52,7 @@ body{font-family:'DM Sans', sans-serif;background:var(--bg);color:var(--text);mi
 .page-sub{font-size:11px;color:var(--text3);font-family:'DM Mono', monospace;margin-top:1px;}
 .topbar-r{display:flex;align-items:center;gap:10px;}
 .btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s;font-family:'DM Sans', sans-serif;}
-.btn-ghost{background:transparent;color:rgba(255,255,255,0.6);border:1px solid var(--border2);}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border2);}
 .btn-ghost:hover{background:var(--bg3);color:var(--text);}
 .btn-primary{background:var(--navy);color:#fff;}
 .btn-primary:hover{opacity:.85;}
@@ -140,7 +140,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);}
 
 /* Tag chips */
 .tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
-.tag{font-size:10px;font-family:'DM Mono', monospace;padding:3px 8px;border-radius:4px;border:1px solid var(--border2);color:rgba(255,255,255,0.6);cursor:pointer;transition:all .15s;}
+.tag{font-size:10px;font-family:'DM Mono', monospace;padding:3px 8px;border-radius:4px;border:1px solid var(--border2);color:var(--text2);background:var(--bg3);cursor:pointer;transition:all .15s;}
 .tag:hover,.tag.selected{border-color:var(--accent);color:var(--accent);background:rgba(0,212,170,.08);}
 
 /* Risk table */
@@ -277,27 +277,73 @@ body { animation: pageFadeIn 0.2s ease both; }
 .ai-risk-item.medium { border-left-color: var(--accent2); }
 
 
-/* GX-NAV-FIX */
-.sidebar{width:232px;min-height:100vh;background:var(--navy);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;box-shadow:2px 0 12px rgba(0,0,0,.15)}
-.sidebar-logo{padding:20px 18px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.08)}
-.logo-mark{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
-.logo-text{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.3px}
-.logo-sub{font-size:9px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace;letter-spacing:1px}
-.sidebar-nav{padding:12px 10px;flex:1;overflow-y:auto}
-.nav-section{font-size:9px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:1.5px;text-transform:uppercase;padding:10px 8px 4px}
-.nav-item{display:flex !important;flex-direction:row !important;align-items:center !important;gap:9px !important;padding:8px 10px !important;border-radius:7px !important;cursor:pointer !important;transition:background .15s !important;text-decoration:none !important;margin-bottom:1px !important;border-left:none !important;font-size:unset !important;font-weight:unset !important;color:unset !important}
-.nav-item:hover{background:rgba(255,255,255,.08) !important;color:unset !important}
-.nav-item.active{background:rgba(0,168,120,.18) !important;border-left:none !important;color:unset !important}
-.nav-icon{width:16px !important;height:16px !important;opacity:.55 !important;flex-shrink:0 !important;display:block !important}
-.nav-item.active .nav-icon{opacity:1 !important}
-.nav-label{font-size:12px !important;font-weight:500 !important;color:rgba(255,255,255,.65) !important;display:block !important}
-.nav-item.active .nav-label{color:#fff !important;font-weight:600 !important}
-.sidebar-footer{padding:14px;border-top:1px solid rgba(255,255,255,.08)}
-.user-card{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:7px;background:rgba(255,255,255,.07);cursor:pointer;transition:background .15s}
-.user-card:hover{background:rgba(255,255,255,.12)}
-.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#6c5ce7,#1847B1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
-.user-name{font-size:12px;font-weight:600;color:#fff}
-.user-role{font-size:10px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace}
+/* ====== NAVBAR OVERRIDE ====== */
+.sidebar { width: 232px; min-height: 100vh; background: var(--navy); display: flex; flex-direction: column; position: fixed; left: 0; top: 0; bottom: 0; z-index: 100; box-shadow: 2px 0 12px rgba(0,0,0,0.15); }
+.logo {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.logo-lockup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-icon-box {
+  width: 30px; height: 30px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #fff;
+  letter-spacing: -0.5px;
+}
+.logo-name {
+  font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.01em; line-height: 1.2;
+}
+.logo-sub, .logo-ver, .logo-tag {
+  font-size: 9px; color: rgba(255,255,255,0.32);
+  font-family: 'DM Mono', monospace; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-top: 2px;
+}
+/* ── Sidebar Navigation (unified, no-jump) ── */
+.nav { padding: 14px 0; flex: 1; overflow-y: auto; }
+
+.nav-section {
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  color: rgba(255,255,255,0.28);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 20px 5px;
+  font-weight: 500;
+}
+
+.nav-item {
+  text-decoration: none !important;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 18px 9px 18px;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.58);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin: 1px 8px;
+  border-radius: 7px;
+  border-left: 2px solid transparent;
+}
+.nav-item:hover {
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.9);
+}
+.nav-item.active {
+  background: rgba(255,255,255,0.12);
+  color: #fff !important;
+  border-left: 2px solid rgba(255,255,255,0.5);
+}
+.nav-item.active .icon { opacity: 1; }
+.icon { width: 14px; height: 14px; opacity: 0.55; flex-shrink: 0; }
+/* ============================= */
 </style>
 </head>
 <body>
@@ -305,56 +351,71 @@ body { animation: pageFadeIn 0.2s ease both; }
 <div class="layout">
   <!-- SIDEBAR -->
   <aside class="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-mark">GX</div>
-    <div><div class="logo-text">Govrix</div><div class="logo-sub">ISMS PLATFORM</div></div>
+  <div class="logo">
+    <div class="logo-lockup">
+      <div class="logo-icon-box">GX</div>
+      <div>
+        <div class="logo-name">Govrix</div>
+        <div class="logo-sub">ISMS Platform</div>
+      </div>
+    </div>
   </div>
-  <nav class="sidebar-nav">
-    <div class="nav-section">Uebersicht</div>
+  <nav class="nav">
+    <div class="nav-section">Übersicht</div>
     <a href="isms-dashboard.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/></svg>
-      <span class="nav-label">Dashboard</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+      Dashboard
     </a>
     <div class="nav-section">Frameworks</div>
     <a href="isms-iso27001.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M8 1L2 4v4c0 3.3 2.5 6.4 6 7 3.5-.6 6-3.7 6-7V4L8 1z" fill="rgba(255,255,255,.8)"/></svg>
-      <span class="nav-label">ISO 27001</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h10M3 8h7M3 13h5"/></svg>
+      ISO 27001:2022
     </a>
     <a href="isms-nist.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/><path d="M5 8h6M8 5v6" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/></svg>
-      <span class="nav-label">NIST CSF 2.0</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="8,2 14,6 14,10 8,14 2,10 2,6"/></svg>
+      NIST CSF 2.0
     </a>
     <a href="isms-kanban-nis2.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="3" width="4" height="10" rx="1" fill="rgba(255,255,255,.6)"/><rect x="6" y="3" width="4" height="7" rx="1" fill="rgba(255,255,255,.6)"/><rect x="11" y="3" width="4" height="5" rx="1" fill="rgba(255,255,255,.6)"/></svg>
-      <span class="nav-label">NIS2 / DORA</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="12" rx="1"/><rect x="9" y="2" width="5" height="12" rx="1"/></svg>
+      NIS2 / Kanban
+    </a>
+    <a href="isms-dora.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2L2 5v4c0 3.5 2.5 6 6 7 3.5-1 6-3.5 6-7V5L8 2z"/></svg>
+      DORA
     </a>
     <div class="nav-section">Management</div>
-    <a href="isms-risk-analyzer.html" class="nav-item active">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M8 2L2 13h12L8 2z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M8 7v3M8 11.5v.5" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span class="nav-label">Risikoanalyse</span>
+    <a href="isms-risk-analyzer.html#register" class="nav-item active">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l2 5h5l-4 3 1.5 5L8 11l-4.5 3L5 9 1 6h5z"/></svg>
+      Risikomanagement <span class="badge" id="nav-risk-badge"></span>
+    </a>
+    <a href="isms-cve.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg>
+      CVE &amp; Risiko
     </a>
     <a href="isms-assets.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="3" width="14" height="9" rx="1.5" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M5 12v2M11 12v2M3 14h10" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span class="nav-label">Assets</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+      Assets & Inventar
     </a>
     <a href="isms-audit.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M4 2h8a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M5 6h6M5 9h4" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span class="nav-label">Audit Log</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1"/><path d="M5 7h6M5 10h4"/></svg>
+      Audit-Log
     </a>
+    <div class="nav-section">Berichte</div>
     <a href="isms-reports.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M10 2v3h3" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/></svg>
-      <span class="nav-label">Reports</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h5l4 4v9H4V2z"/><path d="M9 2v4h4"/></svg>
+      Reports & SoA
     </a>
+    <a href="trust.html" class="nav-item"><span style="margin-right:6px;">🔒</span>Trust Center</a>
   </nav>
-  <div class="sidebar-footer">
-    <div class="user-card">
-      <div class="avatar" id="gx-avatar">GX</div>
-      <div>
-        <div class="user-name" id="gx-name">Benutzer</div>
-        <div class="user-role" id="gx-role">-</div>
+  <div style="padding:10px;border-top:1px solid rgba(255,255,255,0.08);">
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.06);">
+      <div id="gx-avatar" style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#0f9d7e,#1847B1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;">?</div>
+      <div style="flex:1;min-width:0;overflow:hidden;">
+        <div id="gx-name" style="font-size:12px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Benutzer</div>
+        <div id="gx-role" style="font-size:9px;font-family:'DM Mono',monospace;color:#0f9d7e;text-transform:uppercase;letter-spacing:0.08em;">–</div>
       </div>
-      <button onclick="logout()" title="Abmelden" style="background:transparent;border:none;cursor:pointer;padding:5px;border-radius:5px;margin-left:auto;opacity:.6" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.6'">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 14H3a1 1 0 01-1-1V3a1 1 0 011-1h3M11 11l3-3-3-3M14 8H6" stroke="rgba(255,255,255,.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <button onclick="logout()" title="Abmelden" style="background:transparent;border:none;cursor:pointer;padding:5px;border-radius:5px;display:flex;align-items:center;opacity:0.6;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.5"><path d="M6 2H2v12h4"/><path d="M10 11l3-3-3-3"/><line x1="13" y1="8" x2="6" y2="8"/></svg>
       </button>
     </div>
   </div>
@@ -409,10 +470,6 @@ function logout() {
   localStorage.removeItem('gx_user');
   window.location.href = 'isms-login.html';
 }
-function getAuthHeaders() {
-  var t = localStorage.getItem('gx_token');
-  return t ? {'Authorization':'Bearer '+t,'Content-Type':'application/json'} : {'Content-Type':'application/json'};
-}
 </script>
 <!-- MAIN -->
   <div class="main-col">
@@ -422,7 +479,7 @@ function getAuthHeaders() {
         <div class="page-sub">ISO 27001 §6.1 · NIST CSF 2.0 ID.RA · Audit-Zyklus Q1/2026</div>
       </div>
       <div class="topbar-r">
-        <button class="btn btn-ghost btn-sm">Export CSV</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportRisksCSV()">Export CSV</button>
         <button class="btn btn-primary btn-sm" onclick="showTab('new')">+ Neues Risiko</button>
       </div>
     </div>
@@ -816,7 +873,7 @@ function getAuthHeaders() {
 
               <div style="display:flex;gap:10px;">
                 <button class="btn btn-ghost" style="flex:1" onclick="clearForm()">Zurücksetzen</button>
-                <button class="btn btn-primary" style="flex:2" onclick="saveAndAnalyze()">
+                <button class="btn btn-primary" style="flex:2" onclick="submitRiskToAPI()">
                   Risiko speichern &amp; KI-Analyse starten →
                 </button>
               </div>
@@ -1248,43 +1305,50 @@ function formatDate(d) {
   return new Date(d).toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit', year:'2-digit'});
 }
 
+// Local risk store for offline/demo mode
+let localRisks = [];
+
+function renderRiskTable(risks) {
+  const tbody = document.querySelector('.risk-table tbody');
+  if (!tbody) return;
+  if (!risks.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text3);font-size:12px;">Noch keine Risiken erfasst</td></tr>';
+    return;
+  }
+  tbody.innerHTML = risks.map(r => {
+    const score = parseFloat(r.risk_score || (r.likelihood * r.impact)) || 0;
+    const isOverdue = r.due_date && new Date(r.due_date) < new Date();
+    const safeTitle = (r.title||'').replace(/'/g,"&#39;");
+    return `<tr onclick="selectRisk(this,'${safeTitle}','${r.iso_control_ref||''}','${r.risk_ref||r.id||''}')">
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">${r.risk_ref || r.id || '—'}</span></td>
+      <td style="font-weight:600">${r.title}</td>
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">${r.iso_control_ref||'—'}${r.nist_sub_code?' / '+r.nist_sub_code:''}</span></td>
+      <td>${r.likelihood||'—'} × ${r.impact||'—'}</td>
+      <td><span class="score-badge ${riskBadgeClass(score)}">${score.toFixed ? score.toFixed(0) : score}</span></td>
+      <td><span style="font-size:10px;padding:2px 7px;border-radius:4px;background:var(--bg3);font-family:'DM Mono',monospace">${statusLabel(r.status||'open')}</span></td>
+      <td style="${isOverdue?'color:var(--red)':'color:var(--text3)'};font-family:'DM Mono',monospace;font-size:10px">${formatDate(r.due_date)}</td>
+      <td><button onclick="event.stopPropagation();quickRisk(this)" data-title="${safeTitle}" data-control="${r.iso_control_ref||''}" data-score="${score}" data-status="${r.status||''}" data-due="${r.due_date||''}" style="font-size:10px;padding:4px 10px;background:linear-gradient(135deg,#1847B1,#0f9d7e);color:#fff;border:none;border-radius:5px;cursor:pointer;font-weight:600;">✦ KI</button></td>
+    </tr>`;
+  }).join('');
+  const header = document.querySelector('#view-register .panel-hint');
+  if (header) header.textContent = risks.length + ' Risiken';
+}
+
 async function loadRisks() {
   try {
-    const res = await fetch(`${API}/health`);
-    if (!res.ok) throw new Error('API nicht erreichbar');
-    setApiStatus(true, 'API verbunden · Live-Daten');
-
-    const risks = await (await fetch(`${API}/risks`)).json();
-
-    // Update risk register table
-    const tbody = document.querySelector('.risk-table tbody');
-    if (!tbody) return;
-
-    tbody.innerHTML = '';
-    risks.forEach(r => {
-      const score = parseFloat(r.risk_score);
-      const isOverdue = r.due_date && new Date(r.due_date) < new Date();
-      tbody.innerHTML += `
-        <tr onclick="selectRisk(this, '${r.title.replace(/'/g,"\'")}', '${r.iso_control_ref||''}', '${r.risk_ref||''}')">
-          <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">${r.risk_ref || '—'}</span></td>
-          <td style="font-weight:600">${r.title}</td>
-          <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">${r.iso_control_ref || '—'}${r.nist_sub_code ? ' / '+r.nist_sub_code : ''}</span></td>
-          <td>${r.likelihood} × ${r.impact}</td>
-          <td><span class="score-badge ${riskBadgeClass(score)}">${score.toFixed(0)}</span></td>
-          <td><span style="font-size:10px;padding:2px 7px;border-radius:4px;background:var(--bg3);font-family:'DM Mono',monospace">${statusLabel(r.status)}</span></td>
-          <td style="${isOverdue ? 'color:var(--red)' : 'color:var(--text3)'};font-family:'DM Mono',monospace;font-size:10px">${formatDate(r.due_date)}</td>
-          <td><button onclick="event.stopPropagation();quickRisk(this)" data-title="${r.title}" data-control="${r.iso_control_ref||''}" data-score="${r.risk_score||0}" data-status="${r.status||''}" data-due="${r.due_date||''}" style="font-size:10px;padding:4px 10px;background:linear-gradient(135deg,#1847B1,#0f9d7e);color:#fff;border:none;border-radius:5px;cursor:pointer;font-weight:600;">✦ KI</button></td>
-        </tr>`;
-    });
-
-    // Update header count
-    const header = document.querySelector('#view-register .panel-hint');
-    if (header) header.textContent = `${risks.length} Risiken · Live-Daten`;
-
+    const raw = await (await fetch(`${API}/risks`, {headers: getAuthHeaders()})).text();
+    const data = JSON.parse(raw);
+    const risks = Array.isArray(data) ? data : (data.value || data.data || []);
+    if (risks.length) {
+      localRisks = risks;
+      setApiStatus(true, 'API verbunden · Live-Daten');
+    } else {
+      setApiStatus(true, 'API verbunden · ' + localRisks.length + ' Daten');
+    }
   } catch(err) {
     setApiStatus(false, 'API nicht erreichbar — Demo-Daten');
-    console.warn('API Fehler:', err.message);
   }
+  renderRiskTable(localRisks);
 }
 
 // Submit new risk to API
@@ -1305,22 +1369,61 @@ async function submitRiskToAPI() {
   try {
     const res = await fetch(`${API}/risks`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       body: JSON.stringify(body)
     });
-    if (!res.ok) throw new Error('Speichern fehlgeschlagen');
-
-    showNotif('Risiko gespeichert ✓');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    showNotif('✓ Risiko gespeichert — KI-Analyse wird gestartet');
     clearForm();
-    loadRisks(); // Tabelle aktualisieren
-    showTab('register');
+    await loadRisks(); // refresh from API
+    // Trigger AI analysis
+    document.getElementById('ai-title').value = title;
+    document.getElementById('ai-control').value = body.iso_control_ref || '';
+    setTimeout(() => { showTab('ai'); setTimeout(() => runAIAnalysis(), 300); }, 600);
   } catch(err) {
-    // Fallback: lokale Demo-Logik
-    saveAndAnalyze();
+    // API not reachable - save locally so it appears in register
+    console.warn('API Fehler:', err.message);
+    const localEntry = {
+      ...body,
+      id: 'LOCAL-' + Date.now(),
+      risk_ref: 'RIS-' + new Date().getFullYear() + '-' + String(localRisks.length + 1).padStart(3,'0'),
+      risk_score: body.likelihood * body.impact,
+      status: 'open',
+      due_date: null,
+    };
+    localRisks.unshift(localEntry);
+    renderRiskTable(localRisks);
+    showNotif('✓ Risiko lokal gespeichert — KI-Analyse wird gestartet');
+    clearForm();
+    document.getElementById('ai-title').value = title;
+    document.getElementById('ai-control').value = body.iso_control_ref || '';
+    setTimeout(() => { showTab('ai'); setTimeout(() => runAIAnalysis(), 300); }, 600);
   }
 }
 
 // Laden beim Start
+async function exportRisksCSV() {
+  try {
+    const data = await (await fetch(API + '/risks', {headers: getAuthHeaders()})).text().then(t => JSON.parse(t));
+    const header = ['Ref','Titel','ISO Control','NIST Code','Wahrscheinlichkeit','Impact','Score','Status','Treatment','Fällig'];
+    const rows = data.map(r => [
+      r.risk_ref||'', '"'+(r.title||'').replace(/"/g,'""')+'"',
+      r.iso_control_ref||'', r.nist_sub_code||'',
+      r.likelihood||'', r.impact||'', r.risk_score||'',
+      r.status||'', r.treatment||'',
+      r.due_date ? new Date(r.due_date).toLocaleDateString('de-DE') : ''
+    ]);
+    const csv = [header, ...rows].map(r => r.join(';')).join('\n');
+    const a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv);
+    a.download = 'govrix-risiken-' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click();
+    showNotif('✅ CSV exportiert: ' + a.download);
+  } catch(e) {
+    showNotif('❌ Export fehlgeschlagen: ' + e.message);
+  }
+}
+
 async function initRiskAnalyzer() {
   await loadRisks();
   routeHash();
@@ -1818,7 +1921,145 @@ function quickRisk(btn) {
     formatDate(btn.dataset.due)
   );
 }
+
+// ── Risk Detail / Edit / Delete Modal ────────────────────
+let _editRiskId = null;
+
+function selectRisk(tr, title, isoRef, riskRef) {
+  const risk = localRisks.find(r =>
+    r.risk_ref === riskRef || String(r.id) === String(riskRef) || r.title === title
+  );
+  if (!risk) return;
+  _editRiskId = risk.risk_ref || risk.id;
+  document.getElementById('rd-ref').textContent    = risk.risk_ref || risk.id || '—';
+  document.getElementById('rd-title').value        = risk.title || '';
+  document.getElementById('rd-iso').value          = risk.iso_control_ref || '';
+  document.getElementById('rd-likelihood').value   = risk.likelihood || 3;
+  document.getElementById('rd-impact').value       = risk.impact || 3;
+  document.getElementById('rd-status').value       = risk.status || 'open';
+  document.getElementById('rd-treatment').value    = risk.treatment || 'mitigate';
+  document.getElementById('rd-desc').value         = risk.description || '';
+  const score = (risk.likelihood||3) * (risk.impact||3);
+  document.getElementById('rd-score').textContent  = score;
+  document.getElementById('risk-detail-modal').style.display = 'flex';
+}
+
+async function saveRiskEdit() {
+  const risk = localRisks.find(r => r.risk_ref === _editRiskId || String(r.id) === String(_editRiskId));
+  if (!risk) return;
+  risk.title           = document.getElementById('rd-title').value;
+  risk.iso_control_ref = document.getElementById('rd-iso').value;
+  risk.likelihood      = parseInt(document.getElementById('rd-likelihood').value);
+  risk.impact          = parseInt(document.getElementById('rd-impact').value);
+  risk.status          = document.getElementById('rd-status').value;
+  risk.treatment       = document.getElementById('rd-treatment').value;
+  risk.description     = document.getElementById('rd-desc').value;
+  risk.risk_score      = risk.likelihood * risk.impact;
+
+  try {
+    const id = risk.id || risk.risk_ref;
+    if (id && !String(id).startsWith('LOCAL')) {
+      await fetch(`${API}/risks/${id}`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(risk)
+      });
+    }
+  } catch(e) { /* offline - local only */ }
+
+  document.getElementById('risk-detail-modal').style.display = 'none';
+  renderRiskTable(localRisks);
+  showNotif('✓ Risiko aktualisiert');
+}
+
+async function deleteRisk() {
+  if (!confirm('Risiko wirklich löschen?')) return;
+  const risk = localRisks.find(r => r.risk_ref === _editRiskId || String(r.id) === String(_editRiskId));
+  try {
+    const id = risk?.id || risk?.risk_ref;
+    if (id && !String(id).startsWith('LOCAL')) {
+      await fetch(`${API}/risks/${id}`, { method: 'DELETE', headers: getAuthHeaders() });
+    }
+  } catch(e) {}
+  localRisks = localRisks.filter(r => r.risk_ref !== _editRiskId && String(r.id) !== String(_editRiskId));
+  document.getElementById('risk-detail-modal').style.display = 'none';
+  renderRiskTable(localRisks);
+  showNotif('Risiko gelöscht');
+}
 </script>
+
+<!-- Risk Detail Modal -->
+<div id="risk-detail-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:300;align-items:center;justify-content:center;">
+  <div style="background:var(--bg2);border-radius:14px;width:540px;max-height:90vh;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,0.2);">
+    <div style="padding:18px 22px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:15px;font-weight:700;color:var(--navy)">Risiko bearbeiten</div>
+        <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);margin-top:2px;" id="rd-ref">—</div>
+      </div>
+      <span onclick="document.getElementById('risk-detail-modal').style.display='none'" style="cursor:pointer;font-size:22px;color:var(--text3)">×</span>
+    </div>
+    <div style="padding:20px 22px;display:grid;gap:13px;">
+      <div>
+        <label style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:5px;">Titel</label>
+        <input id="rd-title" style="width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;font-size:13px;outline:none;box-sizing:border-box;">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:5px;">ISO Control</label>
+          <input id="rd-iso" style="width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;font-size:12px;font-family:'DM Mono',monospace;outline:none;box-sizing:border-box;" placeholder="z.B. A.8.5">
+        </div>
+        <div>
+          <label style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:5px;">Behandlung</label>
+          <select id="rd-treatment" style="width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;font-size:12px;outline:none;">
+            <option value="mitigate">Mindern</option>
+            <option value="accept">Akzeptieren</option>
+            <option value="transfer">Transferieren</option>
+            <option value="avoid">Vermeiden</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+        <div>
+          <label style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:5px;">Wahrscheinlichkeit</label>
+          <select id="rd-likelihood" style="width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;font-size:12px;outline:none;">
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:5px;">Impact</label>
+          <select id="rd-impact" style="width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;font-size:12px;outline:none;">
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:5px;">Score</label>
+          <div id="rd-score" style="padding:9px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;font-size:13px;font-weight:700;font-family:'DM Mono',monospace;color:var(--red);">—</div>
+        </div>
+      </div>
+      <div>
+        <label style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:5px;">Status</label>
+        <select id="rd-status" style="width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;font-size:12px;outline:none;">
+          <option value="open">Offen</option>
+          <option value="in_treatment">In Behandlung</option>
+          <option value="accepted">Akzeptiert</option>
+          <option value="closed">Geschlossen</option>
+          <option value="transferred">Transferiert</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:5px;">Beschreibung / Notizen</label>
+        <textarea id="rd-desc" rows="3" style="width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;font-size:12px;outline:none;resize:vertical;box-sizing:border-box;"></textarea>
+      </div>
+    </div>
+    <div style="padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:space-between;">
+      <button onclick="deleteRisk()" style="padding:8px 16px;background:transparent;border:1px solid var(--red);color:var(--red);border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;">🗑 Löschen</button>
+      <div style="display:flex;gap:8px;">
+        <button onclick="document.getElementById('risk-detail-modal').style.display='none'" style="padding:8px 16px;background:transparent;border:1px solid var(--border2);color:var(--text2);border-radius:7px;cursor:pointer;font-size:12px;">Abbrechen</button>
+        <button onclick="saveRiskEdit()" style="padding:8px 18px;background:var(--navy);color:#fff;border:none;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;">Speichern</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div id="api-status" style="position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
   background:#fff;border:1px solid var(--border);border-radius:6px;
   padding:6px 14px;font-size:10px;font-family:'DM Mono',monospace;

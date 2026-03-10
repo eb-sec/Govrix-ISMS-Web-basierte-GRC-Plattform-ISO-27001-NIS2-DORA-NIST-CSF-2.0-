@@ -271,27 +271,73 @@ body { animation: pageFadeIn 0.2s ease both; }
 }
 
 
-/* GX-NAV-FIX */
-.sidebar{width:232px;min-height:100vh;background:var(--navy);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;box-shadow:2px 0 12px rgba(0,0,0,.15)}
-.sidebar-logo{padding:20px 18px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.08)}
-.logo-mark{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
-.logo-text{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.3px}
-.logo-sub{font-size:9px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace;letter-spacing:1px}
-.sidebar-nav{padding:12px 10px;flex:1;overflow-y:auto}
-.nav-section{font-size:9px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:1.5px;text-transform:uppercase;padding:10px 8px 4px}
-.nav-item{display:flex !important;flex-direction:row !important;align-items:center !important;gap:9px !important;padding:8px 10px !important;border-radius:7px !important;cursor:pointer !important;transition:background .15s !important;text-decoration:none !important;margin-bottom:1px !important;border-left:none !important;font-size:unset !important;font-weight:unset !important;color:unset !important}
-.nav-item:hover{background:rgba(255,255,255,.08) !important;color:unset !important}
-.nav-item.active{background:rgba(0,168,120,.18) !important;border-left:none !important;color:unset !important}
-.nav-icon{width:16px !important;height:16px !important;opacity:.55 !important;flex-shrink:0 !important;display:block !important}
-.nav-item.active .nav-icon{opacity:1 !important}
-.nav-label{font-size:12px !important;font-weight:500 !important;color:rgba(255,255,255,.65) !important;display:block !important}
-.nav-item.active .nav-label{color:#fff !important;font-weight:600 !important}
-.sidebar-footer{padding:14px;border-top:1px solid rgba(255,255,255,.08)}
-.user-card{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:7px;background:rgba(255,255,255,.07);cursor:pointer;transition:background .15s}
-.user-card:hover{background:rgba(255,255,255,.12)}
-.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#6c5ce7,#1847B1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
-.user-name{font-size:12px;font-weight:600;color:#fff}
-.user-role{font-size:10px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace}
+/* ====== NAVBAR OVERRIDE ====== */
+.sidebar { width: 232px; min-height: 100vh; background: var(--navy); display: flex; flex-direction: column; position: fixed; left: 0; top: 0; bottom: 0; z-index: 100; box-shadow: 2px 0 12px rgba(0,0,0,0.15); }
+.logo {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.logo-lockup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-icon-box {
+  width: 30px; height: 30px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #fff;
+  letter-spacing: -0.5px;
+}
+.logo-name {
+  font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.01em; line-height: 1.2;
+}
+.logo-sub, .logo-ver, .logo-tag {
+  font-size: 9px; color: rgba(255,255,255,0.32);
+  font-family: 'DM Mono', monospace; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-top: 2px;
+}
+/* ── Sidebar Navigation (unified, no-jump) ── */
+.nav { padding: 14px 0; flex: 1; overflow-y: auto; }
+
+.nav-section {
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  color: rgba(255,255,255,0.28);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 20px 5px;
+  font-weight: 500;
+}
+
+.nav-item {
+  text-decoration: none !important;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 18px 9px 18px;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.58);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin: 1px 8px;
+  border-radius: 7px;
+  border-left: 2px solid transparent;
+}
+.nav-item:hover {
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.9);
+}
+.nav-item.active {
+  background: rgba(255,255,255,0.12);
+  color: #fff !important;
+  border-left: 2px solid rgba(255,255,255,0.5);
+}
+.nav-item.active .icon { opacity: 1; }
+.icon { width: 14px; height: 14px; opacity: 0.55; flex-shrink: 0; }
+/* ============================= */
 </style>
 <style>
 body { animation: pageFadeIn 0.2s ease both; }
@@ -326,56 +372,71 @@ body { animation: pageFadeIn 0.2s ease both; }
 </head>
 <body>
 <aside class="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-mark">GX</div>
-    <div><div class="logo-text">Govrix</div><div class="logo-sub">ISMS PLATFORM</div></div>
+  <div class="logo">
+    <div class="logo-lockup">
+      <div class="logo-icon-box">GX</div>
+      <div>
+        <div class="logo-name">Govrix</div>
+        <div class="logo-sub">ISMS Platform</div>
+      </div>
+    </div>
   </div>
-  <nav class="sidebar-nav">
-    <div class="nav-section">Uebersicht</div>
+  <nav class="nav">
+    <div class="nav-section">Übersicht</div>
     <a href="isms-dashboard.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/></svg>
-      <span class="nav-label">Dashboard</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+      Dashboard
     </a>
     <div class="nav-section">Frameworks</div>
     <a href="isms-iso27001.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M8 1L2 4v4c0 3.3 2.5 6.4 6 7 3.5-.6 6-3.7 6-7V4L8 1z" fill="rgba(255,255,255,.8)"/></svg>
-      <span class="nav-label">ISO 27001</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h10M3 8h7M3 13h5"/></svg>
+      ISO 27001:2022
     </a>
     <a href="isms-nist.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/><path d="M5 8h6M8 5v6" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/></svg>
-      <span class="nav-label">NIST CSF 2.0</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="8,2 14,6 14,10 8,14 2,10 2,6"/></svg>
+      NIST CSF 2.0
     </a>
     <a href="isms-kanban-nis2.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="3" width="4" height="10" rx="1" fill="rgba(255,255,255,.6)"/><rect x="6" y="3" width="4" height="7" rx="1" fill="rgba(255,255,255,.6)"/><rect x="11" y="3" width="4" height="5" rx="1" fill="rgba(255,255,255,.6)"/></svg>
-      <span class="nav-label">NIS2 / DORA</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="12" rx="1"/><rect x="9" y="2" width="5" height="12" rx="1"/></svg>
+      NIS2 / Kanban
+    </a>
+    <a href="isms-dora.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2L2 5v4c0 3.5 2.5 6 6 7 3.5-1 6-3.5 6-7V5L8 2z"/></svg>
+      DORA
     </a>
     <div class="nav-section">Management</div>
-    <a href="isms-risk-analyzer.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M8 2L2 13h12L8 2z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M8 7v3M8 11.5v.5" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span class="nav-label">Risikoanalyse</span>
+    <a href="isms-risk-analyzer.html#register" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l2 5h5l-4 3 1.5 5L8 11l-4.5 3L5 9 1 6h5z"/></svg>
+      Risikomanagement <span class="badge" id="nav-risk-badge"></span>
+    </a>
+    <a href="isms-cve.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg>
+      CVE &amp; Risiko
     </a>
     <a href="isms-assets.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="3" width="14" height="9" rx="1.5" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M5 12v2M11 12v2M3 14h10" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span class="nav-label">Assets</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+      Assets & Inventar
     </a>
     <a href="isms-audit.html" class="nav-item active">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M4 2h8a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M5 6h6M5 9h4" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span class="nav-label">Audit Log</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1"/><path d="M5 7h6M5 10h4"/></svg>
+      Audit-Log
     </a>
+    <div class="nav-section">Berichte</div>
     <a href="isms-reports.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M10 2v3h3" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/></svg>
-      <span class="nav-label">Reports</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h5l4 4v9H4V2z"/><path d="M9 2v4h4"/></svg>
+      Reports & SoA
     </a>
+    <a href="trust.html" class="nav-item"><span style="margin-right:6px;">🔒</span>Trust Center</a>
   </nav>
-  <div class="sidebar-footer">
-    <div class="user-card">
-      <div class="avatar" id="gx-avatar">GX</div>
-      <div>
-        <div class="user-name" id="gx-name">Benutzer</div>
-        <div class="user-role" id="gx-role">-</div>
+  <div style="padding:10px;border-top:1px solid rgba(255,255,255,0.08);">
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.06);">
+      <div id="gx-avatar" style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#0f9d7e,#1847B1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;">?</div>
+      <div style="flex:1;min-width:0;overflow:hidden;">
+        <div id="gx-name" style="font-size:12px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Benutzer</div>
+        <div id="gx-role" style="font-size:9px;font-family:'DM Mono',monospace;color:#0f9d7e;text-transform:uppercase;letter-spacing:0.08em;">–</div>
       </div>
-      <button onclick="logout()" title="Abmelden" style="background:transparent;border:none;cursor:pointer;padding:5px;border-radius:5px;margin-left:auto;opacity:.6" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.6'">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 14H3a1 1 0 01-1-1V3a1 1 0 011-1h3M11 11l3-3-3-3M14 8H6" stroke="rgba(255,255,255,.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <button onclick="logout()" title="Abmelden" style="background:transparent;border:none;cursor:pointer;padding:5px;border-radius:5px;display:flex;align-items:center;opacity:0.6;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.5"><path d="M6 2H2v12h4"/><path d="M10 11l3-3-3-3"/><line x1="13" y1="8" x2="6" y2="8"/></svg>
       </button>
     </div>
   </div>
@@ -475,12 +536,9 @@ function getAuthHeaders() {
   <span id="api-msg">Verbinde mit API...</span>
 </div>
 <script>
- : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
+function getAuthHeaders() {
+  var t = localStorage.getItem('gx_token');
+  return t ? {'Authorization':'Bearer '+t,'Content-Type':'application/json'} : {'Content-Type':'application/json'};
 }
 
 const API = 'http://localhost:3000/api/v1';
@@ -488,20 +546,20 @@ function setApiStatus(ok,msg){const dot=document.getElementById('api-dot');const
 function formatDate(d){if(!d)return'—';return new Date(d).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit'});}
 
 const DEMO_AUDIT = [
-  {id:1,ts:'2026-03-01T10:42:11',type:'login',user:'admin',action:'Anmeldung erfolgreich',object:'System',ip:'10.0.5.42'},
-  {id:2,ts:'2026-03-01T10:45:03',type:'update',user:'admin',action:'Risiko aktualisiert',object:'RIS-2026-001',ip:'10.0.5.42'},
-  {id:3,ts:'2026-03-01T10:51:22',type:'create',user:'m.klein',action:'Maßnahme erstellt',object:'MAS-2026-014',ip:'10.0.5.43'},
-  {id:4,ts:'2026-03-01T11:03:45',type:'export',user:'admin',action:'SoA PDF exportiert',object:'ISO-27001-SoA',ip:'10.0.5.42'},
-  {id:5,ts:'2026-03-01T11:15:00',type:'update',user:'t.mueller',action:'Control-Status geändert',object:'A.8.5',ip:'10.0.5.50'},
-  {id:6,ts:'2026-03-01T11:22:33',type:'create',user:'admin',action:'Risiko erstellt',object:'RIS-2026-008',ip:'10.0.5.42'},
-  {id:7,ts:'2026-02-28T16:10:05',type:'delete',user:'admin',action:'Asset entfernt',object:'TEST-SERVER-99',ip:'10.0.5.42'},
-  {id:8,ts:'2026-02-28T15:55:18',type:'login',user:'s.weber',action:'Anmeldung erfolgreich',object:'System',ip:'10.0.5.60'},
-  {id:9,ts:'2026-02-28T14:30:00',type:'update',user:'admin',action:'NIST Score aktualisiert',object:'NIST-CSF-2.0',ip:'10.0.5.42'},
-  {id:10,ts:'2026-02-28T13:00:44',type:'export',user:'m.klein',action:'Risiko-Report exportiert',object:'Q1-2026-Report',ip:'10.0.5.43'},
-  {id:11,ts:'2026-02-27T17:05:22',type:'create',user:'t.mueller',action:'Asset hinzugefügt',object:'PROD-DB-02',ip:'10.0.5.50'},
-  {id:12,ts:'2026-02-27T16:45:11',type:'update',user:'admin',action:'Maßnahme abgeschlossen',object:'MAS-2026-008',ip:'10.0.5.42'},
-  {id:13,ts:'2026-02-27T09:30:00',type:'login',user:'admin',action:'Anmeldung erfolgreich',object:'System',ip:'10.0.5.42'},
-  {id:14,ts:'2026-02-26T14:10:30',type:'update',user:'s.weber',action:'Lieferanten-Assessment geändert',object:'LIEFASS-003',ip:'10.0.5.60'},
+  {id:1,  ts:'2026-03-09T08:15:42',type:'login',  user:'admin@govrix.de',    action:'Benutzer angemeldet',             object:'Benutzerverwaltung · admin@govrix.de — Browser: Chrome 122',                ip:'10.0.5.42'},
+  {id:2,  ts:'2026-03-09T08:22:11',type:'create', user:'admin@govrix.de',    action:'Neues Risiko erstellt',           object:'Risikomanagement · RIS-2026-014 — Fehlende MFA für Admin-Zugänge',           ip:'10.0.5.42'},
+  {id:3,  ts:'2026-03-09T08:31:05',type:'update', user:'admin@govrix.de',    action:'Risikostatus geändert',           object:'Risikomanagement · RIS-2026-008 — Status: open → in_treatment',              ip:'10.0.5.42'},
+  {id:4,  ts:'2026-03-08T16:45:03',type:'update', user:'m.klein@govrix.de',  action:'Control-Status geändert',         object:'ISO 27001 Controls · A.8.5 — Status: in_progress → implemented',             ip:'10.0.5.43'},
+  {id:5,  ts:'2026-03-08T16:10:22',type:'create', user:'m.klein@govrix.de',  action:'Maßnahme erstellt',               object:'Kanban / Maßnahmen · MAS-2026-014 — MFA für alle Admin-Konten einrichten',   ip:'10.0.5.43'},
+  {id:6,  ts:'2026-03-08T14:03:45',type:'export', user:'admin@govrix.de',    action:'SoA als PDF exportiert',          object:'Reports & SoA · ISO-27001:2022 · 93 Controls exportiert',                    ip:'10.0.5.42'},
+  {id:7,  ts:'2026-03-07T17:05:22',type:'create', user:'t.mueller@govrix.de','action':'Asset angelegt',                object:'Assets & Inventar · PROD-DB-02 — Typ: Server · Owner: DBA-Team',             ip:'10.0.5.50'},
+  {id:8,  ts:'2026-03-07T15:55:18',type:'login',  user:'s.weber@govrix.de',  action:'Benutzer angemeldet',             object:'Benutzerverwaltung · s.weber@govrix.de — Browser: Firefox 124',              ip:'10.0.5.60'},
+  {id:9,  ts:'2026-03-07T11:22:33',type:'update', user:'admin@govrix.de',    action:'Risiko aktualisiert',             object:'Risikomanagement · RIS-2026-001 — Likelihood: 4→3, Impact: 5→4',             ip:'10.0.5.42'},
+  {id:10, ts:'2026-03-06T14:30:00',type:'update', user:'admin@govrix.de',    action:'Control-Status geändert',         object:'ISO 27001 Controls · A.5.7 — Status: not_started → in_progress',             ip:'10.0.5.42'},
+  {id:11, ts:'2026-03-06T13:00:44',type:'export', user:'m.klein@govrix.de',  action:'Report exportiert',               object:'Reports & SoA · Risiko-Report Q1-2026 · 14 Risiken exportiert',              ip:'10.0.5.43'},
+  {id:12, ts:'2026-03-05T16:45:11',type:'update', user:'admin@govrix.de',    action:'Maßnahmenstatus geändert',        object:'Kanban / Maßnahmen · MAS-2026-008 — Status: progress → done',                ip:'10.0.5.42'},
+  {id:13, ts:'2026-03-05T10:10:30',type:'update', user:'s.weber@govrix.de',  action:'Asset aktualisiert',              object:'Assets & Inventar · FIREWALL-01 — Letzter Scan aktualisiert: 05.03.26',      ip:'10.0.5.60'},
+  {id:14, ts:'2026-03-04T16:10:05',type:'delete', user:'admin@govrix.de',    action:'Risiko gelöscht',                 object:'Risikomanagement · RIS-2026-003 — Test-Risiko entfernt',                      ip:'10.0.5.42'},
   {id:15,ts:'2026-02-26T11:00:00',type:'export',user:'admin',action:'Audit-Bericht generiert',object:'AUD-2026-Q1',ip:'10.0.5.42'},
   {id:16,ts:'2026-02-25T15:22:10',type:'delete',user:'admin',action:'Alten Risikoeintrag gelöscht',object:'RIS-2025-012',ip:'10.0.5.42'},
   {id:17,ts:'2026-02-25T10:00:00',type:'create',user:'m.klein',action:'NIS2-Maßnahme erstellt',object:'NIS2-ART23-001',ip:'10.0.5.43'},
@@ -530,8 +588,8 @@ function renderAudit() {
       <td class="ts">${ts}</td>
       <td><span class="audit-type type-${e.type}">${TYPE_LABELS[e.type]||e.type}</span></td>
       <td><div class="audit-user-pill"><div class="user-dot">${initials}</div>${e.user}</div></td>
-      <td style="font-weight:500;color:var(--text)">${e.action}</td>
-      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">${e.object}</span></td>
+      <td style="font-weight:600;color:var(--text)">${e.action}</td>
+      <td style="font-size:10px;color:var(--text2);max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${e.object}"><span style="font-family:'DM Mono',monospace;color:var(--accent2)">${e.object}</span></td>
       <td class="ts">${e.ip}</td>
     </tr>`;
   }).join('');
@@ -560,19 +618,26 @@ function filterAudit() {
 }
 
 function exportCSV() {
-  const rows = [['Zeitstempel','Typ','Benutzer','Aktion','Objekt','IP'],...allEntries.map(e=>[e.ts,e.type,e.user,e.action,e.object,e.ip])];
-  const csv = rows.map(r=>r.join(',')).join('\n');
+  const rows = [['Zeitstempel','Typ','Benutzer','Aktion','Objekt','IP'],...allEntries.map(e=>[
+    e.ts, e.type, e.user,
+    '"'+(e.action||'').replace(/"/g,'""')+'"',
+    '"'+(e.object||'').replace(/"/g,'""')+'"',
+    e.ip
+  ])];
+  const csv = rows.map(r=>r.join(';')).join('\n');
   const a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-  a.download = 'audit-log-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv);
+  a.download = 'govrix-audit-log-' + new Date().toISOString().slice(0,10) + '.csv';
+  document.body.appendChild(a);
   a.click();
+  document.body.removeChild(a);
 }
 
 function updateStats() {
   const today = new Date().toDateString();
   document.getElementById('a-total').textContent   = allEntries.length;
   document.getElementById('a-today').textContent   = allEntries.filter(e=>new Date(e.ts).toDateString()===today).length;
-  document.getElementById('a-users').textContent   = new Set(allEntries.map(e=>e.user)).size;
+  // a-users is set after API load
   document.getElementById('a-critical').textContent= allEntries.filter(e=>e.type==='delete').length;
   document.getElementById('a-exports').textContent = allEntries.filter(e=>e.type==='export').length;
   
@@ -587,21 +652,116 @@ function updateStats() {
 
 async function loadAudit() {
   try {
-    const res = await fetch(API+'/audit?limit=50');
+    const res = await fetch(API+'/audit?limit=50', {headers: getAuthHeaders()});
     if (!res.ok) throw new Error();
-    const data = await res.json();
+    const raw = JSON.parse(await res.text());
+    const data = Array.isArray(raw) ? raw : (raw.value || raw.data || raw.items || []);
     if (data.length) {
-      allEntries = data.map((e,i)=>({
-        id:i,ts:e.timestamp||e.created_at,type:e.action_type||'update',
-        user:e.user_name||e.performed_by||'system',action:e.description||e.action,
-        object:e.entity_type||'—',ip:e.ip_address||'—'
-      }));
+      allEntries = data.map((e,i)=>{
+        const raw = (e.event_type||'');
+        const norm = raw.toUpperCase().replace(/[\s-]+/g,'_'); // "risk closed" → "RISK_CLOSED"
+
+        // Typ-Klassifikation
+        const type = /LOGIN|ANMELD/.test(norm)  ? 'login'
+                   : /CREAT|ERSTELL|ADDED/.test(norm) ? 'create'
+                   : /DELET|GELÖSCH|ENTFERN/.test(norm) ? 'delete'
+                   : /EXPORT/.test(norm)          ? 'export'
+                   : 'update';
+
+        // Action-Label — normiert + Rohdaten abdecken
+        const actionLabels = {
+          // Standard-Keys
+          'USER_LOGIN':'Benutzer angemeldet','USER_LOGOUT':'Benutzer abgemeldet',
+          'USER_LOGIN_FAILED':'Anmeldung fehlgeschlagen',
+          'RISK_CREATED':'Neues Risiko erstellt','RISK_UPDATED':'Risiko aktualisiert',
+          'RISK_DELETED':'Risiko gelöscht','RISK_STATUS_CHANGED':'Risikostatus geändert',
+          'RISK_CLOSED':'Risiko geschlossen','RISK_ACCEPTED':'Risiko akzeptiert',
+          'CONTROL_UPDATED':'Control aktualisiert','CONTROL_STATUS_CHANGED':'Control-Status geändert',
+          'ACTION_CREATED':'Maßnahme erstellt','ACTION_UPDATED':'Maßnahme aktualisiert',
+          'ACTION_COMPLETED':'Maßnahme abgeschlossen','ACTION_STATUS_CHANGED':'Maßnahmenstatus geändert',
+          'ASSET_CREATED':'Asset angelegt','ASSET_UPDATED':'Asset aktualisiert','ASSET_DELETED':'Asset entfernt',
+          'REPORT_EXPORTED':'Report exportiert','SOA_EXPORTED':'SoA als PDF exportiert',
+          // API gibt direkt zurück (lowercase / Leerzeichen)
+          'LOGIN':'Benutzer angemeldet','LOGOUT':'Benutzer abgemeldet',
+          'RISK_CLOSED':'Risiko geschlossen',
+          'ACTION_COMPLETED':'Maßnahme abgeschlossen',
+          'NEUES_RISIKO_ERSTELLT':'Neues Risiko erstellt',
+          'RISIKO_AKTUALISIERT':'Risiko aktualisiert',
+          'CONTROL_AKTUALISIERT':'Control aktualisiert',
+        };
+        const actionLabel = actionLabels[norm] || raw.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+
+        // Modul aus entity_type
+        const entityMap = {
+          'risk':'Risikomanagement','risks':'Risikomanagement',
+          'control':'ISO 27001 Controls','controls':'ISO 27001 Controls',
+          'action':'Kanban / Maßnahmen','actions':'Kanban / Maßnahmen',
+          'asset':'Assets & Inventar','assets':'Assets & Inventar',
+          'user':'Benutzerverwaltung','users':'Benutzerverwaltung',
+          'report':'Reports & SoA','audit':'Audit-Log',
+        };
+        // Fallback: derive module from event_type wenn entity_type fehlt
+        let rawEntity = (e.entity_type||'').toLowerCase();
+        if (!rawEntity) {
+          if (/risk/.test(norm.toLowerCase()))    rawEntity = 'risk';
+          else if (/control/.test(norm.toLowerCase())) rawEntity = 'control';
+          else if (/action/.test(norm.toLowerCase()))  rawEntity = 'action';
+          else if (/asset/.test(norm.toLowerCase()))   rawEntity = 'asset';
+          else if (/login|user/.test(norm.toLowerCase())) rawEntity = 'user';
+          else if (/export|report/.test(norm.toLowerCase())) rawEntity = 'report';
+        }
+        const moduleLabel = entityMap[rawEntity] || e.entity_type || 'System';
+
+        // Detail aus old_value / new_value aufbauen
+        const parts = [];
+        if (e.entity_id) parts.push(String(e.entity_id).substring(0,8));
+
+        // Lese new_value für Zusammenfassung
+        const nv = e.new_value || e.newValue;
+        const ov = e.old_value || e.oldValue;
+        const fieldLabels = {
+          status:'Status', title:'Titel', name:'Name', email:'E-Mail',
+          role:'Rolle', control_ref:'Control', iso_control_ref:'ISO',
+          compliance_status:'Compliance', implementation_status:'Impl.',
+          likelihood:'W.keit', impact:'Impact', risk_score:'Score',
+          treatment:'Behandlung', ip:'IP',
+        };
+        if (nv && typeof nv === 'object') {
+          // Show key fields from new_value
+          const keys = ['title','name','email','role','status','compliance_status','control_ref','iso_control_ref','likelihood','impact','risk_score','treatment','ip'];
+          const vals = keys.filter(k => nv[k]!=null && nv[k]!='').map(k => (fieldLabels[k]||k)+': '+String(nv[k]).substring(0,20)).slice(0,3);
+          if (vals.length) parts.push(vals.join(' · '));
+        }
+        // If both old and new status exist, show transition
+        if (ov?.status && nv?.status && ov.status !== nv.status) {
+          // replace last part with transition
+          parts.push('Status: '+ov.status+' → '+nv.status);
+        }
+        const objectLabel = moduleLabel + (parts.length ? ' · ' + parts.join(' — ') : '');
+
+        return {
+          id:i,
+          ts:    e.created_at || e.timestamp || '',
+          type,
+          user:  e.user_email || e.user_name || 'system',
+          action: actionLabel,
+          object: objectLabel,
+          ip:    e.ip_address ? String(e.ip_address) : '—'
+        };
+      });
     }
+    const _td = new Date().toDateString();
+    const _u = new Set(allEntries.map(e=>e.user).filter(Boolean));
+    const _tu = new Set(allEntries.filter(e=>new Date(e.ts).toDateString()===_td).map(e=>e.user).filter(Boolean));
+    document.getElementById('a-users').innerHTML = String(_tu.size);
     setApiStatus(true,'API verbunden · Live-Daten');
   } catch {
     setApiStatus(false,'API nicht erreichbar — Demo-Daten');
   }
   filteredEntries=[...allEntries];
+  // Reset user filter before repopulating
+  const sel2 = document.getElementById('user-filter');
+  while (sel2.options.length > 1) sel2.remove(1);
   updateStats();
   renderAudit();
 }
@@ -609,6 +769,18 @@ async function loadAudit() {
 loadAudit();
 
 document.addEventListener('click',function(e){const link=e.target.closest('a[href]');if(!link)return;const href=link.getAttribute('href');if(!href||href.startsWith('#')||href.startsWith('http'))return;if(!href.endsWith('.html')&&!href.includes('.html#'))return;e.preventDefault();document.body.classList.add('page-leaving');setTimeout(()=>{window.location.href=href;},140);});
+
+async function updateNavBadge() {
+  try {
+    const r = await fetch((typeof API !== 'undefined' ? API : 'http://localhost:3000/api/v1') + '/risks', {headers: typeof getAuthHeaders === 'function' ? getAuthHeaders() : {}});
+    const arr = JSON.parse(await r.text());
+    const risks = Array.isArray(arr) ? arr : (arr.value || []);
+    const open = risks.filter(function(r){ return r.status !== 'closed' && r.status !== 'accepted'; }).length;
+    const el = document.getElementById('nav-risk-badge');
+    if (el) { el.textContent = open || ''; el.style.display = open ? '' : 'none'; }
+  } catch(e) {}
+}
+updateNavBadge();
 </script>
 </body>
 </html>

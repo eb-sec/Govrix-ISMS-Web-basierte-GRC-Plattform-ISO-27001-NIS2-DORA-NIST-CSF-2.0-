@@ -1,34 +1,36 @@
-import { Controller, Get, Post, Put, Body, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Put, Body, Param, Query, Request, UseGuards } from '@nestjs/common';
 import { RisksService } from './risks.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 const DEMO_TENANT = '00000000-0000-0000-0000-000000000001';
-const DEMO_USER   = '10000000-0000-0000-0000-000000000001';
 
 @Controller('risks')
+@UseGuards(JwtAuthGuard)
 export class RisksController {
   constructor(private readonly service: RisksService) {}
 
-  // GET /api/v1/risks
   @Get()
   getRisks(@Query('status') status?: string) {
     return this.service.getRisks(DEMO_TENANT, status);
   }
 
-  // GET /api/v1/risks/stats
   @Get('stats')
   getStats() {
     return this.service.getRiskStats(DEMO_TENANT);
   }
 
-  // POST /api/v1/risks
   @Post()
-  createRisk(@Body() body: any) {
-    return this.service.createRisk(DEMO_TENANT, body, DEMO_USER);
+  createRisk(@Body() body: any, @Request() req: any) {
+    const userId    = req.user?.sub   || null;
+    const userEmail = req.user?.email || 'system';
+    const ip        = req.ip || req.headers?.['x-forwarded-for'] || null;
+    return this.service.createRisk(DEMO_TENANT, body, userId, userEmail, ip);
   }
 
-  // PUT /api/v1/risks/:id
   @Put(':id')
-  updateRisk(@Param('id') id: string, @Body() body: any) {
-    return this.service.updateRisk(DEMO_TENANT, id, body);
+  updateRisk(@Param('id') id: string, @Body() body: any, @Request() req: any) {
+    const userEmail = req.user?.email || 'system';
+    const ip        = req.ip || req.headers?.['x-forwarded-for'] || null;
+    return this.service.updateRisk(DEMO_TENANT, id, body, userEmail, ip);
   }
 }

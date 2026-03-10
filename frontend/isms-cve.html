@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CVE-Bewertung – Govrix ISMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f0f2f5;--bg2:#ffffff;--bg3:#f8f9fb;--bg4:#eef0f4;
+  --border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.13);
+  --text:#1a202c;--text2:#4a5568;--text3:#a0aec0;
+  --navy:#162040;--navy2:#0e1628;
+  --accent:#00a878;--accent2:#1847B1;--accent3:#e17055;--accent4:#6c5ce7;
+  --red:#e53e3e;--yellow:#d69e2e;--green:#38a169;--blue:#3182ce;
+  --orange:#dd6b20;
+  --shadow:0 1px 3px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.05);
+  --shadow2:0 2px 8px rgba(0,0,0,0.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);}
+a{text-decoration:none;color:inherit;}
+
+/* Layout */
+.layout{display:flex;min-height:100vh;}
+aside{background:var(--navy);width:220px;position:fixed;top:0;bottom:0;left:0;display:flex;flex-direction:column;z-index:100;overflow-y:auto;}
+.main-col{margin-left:220px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
+
+/* Logo */
+.logo-wrap{padding:18px 16px 10px;border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0;}
+.logo-badge{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;margin-bottom:8px;}
+.logo-name{font-size:13px;font-weight:700;color:#fff;letter-spacing:0.02em;}
+.logo-sub{font-size:9px;font-family:'DM Mono',monospace;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;}
+
+/* Sidebar nav */
+nav{flex:1;padding:10px 0;}
+.nav-section{font-size:9px;font-weight:700;color:rgba(255,255,255,0.3);letter-spacing:0.12em;text-transform:uppercase;padding:14px 16px 5px;font-family:'DM Mono',monospace;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 16px;font-size:12px;font-weight:500;color:rgba(255,255,255,0.65);border-radius:0;transition:all .15s;cursor:pointer;position:relative;}
+.nav-item:hover{background:rgba(255,255,255,0.07);color:#fff;}
+.nav-item.active{background:rgba(255,255,255,0.12);color:#fff;border-left:3px solid var(--accent);}
+.nav-item .icon{width:15px;height:15px;flex-shrink:0;opacity:0.7;}
+.nav-item.active .icon{opacity:1;}
+.badge{background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:8px;margin-left:auto;}
+.badge-new{background:var(--accent);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:8px;margin-left:auto;}
+
+/* Topbar */
+.topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 26px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.page-title{font-size:17px;font-weight:600;}
+.page-sub{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:1px;}
+.topbar-r{display:flex;align-items:center;gap:10px;}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.btn-primary{background:var(--navy);color:#fff;}
+.btn-primary:hover{opacity:.85;}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;}
+.btn-accent{background:var(--accent);color:#fff;}
+.btn-accent:hover{opacity:.85;}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border2);}
+.btn-ghost:hover{background:var(--bg3);}
+.btn-danger{background:var(--red);color:#fff;}
+.btn-sm{padding:5px 10px;font-size:11px;}
+
+/* Content */
+.content{padding:26px;flex:1;}
+
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px 18px;}
+.stat-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;font-family:'DM Mono',monospace;}
+.stat-val{font-size:26px;font-weight:700;margin-top:4px;}
+.stat-val.red{color:var(--red);}
+.stat-val.orange{color:var(--orange);}
+.stat-val.green{color:var(--green);}
+.stat-val.blue{color:var(--accent2);}
+
+/* Main grid */
+.main-grid{display:grid;grid-template-columns:400px 1fr;gap:20px;align-items:start;}
+
+/* Panel */
+.panel{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;}
+.panel-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.panel-title{font-size:13px;font-weight:700;}
+.panel-hint{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;}
+.panel-body{padding:20px;}
+
+/* Form */
+.form-group{margin-bottom:14px;}
+.form-group label{display:block;font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.05em;font-family:'DM Mono',monospace;margin-bottom:5px;}
+input[type=text],select,textarea{
+  width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);
+  border-radius:7px;padding:9px 12px;font-size:13px;font-family:'DM Sans',sans-serif;
+  outline:none;transition:border-color .15s;
+}
+input[type=text]:focus,select:focus,textarea:focus{border-color:var(--accent2);}
+textarea{resize:vertical;min-height:70px;}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-check{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--text2);cursor:pointer;margin-bottom:10px;}
+.form-check input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:var(--accent);}
+
+/* CVE result */
+.result-wrap{display:none;}
+.result-wrap.show{display:block;}
+
+.cve-hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;border-radius:12px;padding:24px 28px;margin-bottom:20px;position:relative;overflow:hidden;}
+.cve-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:rgba(255,255,255,0.04);border-radius:50%;}
+.cve-hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;}
+.cve-id-label{font-size:10px;font-weight:600;color:rgba(255,255,255,0.5);letter-spacing:0.1em;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:4px;}
+.cve-id-val{font-size:26px;font-weight:800;letter-spacing:-0.01em;}
+.cve-desc{font-size:13px;color:rgba(255,255,255,0.75);line-height:1.55;margin-top:10px;max-width:700px;}
+.cve-badges{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.badge-pill{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.03em;}
+.pill-critical{background:#e53e3e;color:#fff;}
+.pill-high{background:#dd6b20;color:#fff;}
+.pill-medium{background:#d69e2e;color:#fff;}
+.pill-low{background:#38a169;color:#fff;}
+.pill-cvss{background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.2);}
+.pill-source{background:rgba(0,168,120,0.25);color:#4fd1c5;border:1px solid rgba(0,168,120,0.3);}
+
+/* Detail grid */
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.detail-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:18px 20px;}
+.detail-card.full{grid-column:1/-1;}
+.detail-card-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;font-family:'DM Mono',monospace;margin-bottom:14px;}
+.kv-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);}
+.kv-row:last-child{border-bottom:none;}
+.kv-key{font-size:12px;font-weight:600;color:var(--text2);}
+.kv-val{font-size:12px;color:var(--text);}
+.kv-val.bold{font-weight:700;}
+.kv-val.red{color:var(--red);}
+.kv-val.orange{color:var(--orange);}
+.kv-val.yellow{color:var(--yellow);}
+.kv-val.green{color:var(--green);}
+
+/* LLM sections */
+.llm-section{margin-bottom:14px;}
+.llm-section-title{font-size:12px;font-weight:700;color:var(--text2);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.llm-section-title::before{content:'';display:inline-block;width:3px;height:14px;background:var(--accent);border-radius:2px;}
+.llm-text{font-size:13px;color:var(--text);line-height:1.6;}
+.llm-list{margin:0;padding-left:18px;}
+.llm-list li{font-size:13px;color:var(--text);line-height:1.7;}
+
+/* Measures grid */
+.measures-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+
+/* History table */
+.history-table{width:100%;border-collapse:collapse;font-size:12px;}
+.history-table th{padding:10px 14px;text-align:left;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;border-bottom:2px solid var(--border);font-family:'DM Mono',monospace;}
+.history-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.history-table tr:hover td{background:var(--bg3);}
+.history-table tr:last-child td{border-bottom:none;}
+.cve-link{color:var(--accent2);font-weight:600;cursor:pointer;}
+.cve-link:hover{text-decoration:underline;}
+
+/* Priority badges */
+.prio{padding:2px 9px;border-radius:5px;font-size:10px;font-weight:700;text-transform:uppercase;}
+.prio-critical{background:#fff5f5;color:var(--red);border:1px solid #fed7d7;}
+.prio-high{background:#fffaf0;color:var(--orange);border:1px solid #fbd38d;}
+.prio-medium{background:#fffff0;color:var(--yellow);border:1px solid #faf089;}
+.prio-low{background:#f0fff4;color:var(--green);border:1px solid #9ae6b4;}
+
+/* Loading */
+.loading-spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.llm-loading{display:flex;align-items:center;gap:10px;padding:16px;background:var(--bg3);border-radius:8px;font-size:12px;color:var(--text2);}
+.llm-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 1.2s ease-in-out infinite;}
+.llm-dot:nth-child(2){animation-delay:.2s;}
+.llm-dot:nth-child(3){animation-delay:.4s;}
+@keyframes pulse{0%,100%{opacity:.3;transform:scale(.8);}50%{opacity:1;transform:scale(1.2);}}
+
+/* Alert */
+.alert{padding:12px 16px;border-radius:8px;font-size:12px;margin-bottom:16px;}
+.alert-info{background:#ebf8ff;border:1px solid #bee3f8;color:#2b6cb0;}
+.alert-warn{background:#fffbeb;border:1px solid #fbd38d;color:#92400e;}
+.alert-err{background:#fff5f5;border:1px solid #feb2b2;color:#742a2a;}
+.alert-ok{background:#f0fff4;border:1px solid #9ae6b4;color:#276749;}
+
+/* Ollama status */
+.ollama-status{display:flex;align-items:center;gap:6px;font-size:11px;font-family:'DM Mono',monospace;padding:4px 10px;border-radius:20px;border:1px solid var(--border2);}
+.ollama-dot{width:7px;height:7px;border-radius:50%;}
+.ollama-dot.on{background:var(--green);box-shadow:0 0 6px rgba(56,161,105,.5);}
+.ollama-dot.off{background:var(--red);}
+
+/* Empty state */
+.empty-state{text-align:center;padding:40px 20px;color:var(--text3);}
+.empty-icon{font-size:32px;margin-bottom:10px;opacity:.5;}
+
+/* Tabs */
+.tab-bar{display:flex;gap:2px;border-bottom:2px solid var(--border);margin-bottom:22px;}
+.tab{padding:10px 18px;font-size:12px;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;}
+.tab:hover{color:var(--text);}
+.tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside>
+  <div class="logo-wrap">
+    <div class="logo-badge">GX</div>
+    <div class="logo-name">Govrix</div>
+    <div class="logo-sub">ISMS Platform</div>
+  </div>
+  <nav>
+    <div class="nav-section">Übersicht</div>
+    <a href="isms-dashboard.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+      Dashboard
+    </a>
+    <div class="nav-section">Frameworks</div>
+    <a href="isms-iso27001.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h10M3 8h7M3 13h5"/></svg>
+      ISO 27001:2022
+    </a>
+    <a href="isms-nist.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="8,2 14,6 14,10 8,14 2,10 2,6"/></svg>
+      NIST CSF 2.0
+    </a>
+    <a href="isms-kanban-nis2.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="12" rx="1"/><rect x="9" y="2" width="5" height="12" rx="1"/></svg>
+      NIS2 / Kanban
+    </a>
+    <a href="isms-dora.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2L2 5v4c0 3.5 2.5 6 6 7 3.5-1 6-3.5 6-7V5L8 2z"/></svg>
+      DORA
+    </a>
+    <div class="nav-section">Management</div>
+    <a href="isms-risk-analyzer.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l2 5h5l-4 3 1.5 5L8 11l-4.5 3L5 9 1 6h5z"/></svg>
+      Risikomanagement
+    </a>
+    <a href="isms-cve.html" class="nav-item active">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg>
+      CVE & Risiko
+      <span class="badge-new">NEU</span>
+    </a>
+    <a href="isms-assets.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="12" height="9" rx="1"/><path d="M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1"/></svg>
+      Assets & Inventar
+    </a>
+    <a href="isms-audit.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1"/><path d="M5 7h6M5 10h4"/></svg>
+      Audit-Log
+    </a>
+    <div class="nav-section">Berichte</div>
+    <a href="isms-reports.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h5l4 4v9H4V2z"/><path d="M9 2v4h4"/></svg>
+      Reports & SoA
+    </a>
+    <a href="trust.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2L2 5v4c0 3.5 2.5 6 6 7 3.5-1 6-3.5 6-7V5L8 2z"/></svg>
+      Trust Center
+    </a>
+  </nav>
+  <div style="padding:10px;border-top:1px solid rgba(255,255,255,0.08);">
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.06);">
+      <div id="gx-avatar" style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#0f9d7e,#1847B1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;">?</div>
+      <div style="flex:1;min-width:0;">
+        <div id="gx-name" style="font-size:12px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Benutzer</div>
+        <div id="gx-role" style="font-size:9px;font-family:'DM Mono',monospace;color:#0f9d7e;text-transform:uppercase;letter-spacing:0.08em;">–</div>
+      </div>
+      <button onclick="logout()" title="Abmelden" style="background:transparent;border:none;cursor:pointer;padding:5px;border-radius:5px;display:flex;align-items:center;opacity:0.6;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.5"><path d="M6 2H2v12h4"/><path d="M10 11l3-3-3-3"/><line x1="13" y1="8" x2="6" y2="8"/></svg>
+      </button>
+    </div>
+  </div>
+</aside>
+
+<script>
+(function(){
+  var t=localStorage.getItem('gx_token');
+  if(!t){window.location.replace('isms-login.html');return;}
+  var u={};try{u=JSON.parse(localStorage.getItem('gx_user')||'{}');}catch(e){}
+  var c={admin:'#e53e3e',ciso:'#0f9d7e',analyst:'#60a5fa'}[u.role]||'#60a5fa';
+  var av=document.getElementById('gx-avatar'),nm=document.getElementById('gx-name'),rl=document.getElementById('gx-role');
+  if(av&&u.name){av.textContent=u.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();av.style.background='linear-gradient(135deg,'+c+',#1847B1)';}
+  if(nm&&u.name)nm.textContent=u.name;
+  if(rl&&u.role){rl.textContent=u.role;rl.style.color=c;}
+})();
+function logout(){localStorage.removeItem('gx_token');localStorage.removeItem('gx_user');window.location.href='isms-login.html';}
+function getAuthHeaders(){var t=localStorage.getItem('gx_token');return t?{'Authorization':'Bearer '+t,'Content-Type':'application/json'}:{'Content-Type':'application/json'};}
+</script>
+
+<!-- MAIN -->
+<div class="main-col">
+  <div class="topbar">
+    <div>
+      <div class="page-title">CVE-Bewertung & Risikoanalyse</div>
+      <div class="page-sub">NVD Daten · ISO 27001 A.8.8 · Ollama LLM-Analyse</div>
+    </div>
+    <div class="topbar-r">
+      <div class="ollama-status" id="ollama-status">
+        <div class="ollama-dot off" id="ollama-dot"></div>
+        <span id="ollama-label">Ollama prüfen...</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Assessments</div>
+        <div class="stat-val blue" id="stat-total">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Kritisch</div>
+        <div class="stat-val red" id="stat-critical">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Mit Risiko</div>
+        <div class="stat-val orange" id="stat-risk">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">LLM-Analysen</div>
+        <div class="stat-val green" id="stat-llm">0</div>
+      </div>
+    </div>
+
+    <!-- Main grid -->
+    <div class="main-grid">
+
+      <!-- LEFT: Form -->
+      <div>
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">🔍 Neue CVE analysieren</div>
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label>CVE-ID *</label>
+              <div style="display:flex;gap:6px;">
+                <input type="text" id="inp-cve" placeholder="z.B. CVE-2024-12345" style="font-family:'DM Mono',monospace;font-size:13px;flex:1;">
+                <button class="btn btn-ghost btn-sm" id="btn-lupe" title="CVE suchen" onclick="document.getElementById('cve-search-panel').style.display=(document.getElementById('cve-search-panel').style.display==='none'||document.getElementById('cve-search-panel').style.display==='')?'block':'none';document.getElementById('search-keyword').focus();" style="flex-shrink:0;padding:8px 12px;">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10.5 10.5l3 3"/></svg>
+                </button>
+              </div>
+              <div style="font-size:10px;color:var(--text3);margin-top:6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                <span>Live-Daten via NVD-API</span>
+                <span style="color:var(--border2);">|</span>
+                <span style="color:var(--accent2);cursor:pointer;font-weight:600;" onclick="document.getElementById('cve-search-panel').style.display='block';document.getElementById('search-keyword').focus();">🔍 CVE suchen</span>
+                <span style="color:var(--border2);">|</span>
+                <span style="color:var(--accent3);cursor:pointer;font-weight:600;" onclick="openManualMode(document.getElementById('inp-cve').value||'CVE-YYYY-NNNNN')">✏️ Manuell eintragen</span>
+              </div>
+            </div>
+
+            <!-- CVE Search Panel -->
+            <div id="cve-search-panel" style="display:none;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px;margin-bottom:14px;">
+              <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:8px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.05em;">🔍 CVE-Suche (NVD)</div>
+              <div style="display:flex;gap:6px;margin-bottom:8px;">
+                <input type="text" id="search-keyword" placeholder="z.B. Apache, OpenSSL, Windows RCE..." style="flex:1;font-size:12px;" onkeydown="if(event.key==='Enter')searchCVEs()">
+                <select id="search-severity" style="width:110px;font-size:12px;">
+                  <option value="">Alle</option>
+                  <option value="CRITICAL">Critical</option>
+                  <option value="HIGH">High</option>
+                  <option value="MEDIUM">Medium</option>
+                  <option value="LOW">Low</option>
+                </select>
+                <button class="btn btn-accent btn-sm" onclick="searchCVEs()" id="btn-search">Suchen</button>
+              </div>
+              <div id="search-results" style="max-height:220px;overflow-y:auto;"></div>
+            </div>
+            <!-- Betroffenes System -->
+            <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;font-family:'DM Mono',monospace;margin-bottom:8px;">Betroffenes System</div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Produkt / System *</label>
+                <input type="text" id="inp-product" placeholder="z.B. Apache Tomcat">
+              </div>
+              <div class="form-group">
+                <label>Version</label>
+                <input type="text" id="inp-version" placeholder="z.B. 9.0.74">
+              </div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Patch verfügbar?</label>
+                <select id="inp-patch">
+                  <option value="unknown">Unbekannt</option>
+                  <option value="yes">✅ Ja – Patch vorhanden</option>
+                  <option value="no">❌ Nein – kein Patch</option>
+                  <option value="workaround">⚠️ Nur Workaround</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>System bereits gepatcht?</label>
+                <select id="inp-patched">
+                  <option value="no">Nein</option>
+                  <option value="yes">Ja</option>
+                  <option value="partial">Teilweise</option>
+                  <option value="planned">Geplant</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Risiko-Kontext -->
+            <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;font-family:'DM Mono',monospace;margin:14px 0 8px;">Risiko-Kontext</div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Exponierung</label>
+                <select id="inp-exposure">
+                  <option value="unknown">Unklar</option>
+                  <option value="internet">🌐 Internet-exponiert</option>
+                  <option value="dmz">🔶 DMZ</option>
+                  <option value="internal">🔒 Nur intern</option>
+                  <option value="airgapped">🛡️ Air-gapped</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Geschäftskritikalität</label>
+                <select id="inp-criticality">
+                  <option value="low">Niedrig</option>
+                  <option value="medium" selected>Mittel</option>
+                  <option value="high">Hoch</option>
+                  <option value="critical">Kritisch</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Datenkategorie</label>
+                <select id="inp-datacat">
+                  <option value="none">Keine sensiblen Daten</option>
+                  <option value="personal">Personenbezogene Daten (DSGVO)</option>
+                  <option value="financial">Finanzdaten</option>
+                  <option value="health">Gesundheitsdaten</option>
+                  <option value="confidential">Vertrauliche Geschäftsdaten</option>
+                  <option value="public">Nur öffentliche Daten</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Betroffene Nutzer</label>
+                <select id="inp-users">
+                  <option value="none">Keine direkten Nutzer</option>
+                  <option value="few">&lt; 10 (intern)</option>
+                  <option value="internal">10–100 (Mitarbeiter)</option>
+                  <option value="many">100–1000</option>
+                  <option value="all">&gt; 1000 / Alle Kunden</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Controls -->
+            <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;font-family:'DM Mono',monospace;margin:14px 0 8px;">Vorhandene Schutzmaßnahmen</div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>Netzwerkschutz</label>
+                <select id="inp-ctrl-net">
+                  <option value="none">Keiner</option>
+                  <option value="firewall">Firewall</option>
+                  <option value="waf">WAF vorhanden</option>
+                  <option value="segmented">Netzwerksegmentierung</option>
+                  <option value="ids">IDS/IPS aktiv</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Zugriffskontrolle</label>
+                <select id="inp-ctrl-access">
+                  <option value="none">Keine</option>
+                  <option value="basic">Basis (Passwort)</option>
+                  <option value="mfa">MFA aktiv</option>
+                  <option value="pam">PAM / Least Privilege</option>
+                  <option value="zerotrust">Zero Trust</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Zusätzliche Hinweise für die Analyse</label>
+              <textarea id="inp-context" placeholder="z.B. System steht im Rechenzentrum Frankfurt, verarbeitet Kundendaten, läuft 24/7..." style="min-height:60px;"></textarea>
+            </div>
+
+            <div style="border-top:1px solid var(--border);padding-top:14px;margin-top:4px;">
+              <label class="form-check">
+                <input type="checkbox" id="chk-risk" checked>
+                Risiko automatisch ins Register eintragen (ISO A.8.8)
+              </label>
+              <label class="form-check">
+                <input type="checkbox" id="chk-llm" checked>
+                Ollama LLM-Analyse ausführen
+              </label>
+            </div>
+            <div id="form-alert" style="margin-bottom:6px;"></div>
+            <button class="btn btn-primary" id="btn-analyze" onclick="runAnalysis()" style="width:100%;margin-top:6px;justify-content:center;padding:11px;">
+              CVE laden &amp; bewerten
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Result -->
+      <div>
+        <!-- Empty state -->
+        <div id="result-empty" class="panel">
+          <div class="panel-body empty-state">
+            <div class="empty-icon">🛡️</div>
+            <div style="font-size:14px;font-weight:600;color:var(--text2);margin-bottom:8px;">Bereit für CVE-Analyse</div>
+            <div style="font-size:12px;color:var(--text3);">CVE-ID eingeben und „CVE laden &amp; bewerten" klicken.<br>Daten werden live aus der NVD-API abgerufen.</div>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div id="result-wrap" class="result-wrap">
+
+          <!-- Export bar -->
+          <div style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:12px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:10px 14px;">
+            <span style="font-size:11px;color:var(--text3);margin-right:auto;display:flex;align-items:center;font-family:'DM Mono',monospace;">Dieses Assessment exportieren:</span>
+            <button class="btn btn-ghost btn-sm" onclick="exportPDF()" style="border-color:var(--red);color:var(--red);">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h5l4 4v9H4V2z"/><path d="M9 2v4h4"/></svg>
+              PDF
+            </button>
+            <button class="btn btn-ghost btn-sm" onclick="exportExcel()" style="border-color:var(--green);color:var(--green);">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1"/><path d="M2 6h12M6 2v12"/></svg>
+              Excel
+            </button>
+          </div>
+          <!-- Hero -->
+          <div class="cve-hero" id="cve-hero">
+            <div class="cve-hero-top">
+              <div>
+                <div class="cve-id-label">CVE Assessment</div>
+                <div class="cve-id-val" id="res-cve-id">–</div>
+              </div>
+              <div id="res-nvd-score" style="text-align:right;">
+                <div style="font-size:10px;color:rgba(255,255,255,0.5);font-family:'DM Mono',monospace;margin-bottom:4px;">CVSS SCORE</div>
+                <div style="font-size:32px;font-weight:800;" id="res-score-num">–</div>
+              </div>
+            </div>
+            <div class="cve-desc" id="res-desc">–</div>
+            <div class="cve-badges" id="res-badges"></div>
+          </div>
+
+          <!-- Detail grid -->
+          <div class="detail-grid">
+            <div class="detail-card">
+              <div class="detail-card-title">Kontext &amp; Deterministik</div>
+              <div id="res-kv"></div>
+            </div>
+            <div class="detail-card">
+              <div class="detail-card-title">⚡ LLM-Analyse (Ollama)</div>
+              <div id="res-llm-tech">
+                <div class="llm-loading" id="llm-loading" style="display:none;">
+                  <div class="llm-dot"></div><div class="llm-dot"></div><div class="llm-dot"></div>
+                  <span>Analysiere mit Ollama...</span>
+                </div>
+                <div id="llm-result-tech" style="display:none;"></div>
+                <div id="llm-no-result" style="font-size:12px;color:var(--text3);">LLM-Analyse wird nach dem Start angezeigt.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Measures & Evidence -->
+          <div class="measures-grid" id="res-measures-wrap" style="display:none;">
+            <div class="detail-card">
+              <div class="detail-card-title">🔧 Empfohlene Maßnahmen</div>
+              <ul class="llm-list" id="res-measures"></ul>
+            </div>
+            <div class="detail-card">
+              <div class="detail-card-title">📋 Benötigte Evidenzen</div>
+              <ul class="llm-list" id="res-evidence"></ul>
+            </div>
+          </div>
+
+          <!-- Risk created notice -->
+          <div id="res-risk-notice" style="display:none;"></div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="panel" style="margin-top:20px;">
+      <div class="panel-head">
+        <div class="panel-title">📋 CVE-Assessments</div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <button class="btn btn-ghost btn-sm" onclick="exportHistoryPDF()" style="border-color:var(--red);color:var(--red);">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h5l4 4v9H4V2z"/><path d="M9 2v4h4"/></svg> PDF
+          </button>
+          <button class="btn btn-ghost btn-sm" onclick="exportHistoryExcel()" style="border-color:var(--green);color:var(--green);">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1"/><path d="M2 6h12M6 2v12"/></svg> Excel
+          </button>
+          <button class="btn btn-ghost btn-sm" onclick="clearHistory()" style="color:var(--red);">Verlauf löschen</button>
+        </div>
+      </div>
+      <div class="panel-body" style="padding:0;">
+        <div id="history-empty" class="empty-state" style="padding:30px;">
+          <div style="font-size:12px;color:var(--text3);">Noch keine CVE-Assessments vorhanden.</div>
+        </div>
+        <table class="history-table" id="history-table" style="display:none;">
+          <thead>
+            <tr>
+              <th>CVE</th>
+              <th>Produkt</th>
+              <th>CVSS</th>
+              <th>Priorität</th>
+              <th>LLM</th>
+              <th>Risiko</th>
+              <th>Datum</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="history-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main-col -->
+</div><!-- /layout -->
+
+<script>
+const API = 'http://localhost:3000/api/v1';
+const NVD_API = 'https://services.nvd.nist.gov/rest/json/cves/2.0';
+const OLLAMA_URL = 'http://localhost:11434';
+const OLLAMA_MODEL = 'qwen2.5:3b'; // Fallback-Modelle: llama3.2, mistral, phi3
+
+let assessments = JSON.parse(localStorage.getItem('gx_cve_assessments') || '[]');
+let currentAssessment = null;
+
+// ─── Init ────────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  checkOllama();
+  // Nach Login: pending Risk speichern falls vorhanden
+  const pending = sessionStorage.getItem('gx_pending_risk');
+  if (pending) {
+    sessionStorage.removeItem('gx_pending_risk');
+    try {
+      const a = JSON.parse(pending);
+      setTimeout(async () => {
+        showToast('🔄 Speichere ausstehendes Risiko...');
+        await createRiskFromCVE(a);
+        if (a.riskRef && a.riskRef !== 'lokal') {
+          showToast('✅ Risiko ' + a.riskRef + ' gespeichert!', 'ok');
+        }
+      }, 1500);
+    } catch(e) {}
+  }
+  renderHistory();
+  updateStats();
+});
+
+// ─── Ollama Status Check ─────────────────────────────────────────────────────
+async function checkOllama() {
+  try {
+    const r = await fetch(OLLAMA_URL + '/api/tags', {signal: AbortSignal.timeout(3000)});
+    if (r.ok) {
+      const data = await r.json();
+      const models = (data.models || []).map(m => m.name);
+      document.getElementById('ollama-dot').className = 'ollama-dot on';
+      document.getElementById('ollama-label').textContent = 'Ollama · ' + (models.length ? models[0].split(':')[0] : 'bereit');
+      // Auto-select best model
+      const preferred = ['qwen2.5:3b','llama3.2','llama3.2:3b','mistral','phi3','gemma2:2b','qwen2:1.5b'];
+      for (const m of preferred) {
+        if (models.some(x => x.startsWith(m.split(':')[0]))) {
+          window._ollamaModel = models.find(x => x.startsWith(m.split(':')[0]));
+          break;
+        }
+      }
+      if (!window._ollamaModel && models.length) window._ollamaModel = models[0];
+      return true;
+    }
+  } catch(e) {}
+  document.getElementById('ollama-dot').className = 'ollama-dot off';
+  document.getElementById('ollama-label').textContent = 'Ollama offline';
+  return false;
+}
+
+// ─── Main Analysis ───────────────────────────────────────────────────────────
+async function runAnalysis() {
+  const cveId = document.getElementById('inp-cve').value.trim().toUpperCase();
+  if (!/^CVE-\d{4}-\d+$/.test(cveId)) {
+    showFormAlert('Ungültige CVE-ID. Format: CVE-YYYY-NNNNN', 'err');
+    return;
+  }
+
+  const btn = document.getElementById('btn-analyze');
+  btn.disabled = true;
+  clearFormAlert();
+
+  // Show loading with status updates
+  btn.innerHTML = '<span class="loading-spinner"></span>Verbinde mit NVD...';
+  showFormAlert('⏳ NVD-Datenbank wird abgefragt (kann 5-15 Sek. dauern)...', 'info');
+
+  try {
+    // 1. NVD API mit Statusmeldungen
+    let nvdData = null;
+    try {
+      nvdData = await fetchNVD(cveId);
+    } catch(e) {}
+
+    if (!nvdData) {
+      btn.disabled = false;
+      btn.innerHTML = 'CVE laden &amp; bewerten';
+      showFormAlert(`
+        <strong>⚠ NVD-API nicht erreichbar</strong> (Firewall / CORS / kein Internet).<br>
+        <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
+          <button onclick="openManualMode('${cveId}')" style="padding:7px 14px;background:var(--navy);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;">
+            ✏️ Manuell eintragen
+          </button>
+          <button onclick="runAnalysis()" style="padding:7px 14px;background:transparent;color:var(--accent2);border:1px solid var(--accent2);border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;">
+            🔄 Nochmal versuchen
+          </button>
+        </div>`, 'warn');
+      return;
+    }
+
+    // 2. Kontext aus Formular
+    const patchMap = {yes:'Ja – Patch vorhanden',no:'Nein – kein Patch',workaround:'Nur Workaround',unknown:'Unbekannt'};
+    const patchedMap = {yes:'Ja',no:'Nein',partial:'Teilweise',planned:'Geplant'};
+    const datacatMap = {none:'Keine sensiblen Daten',personal:'Personenbezogene Daten (DSGVO)',financial:'Finanzdaten',health:'Gesundheitsdaten',confidential:'Vertrauliche Geschäftsdaten',public:'Nur öffentliche Daten'};
+    const usersMap = {none:'Keine direkten Nutzer',few:'< 10 (intern)',internal:'10–100 Mitarbeiter',many:'100–1000',all:'> 1000 / Alle Kunden'};
+    const ctrlNetMap = {none:'Keiner',firewall:'Firewall',waf:'WAF vorhanden',segmented:'Netzwerksegmentierung',ids:'IDS/IPS aktiv'};
+    const ctrlAccessMap = {none:'Keine',basic:'Basis (Passwort)',mfa:'MFA aktiv',pam:'PAM / Least Privilege',zerotrust:'Zero Trust'};
+    const ctx = {
+      product:     document.getElementById('inp-product').value || '—',
+      version:     document.getElementById('inp-version').value || '—',
+      component:   document.getElementById('inp-product').value || '—',
+      exposure:    document.getElementById('inp-exposure').value,
+      criticality: document.getElementById('inp-criticality').value,
+      patch:       document.getElementById('inp-patch').value,
+      patched:     document.getElementById('inp-patched').value,
+      datacat:     document.getElementById('inp-datacat').value,
+      users:       document.getElementById('inp-users').value,
+      ctrlNet:     document.getElementById('inp-ctrl-net').value,
+      ctrlAccess:  document.getElementById('inp-ctrl-access').value,
+      context:     document.getElementById('inp-context').value || '',
+      // Lesbare Labels für LLM
+      patchLabel:     patchMap[document.getElementById('inp-patch').value],
+      patchedLabel:   patchedMap[document.getElementById('inp-patched').value],
+      datacatLabel:   datacatMap[document.getElementById('inp-datacat').value],
+      usersLabel:     usersMap[document.getElementById('inp-users').value],
+      ctrlNetLabel:   ctrlNetMap[document.getElementById('inp-ctrl-net').value],
+      ctrlAccessLabel:ctrlAccessMap[document.getElementById('inp-ctrl-access').value],
+    };
+
+    // 3. Priority berechnen
+    const priority = calcPriority(nvdData.cvss, ctx.exposure, ctx.criticality);
+
+    // 4. Assessment-Objekt
+    currentAssessment = {
+      id:       Date.now(),
+      cveId,
+      nvd:      nvdData,
+      ctx,
+      priority,
+      riskRef:  null,
+      llmDone:  false,
+      llm:      null,
+      ts:       new Date().toISOString(),
+    };
+
+    // 5. UI aufbauen
+    showResult(currentAssessment);
+
+    // 6. Risiko eintragen
+    if (document.getElementById('chk-risk').checked) {
+      btn.innerHTML = '<span class="loading-spinner"></span>Risiko erstellen...';
+      await createRiskFromCVE(currentAssessment);
+    }
+
+    // 7. LLM-Analyse
+    if (document.getElementById('chk-llm').checked) {
+      btn.innerHTML = '<span class="loading-spinner"></span>LLM analysiert...';
+      await runLLM(currentAssessment);
+    }
+
+    // 8. Speichern
+    assessments.unshift(currentAssessment);
+    if (assessments.length > 50) assessments = assessments.slice(0,50);
+    localStorage.setItem('gx_cve_assessments', JSON.stringify(assessments));
+    renderHistory();
+    updateStats();
+
+  } catch(e) {
+    showFormAlert('Fehler: ' + e.message, 'err');
+    console.error(e);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = 'CVE laden &amp; bewerten';
+}
+
+// ─── NVD API ─────────────────────────────────────────────────────────────────
+function parseNVDVuln(vuln) {
+  const desc = (vuln.descriptions || []).find(d => d.lang === 'en')?.value || '—';
+  let cvss = null, cvssVec = null, cvssVer = null;
+  const metrics = vuln.metrics || {};
+  if (metrics.cvssMetricV31?.[0]) {
+    cvss = metrics.cvssMetricV31[0].cvssData.baseScore;
+    cvssVec = metrics.cvssMetricV31[0].cvssData.vectorString;
+    cvssVer = '3.1';
+  } else if (metrics.cvssMetricV30?.[0]) {
+    cvss = metrics.cvssMetricV30[0].cvssData.baseScore;
+    cvssVec = metrics.cvssMetricV30[0].cvssData.vectorString;
+    cvssVer = '3.0';
+  } else if (metrics.cvssMetricV2?.[0]) {
+    cvss = metrics.cvssMetricV2[0].cvssData.baseScore;
+    cvssVec = metrics.cvssMetricV2[0].cvssData.vectorString;
+    cvssVer = '2.0';
+  }
+  const severity = cvss >= 9 ? 'CRITICAL' : cvss >= 7 ? 'HIGH' : cvss >= 4 ? 'MEDIUM' : 'LOW';
+  const cwe = (vuln.weaknesses || []).flatMap(w => w.description || []).find(d => d.lang==='en')?.value || '—';
+  const refs = (vuln.references || []).slice(0,3).map(r => r.url);
+  const published = vuln.published ? new Date(vuln.published).toLocaleDateString('de-DE') : '—';
+  return { desc, cvss, cvssVec, cvssVer, severity, cwe, refs, published, id: vuln.id };
+}
+
+async function fetchNVD(cveId) {
+  // Attempt 1: Backend Proxy (kein CORS-Problem, NestJS ruft NVD serverseitig ab)
+  try {
+    const r = await fetch(`${API}/nvd/cve?id=${cveId}`, {
+      headers: getAuthHeaders(),
+      signal: AbortSignal.timeout(15000)
+    });
+    if (r.ok) {
+      const data = await r.json();
+      const vuln = data?.vulnerabilities?.[0]?.cve;
+      if (vuln) { console.log('NVD via Backend-Proxy OK'); return parseNVDVuln(vuln); }
+    }
+  } catch(e) { console.warn('Backend-Proxy failed:', e.message); }
+
+  // Attempt 2: Direct (falls Backend offline)
+  try {
+    const r = await fetch(`${NVD_API}?cveId=${cveId}`, {
+      headers: {'Accept':'application/json'},
+      signal: AbortSignal.timeout(12000)
+    });
+    if (r.ok) {
+      const data = await r.json();
+      const vuln = data?.vulnerabilities?.[0]?.cve;
+      if (vuln) return parseNVDVuln(vuln);
+    }
+  } catch(e) { console.warn('NVD direct failed:', e.message); }
+
+  return null;
+}
+
+// NVD Suche ebenfalls über Backend-Proxy
+async function searchCVEsViaBackend(q, severity) {
+  let url = `${API}/nvd/search?q=${encodeURIComponent(q)}`;
+  if (severity) url += `&severity=${severity}`;
+  const r = await fetch(url, { headers: getAuthHeaders(), signal: AbortSignal.timeout(15000) });
+  if (!r.ok) throw new Error('Status ' + r.status);
+  return await r.json();
+}
+
+// ─── Priority Calculation ─────────────────────────────────────────────────────
+function calcPriority(cvss, exposure, criticality) {
+  let score = cvss || 5;
+  if (exposure === 'internet') score += 2;
+  if (exposure === 'dmz') score += 1;
+  if (exposure === 'airgapped') score -= 2;
+  if (criticality === 'critical') score += 2;
+  if (criticality === 'high') score += 1;
+  if (criticality === 'low') score -= 1;
+  if (score >= 12) return 'CRITICAL';
+  if (score >= 8)  return 'HIGH';
+  if (score >= 5)  return 'MEDIUM';
+  return 'LOW';
+}
+
+function priorityDays(p) {
+  return {CRITICAL:7, HIGH:30, MEDIUM:90, LOW:180}[p] || 90;
+}
+
+// ─── Show Result ──────────────────────────────────────────────────────────────
+function showResult(a) {
+  document.getElementById('result-empty').style.display = 'none';
+  document.getElementById('result-wrap').classList.add('show');
+  // Scroll result into view
+  setTimeout(() => document.getElementById('result-wrap').scrollIntoView({behavior:'smooth', block:'start'}), 100);
+
+  const sev = a.nvd.severity || 'MEDIUM';
+  const pillClass = {CRITICAL:'pill-critical',HIGH:'pill-high',MEDIUM:'pill-medium',LOW:'pill-low'}[sev] || 'pill-medium';
+  const prioClass  = {CRITICAL:'pill-critical',HIGH:'pill-high',MEDIUM:'pill-medium',LOW:'pill-low'}[a.priority] || 'pill-medium';
+
+  document.getElementById('res-cve-id').textContent = a.cveId;
+  document.getElementById('res-desc').textContent = a.nvd.desc;
+
+  // Score
+  const scoreEl = document.getElementById('res-score-num');
+  const scoreColors = {CRITICAL:'#fc8181',HIGH:'#f6ad55',MEDIUM:'#f6e05e',LOW:'#68d391'};
+  scoreEl.textContent = a.nvd.cvss ?? '—';
+  scoreEl.style.color = scoreColors[sev] || '#fff';
+
+  // Badges
+  document.getElementById('res-badges').innerHTML = `
+    <span class="badge-pill ${pillClass}">${sev}</span>
+    ${a.nvd.cvss ? `<span class="badge-pill pill-cvss">CVSS ${a.nvd.cvssVer} · ${a.nvd.cvss}</span>` : ''}
+    <span class="badge-pill ${prioClass}">Priorität: ${a.priority}</span>
+    <span class="badge-pill pill-source">NVD · Verifiziert</span>
+  `;
+
+  // KV rows
+  const expMap = {internet:'Internet-exponiert',internal:'Nur intern',dmz:'DMZ',airgapped:'Air-gapped',unknown:'Unklar'};
+  const critMap = {critical:'Kritisch',high:'Hoch',medium:'Mittel',low:'Niedrig'};
+  const prioColor = {CRITICAL:'red',HIGH:'orange',MEDIUM:'yellow',LOW:'green'}[a.priority] || '';
+  const patchColors = {yes:'green',no:'red',workaround:'orange',unknown:''};
+  const patchedColors = {yes:'green',no:'red',partial:'orange',planned:''};
+  document.getElementById('res-kv').innerHTML = `
+    <div class="kv-row"><span class="kv-key">Produkt</span><span class="kv-val">${a.ctx.product} ${a.ctx.version||''}</span></div>
+    <div class="kv-row"><span class="kv-key">Exponierung</span><span class="kv-val">${expMap[a.ctx.exposure]||a.ctx.exposure}</span></div>
+    <div class="kv-row"><span class="kv-key">Kritikalität</span><span class="kv-val">${critMap[a.ctx.criticality]||a.ctx.criticality}</span></div>
+    <div class="kv-row"><span class="kv-key">Priorität</span><span class="kv-val bold ${prioColor}">${a.priority}</span></div>
+    <div class="kv-row"><span class="kv-key">Behandlungsfrist</span><span class="kv-val">${priorityDays(a.priority)} Tage</span></div>
+    <div class="kv-row"><span class="kv-key">Patch verfügbar</span><span class="kv-val ${patchColors[a.ctx.patch]||''}">${a.ctx.patchLabel||a.ctx.patch||'—'}</span></div>
+    <div class="kv-row"><span class="kv-key">Gepatcht</span><span class="kv-val ${patchedColors[a.ctx.patched]||''}">${a.ctx.patchedLabel||a.ctx.patched||'—'}</span></div>
+    <div class="kv-row"><span class="kv-key">Datenkategorie</span><span class="kv-val">${a.ctx.datacatLabel||'—'}</span></div>
+    <div class="kv-row"><span class="kv-key">Betroffene Nutzer</span><span class="kv-val">${a.ctx.usersLabel||'—'}</span></div>
+    <div class="kv-row"><span class="kv-key">Netzwerkschutz</span><span class="kv-val">${a.ctx.ctrlNetLabel||'—'}</span></div>
+    <div class="kv-row"><span class="kv-key">Zugriffskontrolle</span><span class="kv-val">${a.ctx.ctrlAccessLabel||'—'}</span></div>
+    <div class="kv-row"><span class="kv-key">CWE</span><span class="kv-val" style="font-family:'DM Mono',monospace;font-size:11px;">${a.nvd.cwe}</span></div>
+    <div class="kv-row"><span class="kv-key">Veröffentlicht</span><span class="kv-val">${a.nvd.published}</span></div>
+  `;
+
+  // LLM placeholder
+  document.getElementById('llm-no-result').style.display = 'block';
+  document.getElementById('llm-loading').style.display = 'none';
+  document.getElementById('llm-result-tech').style.display = 'none';
+  document.getElementById('res-measures-wrap').style.display = 'none';
+  document.getElementById('res-risk-notice').style.display = 'none';
+}
+
+// ─── LLM Analysis ────────────────────────────────────────────────────────────
+async function runLLM(a) {
+  const ollamaOk = await checkOllama();
+  const model = window._ollamaModel || OLLAMA_MODEL;
+
+  document.getElementById('llm-no-result').style.display = 'none';
+  document.getElementById('llm-loading').style.display = 'flex';
+
+  const expMap = {internet:'Internet-exposed (HIGH risk)',internal:'Internal only',dmz:'DMZ',airgapped:'Air-gapped (LOW risk)',unknown:'Unknown'};
+  const prompt = `You are an ISMS security analyst. Analyze this CVE and provide a structured German-language security assessment.
+
+CVE: ${a.cveId}
+CVSS Score: ${a.nvd.cvss} (${a.nvd.severity})
+CVSS Vector: ${a.nvd.cvssVec || 'N/A'}
+Description: ${a.nvd.desc}
+CWE: ${a.nvd.cwe}
+
+Context:
+- Product: ${a.ctx.product} ${a.ctx.version}
+- Exposure: ${a.ctx.expMap?.[a.ctx.exposure] || a.ctx.exposure}
+- Business Criticality: ${a.ctx.criticality}
+- Patch available: ${a.ctx.patchLabel || a.ctx.patch}
+- System already patched: ${a.ctx.patchedLabel || a.ctx.patched}
+- Data category: ${a.ctx.datacatLabel || a.ctx.datacat}
+- Affected users: ${a.ctx.usersLabel || a.ctx.users}
+- Network controls: ${a.ctx.ctrlNetLabel || a.ctx.ctrlNet}
+- Access controls: ${a.ctx.ctrlAccessLabel || a.ctx.ctrlAccess}
+- Additional context: ${a.ctx.context || 'Not specified'}
+
+Respond ONLY in valid JSON format:
+{
+  "technische_zusammenfassung": "2-3 sentences technical summary in German",
+  "business_impact": "2-3 sentences business impact in German",
+  "angriffsweg": "1-2 sentences attack path in German",
+  "management_summary": "1-2 sentences executive summary in German",
+  "massnahmen": ["measure 1 in German", "measure 2", "measure 3", "measure 4"],
+  "evidenzen": ["evidence 1 in German", "evidence 2", "evidence 3"]
+}`;
+
+  try {
+    if (!ollamaOk) throw new Error('Ollama nicht erreichbar');
+
+    const r = await fetch(`${OLLAMA_URL}/api/generate`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({model, prompt, stream: false, options:{temperature:0.3}}),
+      signal: AbortSignal.timeout(120000)
+    });
+
+    if (!r.ok) throw new Error('Ollama API Fehler: ' + r.status);
+    const data = await r.json();
+    let raw = data.response || '';
+
+    // JSON extrahieren + bereinigen
+    // Entferne Markdown-Code-Blöcke falls vorhanden
+    raw = raw.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+    const match = raw.match(/\{[\s\S]*?\}(?=[^}]*$)/s) || raw.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('Kein JSON in LLM-Antwort');
+    let jsonStr = match[0];
+    // Bereinige häufige LLM-JSON-Fehler
+    jsonStr = jsonStr
+      .replace(/,\s*}/g, '}')      // trailing commas
+      .replace(/,\s*]/g, ']')      // trailing commas in arrays
+      .replace(/([{,]\s*)(\w+):/g, '$1"$2":')  // unquoted keys
+      .replace(/:\s*'([^']*?)'/g, ': "$1"');    // single-quoted values
+    let llm;
+    try { llm = JSON.parse(jsonStr); }
+    catch(parseErr) {
+      // Letzter Versuch: Felder manuell extrahieren
+      const extract = (key) => {
+        const m = raw.match(new RegExp('"' + key + '"\\s*:\\s*"([^"]*)"'));
+        return m ? m[1] : null;
+      };
+      const extractArr = (key) => {
+        const m = raw.match(new RegExp('"' + key + '"\\s*:\\s*\\[([^\\]]+)\\]'));
+        if (!m) return ['—'];
+        return m[1].match(/"([^"]+)"/g)?.map(s => s.replace(/"/g,'')) || ['—'];
+      };
+      llm = {
+        technische_zusammenfassung: extract('technische_zusammenfassung') || '—',
+        business_impact:            extract('business_impact') || '—',
+        angriffsweg:                extract('angriffsweg') || '—',
+        management_summary:         extract('management_summary') || '—',
+        massnahmen:                 extractArr('massnahmen'),
+        evidenzen:                  extractArr('evidenzen'),
+      };
+    }
+
+    a.llm = llm;
+    a.llmDone = true;
+    renderLLMResult(llm);
+
+  } catch(e) {
+    // Fallback: rule-based analysis
+    console.warn('LLM Fehler, nutze regelbasierte Analyse:', e.message);
+    const fallback = generateFallbackAnalysis(a);
+    a.llm = fallback;
+    a.llmDone = true;
+    renderLLMResult(fallback, true);
+  }
+
+  document.getElementById('llm-loading').style.display = 'none';
+}
+
+function renderLLMResult(llm, isFallback = false) {
+  document.getElementById('llm-result-tech').style.display = 'block';
+  document.getElementById('llm-result-tech').innerHTML = `
+    ${isFallback ? '<div style="font-size:10px;color:var(--text3);margin-bottom:10px;font-family:\'DM Mono\',monospace;">⚠ Regelbasierte Analyse (Ollama offline)</div>' : ''}
+    <div class="llm-section">
+      <div class="llm-section-title">Technische Zusammenfassung</div>
+      <div class="llm-text">${llm.technische_zusammenfassung || '—'}</div>
+    </div>
+    <div class="llm-section">
+      <div class="llm-section-title">Business Impact</div>
+      <div class="llm-text">${llm.business_impact || '—'}</div>
+    </div>
+    <div class="llm-section">
+      <div class="llm-section-title">Angriffsweg</div>
+      <div class="llm-text">${llm.angriffsweg || '—'}</div>
+    </div>
+    <div class="llm-section">
+      <div class="llm-section-title">Management Summary</div>
+      <div class="llm-text">${llm.management_summary || '—'}</div>
+    </div>
+  `;
+
+  // Maßnahmen & Evidenzen
+  if (llm.massnahmen?.length || llm.evidenzen?.length) {
+    document.getElementById('res-measures-wrap').style.display = 'grid';
+    document.getElementById('res-measures').innerHTML = (llm.massnahmen||[]).map(m=>`<li>${m}</li>`).join('');
+    document.getElementById('res-evidence').innerHTML = (llm.evidenzen||[]).map(e=>`<li>${e}</li>`).join('');
+  }
+}
+
+// ─── Fallback Analysis ────────────────────────────────────────────────────────
+function generateFallbackAnalysis(a) {
+  const {cvss, severity, cwe, desc} = a.nvd;
+  const {exposure, criticality, product, component} = a.ctx;
+
+  const sevDE = {CRITICAL:'kritische',HIGH:'hohe',MEDIUM:'mittlere',LOW:'niedrige'}[severity]||'sicherheitsrelevante';
+  const expDE = {internet:'öffentlich zugänglich',internal:'intern',dmz:'in der DMZ',airgapped:'isoliert'}[exposure]||'exponiert';
+
+  return {
+    technische_zusammenfassung: `Eine ${sevDE} Schwachstelle (CVSS ${cvss}) wurde in ${component||product} identifiziert. ${desc.split('.')[0]}. Die Schwachstelle ermöglicht potenziell unbefugten Zugriff oder Systemkompromittierung.`,
+    business_impact: `Das betroffene System ist ${expDE} und hat ${criticality} Geschäftskritikalität. Bei erfolgreicher Ausnutzung drohen Datenverlust, Betriebsunterbrechung oder Compliance-Verletzungen gemäß ISO 27001 A.8.8.`,
+    angriffsweg: `Ein Angreifer kann die Schwachstelle (${cwe}) über das Netzwerk ausnutzen. ${exposure === 'internet' ? 'Das System ist öffentlich erreichbar, was das Risiko erheblich erhöht.' : 'Ein Angreifer benötigt zunächst internen Netzwerkzugang.'}`,
+    management_summary: `Schwachstelle ${a.cveId} erfordert ${priorityDays(a.priority)}-Tage-Remediation. Priorität: ${a.priority}. Sofortige Risikobehandlung empfohlen.`,
+    massnahmen: [
+      `Sicherheits-Patch für ${component||product} zeitnah einspielen`,
+      'Betroffene Systeme auf Kompromittierungsindizien untersuchen',
+      'Netzwerksegmentierung und Zugriffskontrollen überprüfen',
+      exposure==='internet' ? 'Temporäre WAF-Regel oder Port-Sperrung als Workaround implementieren' : 'Interne Zugriffsrechte einschränken',
+    ],
+    evidenzen: [
+      'Patch-Deployment-Nachweis (Changelog/Ticket)',
+      'Vulnerability-Scan-Bericht nach Remediation',
+      'Kein aktiver Exploit-Nachweis (SIEM-Auswertung)',
+    ]
+  };
+}
+
+// ─── Create Risk from CVE ─────────────────────────────────────────────────────
+async function createRiskFromCVE(a) {
+  // Alle Werte absichern — PostgreSQL wirft 500 bei null/NaN für Integer-Felder
+  const cvss = parseFloat(a.nvd?.cvss) || 5.0;
+  const likelihood = {CRITICAL:5,HIGH:4,MEDIUM:3,LOW:2}[a.priority] || 3;
+  const impact     = cvss >= 9 ? 5 : cvss >= 7 ? 4 : cvss >= 5 ? 3 : cvss >= 3 ? 2 : 1;
+
+  // Beschreibung kürzen und bereinigen (max 1000 Zeichen)
+  const desc = (a.nvd?.desc || a.cveId + ' – Schwachstelle identifiziert via CVE-Analyse')
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '') // Steuerzeichen entfernen
+    .slice(0, 1000);
+
+  const product = (a.ctx?.product || 'Unbekannt').slice(0,100);
+  const version = a.ctx?.version ? ` ${a.ctx.version}` : '';
+
+  const riskBody = {
+    title:           `${a.cveId} – ${product}${version}`,
+    description:     `${desc}\n\nCVSS: ${cvss} (${a.nvd?.severity||'—'}) | CWE: ${a.nvd?.cwe||'—'} | Priorität: ${a.priority}`,
+    iso_control_ref: 'A.8.8',
+    likelihood:      Math.min(5, Math.max(1, Math.round(likelihood))),
+    impact:          Math.min(5, Math.max(1, Math.round(impact))),
+    treatment:       'mitigate',
+    due_date:        new Date(Date.now() + priorityDays(a.priority) * 86400000).toISOString().split('T')[0],
+  };
+
+  try {
+    const r = await fetch(`${API}/risks`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(riskBody),
+      signal: AbortSignal.timeout(10000),
+    });
+    if (r.ok) {
+      let risk = {};
+      try { risk = JSON.parse(await r.text()); } catch(e) {}
+      // NestJS gibt manchmal {value: {...}} zurück
+      if (risk.value) risk = risk.value;
+      a.riskRef = risk.risk_ref || risk.id?.slice(0,8) || 'erstellt';
+      document.getElementById('res-risk-notice').style.display = 'block';
+      document.getElementById('res-risk-notice').innerHTML = `
+        <div class="alert alert-ok">✅ Risiko <strong>${a.riskRef}</strong> wurde im Register eingetragen. <a href="isms-risk-analyzer.html" style="color:var(--green);font-weight:600;text-decoration:underline;">→ Register öffnen</a></div>
+      `;
+    } else {
+      let errBody = '';
+      try { errBody = await r.text(); } catch(e2) {}
+      console.error('Risk POST Fehler:', r.status, errBody);
+      if (r.status === 401) throw new Error('UNAUTHORIZED');
+      throw new Error('HTTP ' + r.status + (errBody ? ': ' + errBody.slice(0,120) : ''));
+    }
+  } catch(e) {
+    console.warn('createRiskFromCVE failed:', e.message);
+    a.riskRef = 'lokal';
+    document.getElementById('res-risk-notice').style.display = 'block';
+    if (e.message === 'UNAUTHORIZED') {
+      document.getElementById('res-risk-notice').innerHTML = `
+        <div class="alert alert-warn">
+          🔐 Session abgelaufen — Risiko konnte nicht gespeichert werden.<br>
+          <div style="margin-top:8px;display:flex;gap:8px;">
+            <button onclick="reLoginAndRetry()" style="padding:6px 14px;background:var(--navy);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;">🔄 Neu einloggen &amp; Risiko speichern</button>
+            <a href="isms-risk-analyzer.html" style="padding:6px 14px;border:1px solid var(--border2);border-radius:6px;color:var(--text2);font-size:12px;font-weight:600;text-decoration:none;">→ Manuell eintragen</a>
+          </div>
+        </div>`;
+    } else {
+      document.getElementById('res-risk-notice').innerHTML = `
+        <div class="alert alert-warn">⚠ Risiko konnte nicht automatisch gespeichert werden (${e.message}). <a href="isms-risk-analyzer.html" style="color:var(--yellow);font-weight:600;text-decoration:underline;">→ Manuell eintragen</a></div>
+      `;
+    }
+  }
+}
+
+function reLoginAndRetry() {
+  // Speichere aktuelles Assessment für nach dem Login
+  if (currentAssessment) {
+    sessionStorage.setItem('gx_pending_risk', JSON.stringify(currentAssessment));
+  }
+  window.location.href = 'isms-login.html';
+}
+
+// ─── History ──────────────────────────────────────────────────────────────────
+function renderHistory() {
+  const body = document.getElementById('history-body');
+  const table = document.getElementById('history-table');
+  const empty = document.getElementById('history-empty');
+
+  if (!assessments.length) {
+    table.style.display = 'none'; empty.style.display = 'block'; return;
+  }
+  table.style.display = 'table'; empty.style.display = 'none';
+
+  body.innerHTML = assessments.map(a => {
+    const sev = a.nvd?.severity || '—';
+    const pc = {CRITICAL:'prio-critical',HIGH:'prio-high',MEDIUM:'prio-medium',LOW:'prio-low'}[a.priority]||'prio-medium';
+    const date = new Date(a.ts).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});
+    return `<tr>
+      <td><span class="cve-link" onclick="reloadAssessment(${a.id})">${a.cveId}</span></td>
+      <td style="color:var(--text2);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${a.ctx?.product||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;font-weight:600;">${a.nvd?.cvss||'—'}</td>
+      <td><span class="prio ${pc}">${a.priority||'—'}</span></td>
+      <td style="color:${a.llmDone?'var(--green)':'var(--text3)'};">${a.llmDone?'✓':'–'}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text2);">${a.riskRef||'—'}</td>
+      <td style="color:var(--text3);font-size:11px;">${date}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="deleteAssessment(${a.id})">✕</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function reloadAssessment(id) {
+  const a = assessments.find(x => x.id === id);
+  if (!a) return;
+  currentAssessment = a;
+  document.getElementById('inp-cve').value = a.cveId;
+  document.getElementById('inp-product').value = a.ctx?.product||'';
+  document.getElementById('inp-version').value = a.ctx?.version||'';
+  document.getElementById('inp-component').value = a.ctx?.component||'';
+  document.getElementById('inp-exposure').value = a.ctx?.exposure||'unknown';
+  document.getElementById('inp-criticality').value = a.ctx?.criticality||'medium';
+  showResult(a);
+  if (a.llm) renderLLMResult(a.llm);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function deleteAssessment(id) {
+  assessments = assessments.filter(x => x.id !== id);
+  localStorage.setItem('gx_cve_assessments', JSON.stringify(assessments));
+  renderHistory();
+  updateStats();
+}
+
+function clearHistory() {
+  if (!confirm('Gesamten CVE-Verlauf löschen?')) return;
+  assessments = [];
+  localStorage.setItem('gx_cve_assessments', JSON.stringify(assessments));
+  renderHistory();
+  updateStats();
+}
+
+function updateStats() {
+  document.getElementById('stat-total').textContent    = assessments.length;
+  document.getElementById('stat-critical').textContent = assessments.filter(a=>a.priority==='CRITICAL').length;
+  document.getElementById('stat-risk').textContent     = assessments.filter(a=>a.riskRef).length;
+  document.getElementById('stat-llm').textContent      = assessments.filter(a=>a.llmDone).length;
+}
+
+// ─── Exports ─────────────────────────────────────────────────────────────────
+
+function exportPDF() {
+  if (!currentAssessment) return;
+  const a = currentAssessment;
+  const llm = a.llm || {};
+  const expMap = {internet:'Internet-exponiert',internal:'Nur intern',dmz:'DMZ',airgapped:'Air-gapped',unknown:'Unklar'};
+  const critMap = {critical:'Kritisch',high:'Hoch',medium:'Mittel',low:'Niedrig'};
+  const prioColors = {CRITICAL:'#e53e3e',HIGH:'#dd6b20',MEDIUM:'#d69e2e',LOW:'#38a169'};
+  const prioColor = prioColors[a.priority] || '#333';
+
+  const html = `<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
+  <title>CVE Assessment – ${a.cveId}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Arial', sans-serif; font-size: 12px; color: #1a202c; background: #fff; padding: 30px; }
+    h1 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+    h2 { font-size: 13px; font-weight: 700; color: #4a5568; margin: 20px 0 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; }
+    h3 { font-size: 11px; font-weight: 700; color: #718096; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+    .header { background: #162040; color: #fff; border-radius: 10px; padding: 22px 26px; margin-bottom: 22px; }
+    .header .sub { font-size: 10px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; font-family: monospace; }
+    .header .cve-id { font-size: 26px; font-weight: 800; }
+    .header .desc { font-size: 12px; color: rgba(255,255,255,0.75); margin-top: 8px; line-height: 1.5; }
+    .badges { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .badge { padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; }
+    .badge-sev { background: ${prioColor}; color: #fff; }
+    .badge-cvss { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+    .badge-prio { border: 2px solid ${prioColor}; color: ${prioColor}; background: transparent; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .card { background: #f8f9fb; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; }
+    .kv { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #edf2f7; font-size: 11px; }
+    .kv:last-child { border-bottom: none; }
+    .kv-k { color: #718096; font-weight: 600; }
+    .kv-v { font-weight: 500; }
+    .kv-v.prio { color: ${prioColor}; font-weight: 800; }
+    .llm-section { margin-bottom: 12px; }
+    .llm-section h3 { font-size: 11px; color: #00a878; margin-bottom: 4px; }
+    .llm-text { font-size: 12px; line-height: 1.6; color: #2d3748; }
+    ul { padding-left: 16px; }
+    ul li { font-size: 12px; line-height: 1.7; color: #2d3748; }
+    .footer { margin-top: 30px; padding-top: 14px; border-top: 1px solid #e2e8f0; font-size: 10px; color: #a0aec0; display: flex; justify-content: space-between; }
+    .prio-badge { display: inline-block; padding: 2px 10px; border-radius: 4px; font-weight: 700; font-size: 11px; color: #fff; background: ${prioColor}; }
+    @media print { body { padding: 10px; } }
+  </style></head><body>
+  <div class="header">
+    <div class="sub">CVE Assessment Report · Govrix ISMS</div>
+    <div class="cve-id">${a.cveId}</div>
+    <div class="desc">${a.nvd.desc}</div>
+    <div class="badges">
+      <span class="badge badge-sev">${a.nvd.severity}</span>
+      ${a.nvd.cvss ? `<span class="badge badge-cvss">CVSS ${a.nvd.cvssVer} · ${a.nvd.cvss}</span>` : ''}
+      <span class="badge badge-prio">Priorität: ${a.priority}</span>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Kontext &amp; Deterministik</h3>
+      <div class="kv"><span class="kv-k">Produkt</span><span class="kv-v">${a.ctx.product||'—'}</span></div>
+      <div class="kv"><span class="kv-k">Version</span><span class="kv-v">${a.ctx.version||'—'}</span></div>
+      <div class="kv"><span class="kv-k">Komponente</span><span class="kv-v">${a.ctx.component||'—'}</span></div>
+      <div class="kv"><span class="kv-k">Exponierung</span><span class="kv-v">${expMap[a.ctx.exposure]||a.ctx.exposure}</span></div>
+      <div class="kv"><span class="kv-k">Geschäftskritikalität</span><span class="kv-v">${critMap[a.ctx.criticality]||a.ctx.criticality}</span></div>
+      <div class="kv"><span class="kv-k">Priorität</span><span class="kv-v prio">${a.priority}</span></div>
+      <div class="kv"><span class="kv-k">Behandlungsfrist</span><span class="kv-v">${priorityDays(a.priority)} Tage</span></div>
+      <div class="kv"><span class="kv-k">CWE</span><span class="kv-v">${a.nvd.cwe||'—'}</span></div>
+      <div class="kv"><span class="kv-k">Veröffentlicht</span><span class="kv-v">${a.nvd.published||'—'}</span></div>
+      <div class="kv"><span class="kv-k">Verknüpftes Risiko</span><span class="kv-v">${a.riskRef||'—'}</span></div>
+      <div class="kv"><span class="kv-k">CVSS-Vektor</span><span class="kv-v" style="font-size:9px;font-family:monospace;">${a.nvd.cvssVec||'—'}</span></div>
+    </div>
+    <div class="card">
+      <h3>LLM-Analyse (Ollama)</h3>
+      ${llm.technische_zusammenfassung ? `
+      <div class="llm-section">
+        <h3>Technische Zusammenfassung</h3>
+        <div class="llm-text">${llm.technische_zusammenfassung}</div>
+      </div>
+      <div class="llm-section">
+        <h3>Business Impact</h3>
+        <div class="llm-text">${llm.business_impact||'—'}</div>
+      </div>
+      <div class="llm-section">
+        <h3>Angriffsweg</h3>
+        <div class="llm-text">${llm.angriffsweg||'—'}</div>
+      </div>
+      <div class="llm-section">
+        <h3>Management Summary</h3>
+        <div class="llm-text">${llm.management_summary||'—'}</div>
+      </div>` : '<div class="llm-text" style="color:#a0aec0;">Keine LLM-Analyse verfügbar.</div>'}
+    </div>
+  </div>
+
+  ${llm.massnahmen?.length ? `
+  <div class="grid2">
+    <div class="card">
+      <h3>Empfohlene Maßnahmen</h3>
+      <ul>${(llm.massnahmen||[]).map(m=>'<li>'+m+'</li>').join('')}</ul>
+    </div>
+    <div class="card">
+      <h3>Benötigte Evidenzen</h3>
+      <ul>${(llm.evidenzen||[]).map(e=>'<li>'+e+'</li>').join('')}</ul>
+    </div>
+  </div>` : ''}
+
+  <div class="footer">
+    <span>Govrix ISMS · CVE Assessment Report</span>
+    <span>Erstellt: ${new Date(a.ts).toLocaleString('de-DE')} · NVD-Daten verifiziert</span>
+  </div>
+  </body></html>`;
+
+  const win = window.open('', '_blank');
+  win.document.write(html);
+  win.document.close();
+  setTimeout(() => { win.focus(); win.print(); }, 500);
+}
+
+function exportExcel() {
+  if (!currentAssessment) return;
+  const a = currentAssessment;
+  const llm = a.llm || {};
+  const expMap = {internet:'Internet-exponiert',internal:'Nur intern',dmz:'DMZ',airgapped:'Air-gapped',unknown:'Unklar'};
+  const critMap = {critical:'Kritisch',high:'Hoch',medium:'Mittel',low:'Niedrig'};
+
+  // Build CSV-style TSV for Excel
+  const rows = [
+    ['CVE Assessment Report – Govrix ISMS','','',''],
+    ['Erstellt', new Date(a.ts).toLocaleString('de-DE'),'',''],
+    ['','','',''],
+    ['=== SCHWACHSTELLE ===','','',''],
+    ['CVE-ID', a.cveId, 'CVSS Score', a.nvd.cvss||'—'],
+    ['Severity', a.nvd.severity||'—', 'CVSS Version', a.nvd.cvssVer||'—'],
+    ['CWE', a.nvd.cwe||'—', 'Veröffentlicht', a.nvd.published||'—'],
+    ['CVSS Vektor', a.nvd.cvssVec||'—','',''],
+    ['Beschreibung', a.nvd.desc,'',''],
+    ['','','',''],
+    ['=== KONTEXT ===','','',''],
+    ['Produkt', a.ctx.product||'—', 'Version', a.ctx.version||'—'],
+    ['Komponente', a.ctx.component||'—', 'Exponierung', expMap[a.ctx.exposure]||a.ctx.exposure],
+    ['Kritikalität', critMap[a.ctx.criticality]||'—', 'Priorität', a.priority],
+    ['Frist (Tage)', priorityDays(a.priority), 'Risiko-Ref', a.riskRef||'—'],
+    ['Geschäftskontext', a.ctx.context||'—','',''],
+    ['Vorhandene Controls', a.ctx.controls||'—','',''],
+    ['','','',''],
+    ['=== LLM-ANALYSE ===','','',''],
+    ['Technische Zusammenfassung', llm.technische_zusammenfassung||'—','',''],
+    ['Business Impact', llm.business_impact||'—','',''],
+    ['Angriffsweg', llm.angriffsweg||'—','',''],
+    ['Management Summary', llm.management_summary||'—','',''],
+    ['','','',''],
+    ['=== MASSNAHMEN ===','','',''],
+    ...(llm.massnahmen||['—']).map((m,i) => [`Maßnahme ${i+1}`, m,'','']),
+    ['','','',''],
+    ['=== EVIDENZEN ===','','',''],
+    ...(llm.evidenzen||['—']).map((e,i) => [`Evidenz ${i+1}`, e,'','']),
+  ];
+
+  const tsv = rows.map(r => r.map(c => '"'+String(c).replace(/"/g,'""')+'"').join('\t')).join('\n');
+  const bom = '﻿';
+  const blob = new Blob([bom + tsv], {type:'text/tab-separated-values;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `CVE-Assessment_${a.cveId}_${new Date().toISOString().slice(0,10)}.xls`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportHistoryExcel() {
+  if (!assessments.length) return;
+  const expMap = {internet:'Internet-exponiert',internal:'Nur intern',dmz:'DMZ',airgapped:'Air-gapped',unknown:'Unklar'};
+  const critMap = {critical:'Kritisch',high:'Hoch',medium:'Mittel',low:'Niedrig'};
+
+  const header = ['CVE-ID','Produkt','Version','Komponente','CVSS','Severity','Priorität','Exponierung','Kritikalität','Frist (Tage)','Risiko-Ref','LLM-Analyse','Datum'];
+  const rows = assessments.map(a => [
+    a.cveId,
+    a.ctx?.product||'—',
+    a.ctx?.version||'—',
+    a.ctx?.component||'—',
+    a.nvd?.cvss||'—',
+    a.nvd?.severity||'—',
+    a.priority||'—',
+    expMap[a.ctx?.exposure]||a.ctx?.exposure||'—',
+    critMap[a.ctx?.criticality]||a.ctx?.criticality||'—',
+    priorityDays(a.priority),
+    a.riskRef||'—',
+    a.llmDone ? 'Ja' : 'Nein',
+    new Date(a.ts).toLocaleString('de-DE'),
+  ]);
+
+  const tsv = [header, ...rows].map(r => r.map(c => '"'+String(c).replace(/"/g,'""')+'"').join('\t')).join('\n');
+  const bom = '﻿';
+  const blob = new Blob([bom + tsv], {type:'text/tab-separated-values;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `CVE-Assessments_Govrix_${new Date().toISOString().slice(0,10)}.xls`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+// ─── CVE Search ──────────────────────────────────────────────────────────────
+function toggleSearch() {
+  const panel = document.getElementById('cve-search-panel');
+  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+  if (panel.style.display === 'block') document.getElementById('search-keyword').focus();
+}
+
+async function searchCVEs() {
+  const kw = document.getElementById('search-keyword').value.trim();
+  if (!kw) return;
+  const sev = document.getElementById('search-severity').value;
+  const btn = document.getElementById('btn-search');
+  const res = document.getElementById('search-results');
+
+  btn.disabled = true;
+  btn.textContent = '...';
+  res.innerHTML = '<div style="font-size:11px;color:var(--text3);padding:8px;">Suche über NestJS-Proxy...</div>';
+
+  try {
+    let data;
+    try {
+      data = await searchCVEsViaBackend(kw, sev);
+    } catch(e) {
+      // Fallback direkt
+      let url = `https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=${encodeURIComponent(kw)}&resultsPerPage=10`;
+      if (sev) url += `&cvssV3Severity=${sev}`;
+      const r = await fetch(url, {signal: AbortSignal.timeout(15000)});
+      data = await r.json();
+    }
+    const vulns = data?.vulnerabilities || [];
+
+    if (!vulns.length) {
+      res.innerHTML = '<div style="font-size:11px;color:var(--text3);padding:8px;">Keine CVEs gefunden.</div>';
+    } else {
+      res.innerHTML = vulns.map(v => {
+        const cve = v.cve;
+        const id = cve.id;
+        const desc = (cve.descriptions||[]).find(d=>d.lang==='en')?.value?.substring(0,100) || '—';
+        const metrics = cve.metrics || {};
+        let score = null, sev = '—';
+        if (metrics.cvssMetricV31?.[0]) { score = metrics.cvssMetricV31[0].cvssData.baseScore; sev = metrics.cvssMetricV31[0].cvssData.baseSeverity; }
+        else if (metrics.cvssMetricV30?.[0]) { score = metrics.cvssMetricV30[0].cvssData.baseScore; sev = metrics.cvssMetricV30[0].cvssData.baseSeverity; }
+        else if (metrics.cvssMetricV2?.[0]) { score = metrics.cvssMetricV2[0].cvssData.baseScore; sev = 'V2'; }
+        const sevColor = {CRITICAL:'var(--red)',HIGH:'var(--orange)',MEDIUM:'var(--yellow)',LOW:'var(--green)'}[sev]||'var(--text3)';
+        return `<div onclick="selectCVE('${id}')" style="padding:8px 10px;border-radius:6px;cursor:pointer;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;" onmouseover="this.style.background='var(--bg4)'" onmouseout="this.style.background=''">
+          <div style="flex-shrink:0;min-width:130px;">
+            <div style="font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:var(--accent2);">${id}</div>
+            <div style="font-size:10px;font-weight:700;color:${sevColor};">${score ? score+' '+sev : '—'}</div>
+          </div>
+          <div style="font-size:11px;color:var(--text2);line-height:1.4;">${desc}...</div>
+        </div>`;
+      }).join('');
+    }
+  } catch(e) {
+    res.innerHTML = `<div style="font-size:11px;color:var(--red);padding:8px;">Fehler: ${e.message}</div>`;
+  }
+  btn.disabled = false;
+  btn.textContent = 'Suchen';
+}
+
+function selectCVE(id) {
+  document.getElementById('inp-cve').value = id;
+  document.getElementById('cve-search-panel').style.display = 'none';
+  document.getElementById('inp-cve').focus();
+}
+
+// ─── History PDF Export ───────────────────────────────────────────────────────
+function exportHistoryPDF() {
+  if (!assessments.length) { alert('Kein Verlauf vorhanden.'); return; }
+  const expMap = {internet:'Internet-exponiert',internal:'Nur intern',dmz:'DMZ',airgapped:'Air-gapped',unknown:'Unklar'};
+  const critMap = {critical:'Kritisch',high:'Hoch',medium:'Mittel',low:'Niedrig'};
+  const prioColors = {CRITICAL:'#e53e3e',HIGH:'#dd6b20',MEDIUM:'#d69e2e',LOW:'#38a169'};
+
+  const rows = assessments.map(a => `
+    <tr>
+      <td style="font-family:monospace;font-weight:700;color:#2b6cb0;">${a.cveId}</td>
+      <td>${a.ctx?.product||'—'}</td>
+      <td style="font-weight:700;">${a.nvd?.cvss||'—'}</td>
+      <td><span style="background:${prioColors[a.priority]||'#888'};color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;">${a.priority||'—'}</span></td>
+      <td style="color:${a.llmDone?'#38a169':'#a0aec0'}">${a.llmDone?'✓ Ja':'–'}</td>
+      <td style="font-family:monospace;font-size:10px;">${a.riskRef||'—'}</td>
+      <td style="color:#718096;font-size:10px;">${new Date(a.ts).toLocaleDateString('de-DE')}</td>
+    </tr>`).join('');
+
+  const html = `<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
+  <title>CVE-Assessments – Govrix ISMS</title>
+  <style>
+    body{font-family:Arial,sans-serif;font-size:12px;color:#1a202c;padding:24px;}
+    h1{font-size:18px;font-weight:800;margin-bottom:4px;}
+    .sub{font-size:10px;color:#718096;font-family:monospace;margin-bottom:20px;}
+    table{width:100%;border-collapse:collapse;}
+    th{background:#162040;color:#fff;padding:8px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;}
+    td{padding:8px 12px;border-bottom:1px solid #e2e8f0;vertical-align:middle;}
+    tr:nth-child(even) td{background:#f8f9fb;}
+    .footer{margin-top:20px;font-size:10px;color:#a0aec0;border-top:1px solid #e2e8f0;padding-top:10px;display:flex;justify-content:space-between;}
+    @media print{body{padding:10px;}}
+  </style></head><body>
+  <h1>CVE-Assessments – Übersicht</h1>
+  <div class="sub">Govrix ISMS · ${assessments.length} Assessments · Exportiert: ${new Date().toLocaleString('de-DE')}</div>
+  <table>
+    <thead><tr><th>CVE-ID</th><th>Produkt</th><th>CVSS</th><th>Priorität</th><th>LLM</th><th>Risiko-Ref</th><th>Datum</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+  <div class="footer"><span>Govrix ISMS Platform</span><span>NVD-Daten verifiziert · ISO 27001 A.8.8</span></div>
+  </body></html>`;
+
+  const win = window.open('', '_blank');
+  win.document.write(html);
+  win.document.close();
+  setTimeout(() => { win.focus(); win.print(); }, 400);
+}
+
+// ─── Manual Mode ─────────────────────────────────────────────────────────────
+function openManualMode(cveId) {
+  clearFormAlert();
+  const overlay = document.createElement('div');
+  overlay.id = 'manual-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;display:flex;align-items:center;justify-content:center;';
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:14px;padding:28px;width:520px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+      <div style="font-size:15px;font-weight:700;margin-bottom:4px;">Manuelle CVE-Eingabe</div>
+      <div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:20px;">NVD offline – Daten manuell eingeben</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div>
+          <label style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;font-family:'DM Mono',monospace;display:block;margin-bottom:4px;">CVE-ID</label>
+          <input id="m-cve" value="${cveId}" style="width:100%;padding:8px 10px;border:1px solid var(--border2);border-radius:6px;font-size:13px;font-family:'DM Mono',monospace;">
+        </div>
+        <div>
+          <label style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;font-family:'DM Mono',monospace;display:block;margin-bottom:4px;">CVSS Score (0-10)</label>
+          <input id="m-cvss" type="number" min="0" max="10" step="0.1" placeholder="z.B. 7.8" style="width:100%;padding:8px 10px;border:1px solid var(--border2);border-radius:6px;font-size:13px;">
+        </div>
+        <div>
+          <label style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;font-family:'DM Mono',monospace;display:block;margin-bottom:4px;">Severity</label>
+          <select id="m-sev" style="width:100%;padding:8px 10px;border:1px solid var(--border2);border-radius:6px;font-size:13px;">
+            <option value="CRITICAL">CRITICAL</option>
+            <option value="HIGH" selected>HIGH</option>
+            <option value="MEDIUM">MEDIUM</option>
+            <option value="LOW">LOW</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;font-family:'DM Mono',monospace;display:block;margin-bottom:4px;">CWE</label>
+          <input id="m-cwe" placeholder="z.B. CWE-79, CWE-89" style="width:100%;padding:8px 10px;border:1px solid var(--border2);border-radius:6px;font-size:13px;">
+        </div>
+        <div>
+          <label style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;font-family:'DM Mono',monospace;display:block;margin-bottom:4px;">Veröffentlicht</label>
+          <input id="m-pub" type="date" style="width:100%;padding:8px 10px;border:1px solid var(--border2);border-radius:6px;font-size:13px;">
+        </div>
+        <div>
+          <label style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;font-family:'DM Mono',monospace;display:block;margin-bottom:4px;">CVSS-Vektor (optional)</label>
+          <input id="m-vec" placeholder="AV:N/AC:L/..." style="width:100%;padding:8px 10px;border:1px solid var(--border2);border-radius:6px;font-size:12px;font-family:'DM Mono',monospace;">
+        </div>
+      </div>
+      <div>
+        <label style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;font-family:'DM Mono',monospace;display:block;margin-bottom:4px;">Beschreibung *</label>
+        <textarea id="m-desc" rows="3" placeholder="Kurze Beschreibung der Schwachstelle..." style="width:100%;padding:8px 10px;border:1px solid var(--border2);border-radius:6px;font-size:13px;resize:vertical;"></textarea>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:18px;justify-content:flex-end;">
+        <button onclick="document.getElementById('manual-overlay').remove()" style="padding:9px 18px;border-radius:7px;border:1px solid var(--border2);background:#fff;cursor:pointer;font-size:13px;font-weight:600;">Abbrechen</button>
+        <button onclick="submitManual()" style="padding:9px 18px;border-radius:7px;border:none;background:var(--navy);color:#fff;cursor:pointer;font-size:13px;font-weight:600;">Analyse starten →</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  // Set today as default date
+  document.getElementById('m-pub').valueAsDate = new Date();
+}
+
+async function submitManual() {
+  const desc = document.getElementById('m-desc').value.trim();
+  if (!desc) { alert('Bitte eine Beschreibung eingeben.'); return; }
+  const cvss = parseFloat(document.getElementById('m-cvss').value) || null;
+  const sev  = document.getElementById('m-sev').value;
+  const cveId = document.getElementById('m-cve').value.trim().toUpperCase();
+  const pub  = document.getElementById('m-pub').value;
+
+  const nvdData = {
+    desc, cvss, cvssVec: document.getElementById('m-vec').value || null,
+    cvssVer: cvss ? '3.1' : null,
+    severity: sev,
+    cwe: document.getElementById('m-cwe').value || '—',
+    refs: [], published: pub ? new Date(pub).toLocaleDateString('de-DE') : '—',
+    id: cveId, manual: true,
+  };
+
+  document.getElementById('manual-overlay').remove();
+  document.getElementById('inp-cve').value = cveId;
+
+  const ctx = {
+    product:     document.getElementById('inp-product').value || '—',
+    version:     document.getElementById('inp-version').value || '—',
+    component:   document.getElementById('inp-component').value || '—',
+    exposure:    document.getElementById('inp-exposure').value,
+    criticality: document.getElementById('inp-criticality').value,
+    context:     document.getElementById('inp-context').value || '',
+    controls:    document.getElementById('inp-controls').value || '',
+  };
+  const priority = calcPriority(cvss, ctx.exposure, ctx.criticality);
+  currentAssessment = { id: Date.now(), cveId, nvd: nvdData, ctx, priority, riskRef: null, llmDone: false, llm: null, ts: new Date().toISOString() };
+
+  showResult(currentAssessment);
+  if (document.getElementById('chk-risk').checked) await createRiskFromCVE(currentAssessment);
+  if (document.getElementById('chk-llm').checked) await runLLM(currentAssessment);
+
+  assessments.unshift(currentAssessment);
+  if (assessments.length > 50) assessments = assessments.slice(0,50);
+  localStorage.setItem('gx_cve_assessments', JSON.stringify(assessments));
+  renderHistory();
+  updateStats();
+}
+
+// ─── Toast ───────────────────────────────────────────────────────────────────
+function showToast(msg, type='info') {
+  const colors = {info:'#2b6cb0',ok:'#276749',err:'#742a2a'};
+  const t = document.createElement('div');
+  t.style.cssText = `position:fixed;bottom:24px;right:24px;z-index:9999;background:${colors[type]||colors.info};color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.2);transition:opacity 0.3s;`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; setTimeout(()=>t.remove(),300); }, 3000);
+}
+
+// ─── Alerts ───────────────────────────────────────────────────────────────────
+function showFormAlert(msg, type='info') {
+  const map = {info:'alert-info',warn:'alert-warn',err:'alert-err',ok:'alert-ok'};
+  document.getElementById('form-alert').innerHTML = `<div class="alert ${map[type]||'alert-info'}">${msg}</div>`;
+}
+function clearFormAlert() { document.getElementById('form-alert').innerHTML = ''; }
+</script>
+</body>
+</html>

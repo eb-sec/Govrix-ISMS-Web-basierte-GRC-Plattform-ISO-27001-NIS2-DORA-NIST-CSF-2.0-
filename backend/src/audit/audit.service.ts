@@ -6,39 +6,47 @@ import { DATABASE_POOL } from '../common/database.module';
 export class AuditService {
   constructor(@Inject(DATABASE_POOL) private readonly db: Pool) {}
 
-  async log(entry: {
-    tenantId: string;
-    userId?: string;
-    userEmail?: string;
-    eventType: string;
+  async log(params: {
+    tenantId:   string;
+    userId?:    string;
+    userEmail:  string;
+    eventType:  string;
     entityType?: string;
-    entityId?: string;
-    oldValue?: any;
-    newValue?: any;
+    entityId?:   string;
+    oldValue?:   Record<string, any>;
+    newValue?:   Record<string, any>;
+    ipAddress?:  string;
+    userAgent?:  string;
   }) {
-    await this.db.query(`
-      INSERT INTO audit_log
-        (tenant_id, user_id, user_email, event_type, entity_type, entity_id, old_value, new_value)
-      VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8::jsonb)
-    `, [
-      entry.tenantId, entry.userId || null, entry.userEmail || 'system',
-      entry.eventType, entry.entityType || null, entry.entityId || null,
-      entry.oldValue ? JSON.stringify(entry.oldValue) : null,
-      entry.newValue ? JSON.stringify(entry.newValue) : null,
-    ]);
+    try {
+      await this.db.query(
+        `INSERT INTO audit_log
+           (tenant_id, user_id, user_email, event_type, entity_type, entity_id,
+            old_value, new_value, ip_address, user_agent)
+         VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8::jsonb,$9::inet,$10)`,
+        [
+          params.tenantId,
+          params.userId    || null,
+          params.userEmail,
+          params.eventType,
+          params.entityType || null,
+          params.entityId   || null,
+          params.oldValue   ? JSON.stringify(params.oldValue) : null,
+          params.newValue   ? JSON.stringify(params.newValue) : null,
+          params.ipAddress  || null,
+          params.userAgent  || null,
+        ]
+      );
+    } catch (e) {
+      console.warn('Audit-Log Fehler:', e.message);
+    }
   }
 
-  async getLog(tenantId: string, limit = 50) {
-    const result = await this.db.query(`
-      SELECT
-        al.id, al.event_type, al.entity_type, al.entity_id,
-        al.old_value, al.new_value, al.user_email, al.created_at
-      FROM audit_log al
-      WHERE al.tenant_id = $1
-      ORDER BY al.created_at DESC
-      LIMIT $2
-    `, [tenantId, limit]);
-
+  async getLog(tenantId: string, limit: number = 50) {
+    const result = await this.db.query(
+      `SELECT * FROM audit_log WHERE tenant_id = $1 ORDER BY created_at DESC LIMIT $2`,
+      [tenantId, limit]
+    );
     return result.rows;
   }
 }

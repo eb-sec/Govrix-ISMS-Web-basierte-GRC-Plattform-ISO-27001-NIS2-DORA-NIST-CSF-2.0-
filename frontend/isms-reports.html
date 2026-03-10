@@ -271,27 +271,73 @@ body { animation: pageFadeIn 0.2s ease both; }
 }
 
 
-/* GX-NAV-FIX */
-.sidebar{width:232px;min-height:100vh;background:var(--navy);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;box-shadow:2px 0 12px rgba(0,0,0,.15)}
-.sidebar-logo{padding:20px 18px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.08)}
-.logo-mark{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
-.logo-text{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.3px}
-.logo-sub{font-size:9px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace;letter-spacing:1px}
-.sidebar-nav{padding:12px 10px;flex:1;overflow-y:auto}
-.nav-section{font-size:9px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:1.5px;text-transform:uppercase;padding:10px 8px 4px}
-.nav-item{display:flex !important;flex-direction:row !important;align-items:center !important;gap:9px !important;padding:8px 10px !important;border-radius:7px !important;cursor:pointer !important;transition:background .15s !important;text-decoration:none !important;margin-bottom:1px !important;border-left:none !important;font-size:unset !important;font-weight:unset !important;color:unset !important}
-.nav-item:hover{background:rgba(255,255,255,.08) !important;color:unset !important}
-.nav-item.active{background:rgba(0,168,120,.18) !important;border-left:none !important;color:unset !important}
-.nav-icon{width:16px !important;height:16px !important;opacity:.55 !important;flex-shrink:0 !important;display:block !important}
-.nav-item.active .nav-icon{opacity:1 !important}
-.nav-label{font-size:12px !important;font-weight:500 !important;color:rgba(255,255,255,.65) !important;display:block !important}
-.nav-item.active .nav-label{color:#fff !important;font-weight:600 !important}
-.sidebar-footer{padding:14px;border-top:1px solid rgba(255,255,255,.08)}
-.user-card{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:7px;background:rgba(255,255,255,.07);cursor:pointer;transition:background .15s}
-.user-card:hover{background:rgba(255,255,255,.12)}
-.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#6c5ce7,#1847B1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
-.user-name{font-size:12px;font-weight:600;color:#fff}
-.user-role{font-size:10px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace}
+/* ====== NAVBAR OVERRIDE ====== */
+.sidebar { width: 232px; min-height: 100vh; background: var(--navy); display: flex; flex-direction: column; position: fixed; left: 0; top: 0; bottom: 0; z-index: 100; box-shadow: 2px 0 12px rgba(0,0,0,0.15); }
+.logo {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.logo-lockup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-icon-box {
+  width: 30px; height: 30px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #fff;
+  letter-spacing: -0.5px;
+}
+.logo-name {
+  font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.01em; line-height: 1.2;
+}
+.logo-sub, .logo-ver, .logo-tag {
+  font-size: 9px; color: rgba(255,255,255,0.32);
+  font-family: 'DM Mono', monospace; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-top: 2px;
+}
+/* ── Sidebar Navigation (unified, no-jump) ── */
+.nav { padding: 14px 0; flex: 1; overflow-y: auto; }
+
+.nav-section {
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  color: rgba(255,255,255,0.28);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 20px 5px;
+  font-weight: 500;
+}
+
+.nav-item {
+  text-decoration: none !important;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 18px 9px 18px;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.58);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin: 1px 8px;
+  border-radius: 7px;
+  border-left: 2px solid transparent;
+}
+.nav-item:hover {
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.9);
+}
+.nav-item.active {
+  background: rgba(255,255,255,0.12);
+  color: #fff !important;
+  border-left: 2px solid rgba(255,255,255,0.5);
+}
+.nav-item.active .icon { opacity: 1; }
+.icon { width: 14px; height: 14px; opacity: 0.55; flex-shrink: 0; }
+/* ============================= */
 </style>
 <style>
 body { animation: pageFadeIn 0.2s ease both; }
@@ -330,56 +376,71 @@ body { animation: pageFadeIn 0.2s ease both; }
 </head>
 <body>
 <aside class="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-mark">GX</div>
-    <div><div class="logo-text">Govrix</div><div class="logo-sub">ISMS PLATFORM</div></div>
+  <div class="logo">
+    <div class="logo-lockup">
+      <div class="logo-icon-box">GX</div>
+      <div>
+        <div class="logo-name">Govrix</div>
+        <div class="logo-sub">ISMS Platform</div>
+      </div>
+    </div>
   </div>
-  <nav class="sidebar-nav">
-    <div class="nav-section">Uebersicht</div>
+  <nav class="nav">
+    <div class="nav-section">Übersicht</div>
     <a href="isms-dashboard.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/></svg>
-      <span class="nav-label">Dashboard</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+      Dashboard
     </a>
     <div class="nav-section">Frameworks</div>
     <a href="isms-iso27001.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M8 1L2 4v4c0 3.3 2.5 6.4 6 7 3.5-.6 6-3.7 6-7V4L8 1z" fill="rgba(255,255,255,.8)"/></svg>
-      <span class="nav-label">ISO 27001</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h10M3 8h7M3 13h5"/></svg>
+      ISO 27001:2022
     </a>
     <a href="isms-nist.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/><path d="M5 8h6M8 5v6" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/></svg>
-      <span class="nav-label">NIST CSF 2.0</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="8,2 14,6 14,10 8,14 2,10 2,6"/></svg>
+      NIST CSF 2.0
     </a>
     <a href="isms-kanban-nis2.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="3" width="4" height="10" rx="1" fill="rgba(255,255,255,.6)"/><rect x="6" y="3" width="4" height="7" rx="1" fill="rgba(255,255,255,.6)"/><rect x="11" y="3" width="4" height="5" rx="1" fill="rgba(255,255,255,.6)"/></svg>
-      <span class="nav-label">NIS2 / DORA</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="12" rx="1"/><rect x="9" y="2" width="5" height="12" rx="1"/></svg>
+      NIS2 / Kanban
+    </a>
+    <a href="isms-dora.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2L2 5v4c0 3.5 2.5 6 6 7 3.5-1 6-3.5 6-7V5L8 2z"/></svg>
+      DORA
     </a>
     <div class="nav-section">Management</div>
-    <a href="isms-risk-analyzer.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M8 2L2 13h12L8 2z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M8 7v3M8 11.5v.5" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span class="nav-label">Risikoanalyse</span>
+    <a href="isms-risk-analyzer.html#register" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l2 5h5l-4 3 1.5 5L8 11l-4.5 3L5 9 1 6h5z"/></svg>
+      Risikomanagement <span class="badge" id="nav-risk-badge"></span>
+    </a>
+    <a href="isms-cve.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg>
+      CVE &amp; Risiko
     </a>
     <a href="isms-assets.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="3" width="14" height="9" rx="1.5" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M5 12v2M11 12v2M3 14h10" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span class="nav-label">Assets</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+      Assets & Inventar
     </a>
     <a href="isms-audit.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M4 2h8a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M5 6h6M5 9h4" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span class="nav-label">Audit Log</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1"/><path d="M5 7h6M5 10h4"/></svg>
+      Audit-Log
     </a>
+    <div class="nav-section">Berichte</div>
     <a href="isms-reports.html" class="nav-item active">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M10 2v3h3" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/></svg>
-      <span class="nav-label">Reports</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h5l4 4v9H4V2z"/><path d="M9 2v4h4"/></svg>
+      Reports & SoA
     </a>
+    <a href="trust.html" class="nav-item"><span style="margin-right:6px;">🔒</span>Trust Center</a>
   </nav>
-  <div class="sidebar-footer">
-    <div class="user-card">
-      <div class="avatar" id="gx-avatar">GX</div>
-      <div>
-        <div class="user-name" id="gx-name">Benutzer</div>
-        <div class="user-role" id="gx-role">-</div>
+  <div style="padding:10px;border-top:1px solid rgba(255,255,255,0.08);">
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.06);">
+      <div id="gx-avatar" style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#0f9d7e,#1847B1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;">?</div>
+      <div style="flex:1;min-width:0;overflow:hidden;">
+        <div id="gx-name" style="font-size:12px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Benutzer</div>
+        <div id="gx-role" style="font-size:9px;font-family:'DM Mono',monospace;color:#0f9d7e;text-transform:uppercase;letter-spacing:0.08em;">–</div>
       </div>
-      <button onclick="logout()" title="Abmelden" style="background:transparent;border:none;cursor:pointer;padding:5px;border-radius:5px;margin-left:auto;opacity:.6" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.6'">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 14H3a1 1 0 01-1-1V3a1 1 0 011-1h3M11 11l3-3-3-3M14 8H6" stroke="rgba(255,255,255,.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <button onclick="logout()" title="Abmelden" style="background:transparent;border:none;cursor:pointer;padding:5px;border-radius:5px;display:flex;align-items:center;opacity:0.6;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.5"><path d="M6 2H2v12h4"/><path d="M10 11l3-3-3-3"/><line x1="13" y1="8" x2="6" y2="8"/></svg>
       </button>
     </div>
   </div>
@@ -467,6 +528,7 @@ function getAuthHeaders() {
           <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg>
           PDF Export
         </button>
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();generateReport('nist-xlsx')">Excel</button>
       </div>
     </div>
   </div>
@@ -491,7 +553,7 @@ function getAuthHeaders() {
           <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg>
           PDF Export
         </button>
-        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();generateReport('nis2-word')">Word</button>
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();generateReport('nis2-xlsx')">Excel</button>
       </div>
     </div>
   </div>
@@ -517,6 +579,31 @@ function getAuthHeaders() {
           PDF Export
         </button>
         <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();generateReport('risiko-xlsx')">Excel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="report-card" onclick="generateReport('assets-pdf')">
+    <div class="report-card-head">
+      <div class="report-icon" style="background:#f0fff4">📦</div>
+      <div>
+        <div class="report-name">Asset &amp; Inventar Report</div>
+        <div class="report-desc">Vollständige Asset-Liste mit Status, Kritikalität, Owner und letztem Scan-Datum. ISO 27001 A.8.1.</div>
+      </div>
+    </div>
+    <div class="report-card-body">
+      <div class="report-meta">
+        <div class="report-meta-item"><div class="report-meta-label">Assets gesamt</div><div class="report-meta-val">12</div></div>
+        <div class="report-meta-item"><div class="report-meta-label">Kritisch</div><div class="report-meta-val" style="color:var(--red)">1</div></div>
+        <div class="report-meta-item"><div class="report-meta-label">ISO-Referenz</div><div class="report-meta-val">A.8.1</div></div>
+      </div>
+      <div class="report-progress"><div class="report-progress-fill" style="width:58%;background:var(--green)"></div></div>
+      <div class="report-actions">
+        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();generateReport('assets-pdf')">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg>
+          PDF Export
+        </button>
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();generateReport('assets-xlsx')">Excel</button>
       </div>
     </div>
   </div>
@@ -563,12 +650,9 @@ function getAuthHeaders() {
   <span id="api-msg">Verbinde mit API...</span>
 </div>
 <script>
- : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
+function getAuthHeaders() {
+  const t = localStorage.getItem('gx_token');
+  return t ? {'Authorization':'Bearer '+t,'Content-Type':'application/json'} : {'Content-Type':'application/json'};
 }
 
 const API = 'http://localhost:3000/api/v1';
@@ -608,22 +692,225 @@ function renderSoA(data) {
     </tr>`).join('');
 }
 
-function generateReport(type) {
-  const toast = document.getElementById('toast');
-  const labels = {
-    'iso27001':'ISO 27001 Compliance Report',
-    'iso27001-pdf':'ISO 27001 PDF',
-    'iso27001-xlsx':'ISO 27001 Excel',
-    'nist-pdf':'NIST CSF 2.0 PDF',
-    'nis2-pdf':'NIS2/DORA PDF',
-    'nis2-word':'NIS2/DORA Word',
-    'risiko-pdf':'Risiko Report PDF',
-    'risiko-xlsx':'Risiko Excel',
-    'soa-pdf':'Statement of Applicability PDF',
-  };
-  toast.textContent = '📄 ' + (labels[type]||'Bericht') + ' wird generiert...';
-  toast.style.opacity = '1';
-  setTimeout(() => { toast.style.opacity='0'; }, 2500);
+// ── EXPORT LIBRARIES ─────────────────────────────────────────
+function loadScript(src, cb) {
+  if (document.querySelector('script[src="'+src+'"]')) { cb(); return; }
+  const s = document.createElement('script'); s.src = src; s.onload = cb; document.head.appendChild(s);
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.opacity = '1';
+  setTimeout(() => { t.style.opacity = '0'; }, 3000);
+}
+
+// ── PDF HELPERS ───────────────────────────────────────────────
+function makePDF(title, subtitle, columns, rows, filename) {
+  loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', function() {
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js', function() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+      // Header
+      doc.setFillColor(22, 32, 64);
+      doc.rect(0, 0, 297, 22, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(13); doc.setFont('helvetica', 'bold');
+      doc.text('GOVRIX ISMS', 14, 10);
+      doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+      doc.text(title, 14, 17);
+      doc.setFontSize(8);
+      doc.text('Stand: ' + new Date().toLocaleDateString('de-DE') + ' · Vertraulich', 200, 17);
+      doc.setTextColor(0, 0, 0);
+      // Subtitle
+      doc.setFontSize(14); doc.setFont('helvetica', 'bold');
+      doc.text(title, 14, 32);
+      doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+      doc.setTextColor(100, 100, 100);
+      doc.text(subtitle, 14, 38);
+      doc.setTextColor(0, 0, 0);
+      // Table
+      doc.autoTable({
+        head: [columns],
+        body: rows,
+        startY: 43,
+        styles: { fontSize: 8, cellPadding: 3 },
+        headStyles: { fillColor: [22, 32, 64], textColor: 255, fontStyle: 'bold' },
+        alternateRowStyles: { fillColor: [245, 247, 250] },
+        margin: { left: 14, right: 14 },
+      });
+      // Footer
+      const pg = doc.internal.getNumberOfPages();
+      for (let i = 1; i <= pg; i++) {
+        doc.setPage(i);
+        doc.setFontSize(7); doc.setTextColor(150);
+        doc.text('Govrix ISMS · Vertraulich · Seite ' + i + ' von ' + pg, 14, 205);
+      }
+      doc.save(filename);
+      showToast('✅ PDF gespeichert: ' + filename);
+    });
+  });
+}
+
+// ── EXCEL HELPER ──────────────────────────────────────────────
+function makeXLSX(sheetName, columns, rows, filename) {
+  loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js', function() {
+    const data = [columns, ...rows];
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    ws['!cols'] = columns.map(() => ({ wch: 28 }));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, sheetName);
+    XLSX.writeFile(wb, filename);
+    showToast('✅ Excel gespeichert: ' + filename);
+  });
+}
+
+// ── REPORT GENERATOR ─────────────────────────────────────────
+async function generateReport(type) {
+  showToast('⏳ Generiere ' + type + '...');
+
+  if (type === 'assets-pdf') {
+    try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+      const now = new Date().toLocaleDateString('de-DE');
+      doc.setFontSize(16); doc.setFont('helvetica','bold');
+      doc.text('Govrix ISMS — Asset & Inventar', 14, 16);
+      doc.setFontSize(9); doc.setFont('helvetica','normal');
+      doc.text('ISO 27001 A.8.1 · Erstellt: ' + now, 14, 23);
+      const DEMO = [
+        ['PROD-DB-01','Server','Konform','Hoch','DBA-Team','10.0.1.10','Ubuntu 22.04','28.02.26','A.8.1'],
+        ['WEB-APP-PROD','Applikation','Konform','Hoch','Dev-Team','10.0.1.20','Node.js 20','27.02.26','A.8.1'],
+        ['BACKUP-SERVER','Server','Warnung','Hoch','IT-Ops','10.0.2.5','Windows Server 2022','01.02.26','A.8.13'],
+        ['AWS-S3-PROD','Cloud Service','Konform','Mittel','Cloud-Team','aws://s3','AWS S3','28.02.26','A.8.1'],
+        ['FIREWALL-01','Netzwerk','Konform','Hoch','Network-Team','192.168.1.1','FortiOS 7.4','25.02.26','A.8.20'],
+        ['DEV-LAPTOP-MK','Endpoint','Warnung','Mittel','M. Klein','10.0.5.42','macOS 14.3','15.01.26','A.8.1'],
+        ['MAIL-SERVER','Server','Kritisch','Hoch','IT-Ops','10.0.1.30','Exchange 2019','01.12.25','A.8.1'],
+        ['VPN-GATEWAY','Netzwerk','Konform','Hoch','Network-Team','203.0.113.5','OpenVPN 2.6','28.02.26','A.8.20'],
+        ['CI-CD-PIPELINE','Cloud Service','Konform','Mittel','Dev-Team','github.com','GitHub Actions','28.02.26','A.8.25'],
+        ['HR-SYSTEM','Applikation','Warnung','Mittel','HR-Dept','10.0.3.10','SAP SuccessFactors','20.01.26','A.8.1'],
+        ['MONITORING','Server','Konform','Niedrig','IT-Ops','10.0.1.50','Ubuntu 22.04','28.02.26','A.8.16'],
+        ['PRINTER-FLOOR2','Endpoint','Warnung','Niedrig','Office-Mgmt','10.0.5.100','HP JetDirect','01.11.25','A.8.1'],
+      ];
+      doc.autoTable({
+        startY: 28,
+        head: [['Asset','Typ','Status','Kritikalität','Owner','IP/Host','System','Letzter Scan','ISO']],
+        body: DEMO,
+        styles: { fontSize: 8, cellPadding: 2 },
+        headStyles: { fillColor: [22, 32, 64], textColor: 255 },
+        alternateRowStyles: { fillColor: [245, 247, 250] }
+      });
+      doc.save('govrix-assets-' + now.replace(/\./g,'-') + '.pdf');
+      showToast('Asset Report PDF erstellt');
+    } catch(e) { showToast('Fehler: ' + e.message); }
+    return;
+  }
+  if (type === 'assets-xlsx') {
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js', function() {
+      const rows = [
+        {Asset:'PROD-DB-01',Typ:'Server',Status:'Konform',Kritikalität:'Hoch',Owner:'DBA-Team','IP/Host':'10.0.1.10',System:'Ubuntu 22.04','Letzter Scan':'28.02.26','ISO-Ref':'A.8.1'},
+        {Asset:'WEB-APP-PROD',Typ:'Applikation',Status:'Konform',Kritikalität:'Hoch',Owner:'Dev-Team','IP/Host':'10.0.1.20',System:'Node.js 20','Letzter Scan':'27.02.26','ISO-Ref':'A.8.1'},
+        {Asset:'BACKUP-SERVER',Typ:'Server',Status:'Warnung',Kritikalität:'Hoch',Owner:'IT-Ops','IP/Host':'10.0.2.5',System:'Windows Server 2022','Letzter Scan':'01.02.26','ISO-Ref':'A.8.13'},
+        {Asset:'AWS-S3-PROD',Typ:'Cloud',Status:'Konform',Kritikalität:'Mittel',Owner:'Cloud-Team','IP/Host':'aws://s3',System:'AWS S3','Letzter Scan':'28.02.26','ISO-Ref':'A.8.1'},
+        {Asset:'FIREWALL-01',Typ:'Netzwerk',Status:'Konform',Kritikalität:'Hoch',Owner:'Network-Team','IP/Host':'192.168.1.1',System:'FortiOS 7.4','Letzter Scan':'25.02.26','ISO-Ref':'A.8.20'},
+        {Asset:'MAIL-SERVER',Typ:'Server',Status:'Kritisch',Kritikalität:'Hoch',Owner:'IT-Ops','IP/Host':'10.0.1.30',System:'Exchange 2019','Letzter Scan':'01.12.25','ISO-Ref':'A.8.1'},
+      ];
+      const ws = XLSX.utils.json_to_sheet(rows);
+      ws['!cols'] = [{wch:20},{wch:14},{wch:10},{wch:12},{wch:16},{wch:16},{wch:22},{wch:14},{wch:10}];
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Assets');
+      XLSX.writeFile(wb, 'govrix-assets.xlsx');
+      showToast('Asset Report Excel erstellt');
+    });
+    return;
+  }
+  if (type === 'soa-pdf') {
+    const cols = ['Control', 'Bezeichnung', 'Status', 'Begründung', 'Verantwortlich', 'Nachweis'];
+    const rows = SOA_DATA.map(r => [r.control, r.name, STATUS_MAP[r.status]||r.status, r.reason, r.owner, r.evidence]);
+    makePDF('Statement of Applicability', 'ISO 27001:2022 · Annex A · Stand: ' + new Date().toLocaleDateString('de-DE'), cols, rows, 'govrix-soa.pdf');
+    return;
+  }
+
+  if (type === 'iso27001-pdf') {
+    try {
+      const data = await (await fetch(API + '/controls/iso', {headers: getAuthHeaders()})).text().then(t => JSON.parse(t));
+      const cols = ['Control', 'Titel', 'Status', 'Score'];
+      const rows = data.map(c => [c.code||'', c.title||'', c.status||'—', c.score||'—']);
+      makePDF('ISO 27001:2022 Compliance Report', '93 Controls · Annex A', cols, rows, 'govrix-iso27001.pdf');
+    } catch { showToast('❌ Fehler beim Laden der ISO-Daten'); }
+    return;
+  }
+
+  if (type === 'iso27001-xlsx') {
+    try {
+      const data = await (await fetch(API + '/controls/iso', {headers: getAuthHeaders()})).text().then(t => JSON.parse(t));
+      const cols = ['Control', 'Titel', 'Status', 'Score'];
+      const rows = data.map(c => [c.code||'', c.title||'', c.status||'—', c.score||'—']);
+      makeXLSX('ISO 27001', cols, rows, 'govrix-iso27001.xlsx');
+    } catch { showToast('❌ Fehler beim Laden der ISO-Daten'); }
+    return;
+  }
+
+  if (type === 'nist-pdf') {
+    try {
+      const data = await (await fetch(API + '/controls/nist', {headers: getAuthHeaders()})).text().then(t => JSON.parse(t));
+      const cols = ['Code', 'Beschreibung', 'Score', 'Status'];
+      const rows = data.map(c => [c.code||'', (c.description||'').substring(0,60), c.score||'—', c.status||'—']);
+      makePDF('NIST CSF 2.0 Report', '54 Subcategories · Cybersecurity Framework', cols, rows, 'govrix-nist.pdf');
+    } catch { showToast('❌ Fehler beim Laden der NIST-Daten'); }
+    return;
+  }
+
+  if (type === 'nist-xlsx') {
+    try {
+      const data = await (await fetch(API + '/controls/nist', {headers: getAuthHeaders()})).text().then(t => JSON.parse(t));
+      const arr = Array.isArray(data) ? data : (data.value || []);
+      const cols = ['Code', 'Beschreibung', 'Score', 'Status'];
+      const rows = arr.map(c => [c.code||'', c.description||'', c.score||'—', c.status||'—']);
+      makeXLSX('NIST CSF 2.0', cols, rows, 'govrix-nist.xlsx');
+    } catch { showToast('❌ Fehler beim Laden der NIST-Daten'); }
+    return;
+  }
+
+  if (type === 'nis2-xlsx') {
+    try {
+      const data = await (await fetch(API + '/controls/nis2', {headers: getAuthHeaders()})).text().then(t => JSON.parse(t));
+      const cols = ['Ref', 'Artikel', 'Anforderung', 'Kategorie', 'Status', 'Fortschritt %'];
+      const rows = data.map(r => [r.req_ref||'', r.article||'', r.title||'', r.category||'', r.status||'—', r.completion_pct||0]);
+      makeXLSX('NIS2-DORA', cols, rows, 'govrix-nis2-dora.xlsx');
+    } catch { showToast('❌ Fehler beim Laden der NIS2-Daten'); }
+    return;
+  }
+
+  if (type === 'nis2-pdf') {
+    try {
+      const data = await (await fetch(API + '/controls/nis2', {headers: getAuthHeaders()})).text().then(t => JSON.parse(t));
+      const cols = ['Ref', 'Artikel', 'Anforderung', 'Status', 'Fortschritt'];
+      const rows = data.map(r => [r.req_ref||'', r.article||'', r.title||'', r.status||'—', (r.completion_pct||0)+'%']);
+      makePDF('NIS2 / DORA Compliance Report', 'EU 2022/2555 · EU 2022/2554', cols, rows, 'govrix-nis2-dora.pdf');
+    } catch { showToast('❌ Fehler beim Laden der NIS2-Daten'); }
+    return;
+  }
+
+  if (type === 'risiko-pdf') {
+    try {
+      const data = await (await fetch(API + '/risks', {headers: getAuthHeaders()})).text().then(t => JSON.parse(t));
+      const cols = ['Ref', 'Risiko', 'Control', 'W×A', 'Score', 'Status', 'Fällig'];
+      const rows = data.map(r => [r.risk_ref||'', r.title||'', r.iso_control_ref||'', r.likelihood+'×'+r.impact, r.risk_score||'', r.status||'', r.due_date ? new Date(r.due_date).toLocaleDateString('de-DE') : '—']);
+      makePDF('Risikomanagement Report', 'ISO 27001 · NIST CSF 2.0 · Audit-Zyklus Q1/2026', cols, rows, 'govrix-risiken.pdf');
+    } catch { showToast('❌ Fehler beim Laden der Risiken'); }
+    return;
+  }
+
+  if (type === 'risiko-xlsx') {
+    try {
+      const data = await (await fetch(API + '/risks', {headers: getAuthHeaders()})).text().then(t => JSON.parse(t));
+      const cols = ['Ref', 'Risiko', 'ISO Control', 'NIST Code', 'Wahrscheinlichkeit', 'Impact', 'Score', 'Status', 'Treatment', 'Fällig'];
+      const rows = data.map(r => [r.risk_ref, r.title, r.iso_control_ref, r.nist_sub_code, r.likelihood, r.impact, r.risk_score, r.status, r.treatment, r.due_date ? new Date(r.due_date).toLocaleDateString('de-DE') : '']);
+      makeXLSX('Risiken', cols, rows, 'govrix-risiken.xlsx');
+    } catch { showToast('❌ Fehler beim Laden der Risiken'); }
+    return;
+  }
+
+  showToast('⚠️ Report-Typ nicht implementiert: ' + type);
 }
 
 async function loadReports() {
@@ -643,6 +930,20 @@ async function loadReports() {
 loadReports();
 
 document.addEventListener('click',function(e){const link=e.target.closest('a[href]');if(!link)return;const href=link.getAttribute('href');if(!href||href.startsWith('#')||href.startsWith('http'))return;if(!href.endsWith('.html')&&!href.includes('.html#'))return;e.preventDefault();document.body.classList.add('page-leaving');setTimeout(()=>{window.location.href=href;},140);});
+
+// ── Nav Badge ─────────────────────────────────────────────
+async function updateNavBadge() {
+  try {
+    const r = await fetch((typeof API !== 'undefined' ? API : 'http://localhost:3000/api/v1') + '/risks', {headers: typeof getAuthHeaders === 'function' ? getAuthHeaders() : {}});
+    const txt = await r.text();
+    const risks = JSON.parse(txt);
+    const arr = Array.isArray(risks) ? risks : (risks.value || []);
+    const open = arr.filter(function(r){ return r.status !== 'closed' && r.status !== 'accepted'; }).length;
+    const el = document.getElementById('nav-risk-badge');
+    if (el) { el.textContent = open || ''; el.style.display = open ? '' : 'none'; }
+  } catch(e) {}
+}
+updateNavBadge();
 </script>
 </body>
 </html>

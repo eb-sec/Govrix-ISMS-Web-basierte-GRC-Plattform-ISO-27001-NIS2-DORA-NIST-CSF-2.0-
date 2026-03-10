@@ -57,6 +57,8 @@ services:
       ENTRA_TENANT_ID: ${ENTRA_TENANT_ID:-}
       ENTRA_REDIRECT_URI: ${ENTRA_REDIRECT_URI:-http://localhost:3000/auth/callback}
       PORT: 3000
+      OLLAMA_URL: http://host.docker.internal:11434
+      OLLAMA_MODEL: gemma3:4b
     ports:
       - "3000:3000"
     depends_on:

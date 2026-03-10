@@ -271,27 +271,73 @@ body { animation: pageFadeIn 0.2s ease both; }
 }
 
 
-/* GX-NAV-FIX */
-.sidebar{width:232px;min-height:100vh;background:var(--navy);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;box-shadow:2px 0 12px rgba(0,0,0,.15)}
-.sidebar-logo{padding:20px 18px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.08)}
-.logo-mark{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
-.logo-text{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.3px}
-.logo-sub{font-size:9px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace;letter-spacing:1px}
-.sidebar-nav{padding:12px 10px;flex:1;overflow-y:auto}
-.nav-section{font-size:9px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:1.5px;text-transform:uppercase;padding:10px 8px 4px}
-.nav-item{display:flex !important;flex-direction:row !important;align-items:center !important;gap:9px !important;padding:8px 10px !important;border-radius:7px !important;cursor:pointer !important;transition:background .15s !important;text-decoration:none !important;margin-bottom:1px !important;border-left:none !important;font-size:unset !important;font-weight:unset !important;color:unset !important}
-.nav-item:hover{background:rgba(255,255,255,.08) !important;color:unset !important}
-.nav-item.active{background:rgba(0,168,120,.18) !important;border-left:none !important;color:unset !important}
-.nav-icon{width:16px !important;height:16px !important;opacity:.55 !important;flex-shrink:0 !important;display:block !important}
-.nav-item.active .nav-icon{opacity:1 !important}
-.nav-label{font-size:12px !important;font-weight:500 !important;color:rgba(255,255,255,.65) !important;display:block !important}
-.nav-item.active .nav-label{color:#fff !important;font-weight:600 !important}
-.sidebar-footer{padding:14px;border-top:1px solid rgba(255,255,255,.08)}
-.user-card{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:7px;background:rgba(255,255,255,.07);cursor:pointer;transition:background .15s}
-.user-card:hover{background:rgba(255,255,255,.12)}
-.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#6c5ce7,#1847B1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
-.user-name{font-size:12px;font-weight:600;color:#fff}
-.user-role{font-size:10px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace}
+/* ====== NAVBAR OVERRIDE ====== */
+.sidebar { width: 232px; min-height: 100vh; background: var(--navy); display: flex; flex-direction: column; position: fixed; left: 0; top: 0; bottom: 0; z-index: 100; box-shadow: 2px 0 12px rgba(0,0,0,0.15); }
+.logo {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.logo-lockup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-icon-box {
+  width: 30px; height: 30px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #fff;
+  letter-spacing: -0.5px;
+}
+.logo-name {
+  font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.01em; line-height: 1.2;
+}
+.logo-sub, .logo-ver, .logo-tag {
+  font-size: 9px; color: rgba(255,255,255,0.32);
+  font-family: 'DM Mono', monospace; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-top: 2px;
+}
+/* ── Sidebar Navigation (unified, no-jump) ── */
+.nav { padding: 14px 0; flex: 1; overflow-y: auto; }
+
+.nav-section {
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  color: rgba(255,255,255,0.28);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 20px 5px;
+  font-weight: 500;
+}
+
+.nav-item {
+  text-decoration: none !important;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 18px 9px 18px;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.58);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin: 1px 8px;
+  border-radius: 7px;
+  border-left: 2px solid transparent;
+}
+.nav-item:hover {
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.9);
+}
+.nav-item.active {
+  background: rgba(255,255,255,0.12);
+  color: #fff !important;
+  border-left: 2px solid rgba(255,255,255,0.5);
+}
+.nav-item.active .icon { opacity: 1; }
+.icon { width: 14px; height: 14px; opacity: 0.55; flex-shrink: 0; }
+/* ============================= */
 </style>
 <style>
 body { animation: pageFadeIn 0.2s ease both; }
@@ -339,56 +385,67 @@ body { animation: pageFadeIn 0.2s ease both; }
 </head>
 <body>
 <aside class="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-mark">GX</div>
-    <div><div class="logo-text">Govrix</div><div class="logo-sub">ISMS PLATFORM</div></div>
+  <div class="logo">
+    <div class="logo-lockup">
+      <div class="logo-icon-box">GX</div>
+      <div>
+        <div class="logo-name">Govrix</div>
+        <div class="logo-sub">ISMS Platform</div>
+      </div>
+    </div>
   </div>
-  <nav class="sidebar-nav">
-    <div class="nav-section">Uebersicht</div>
+  <nav class="nav">
+    <div class="nav-section">Übersicht</div>
     <a href="isms-dashboard.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="rgba(255,255,255,.6)"/></svg>
-      <span class="nav-label">Dashboard</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+      Dashboard
     </a>
     <div class="nav-section">Frameworks</div>
     <a href="isms-iso27001.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M8 1L2 4v4c0 3.3 2.5 6.4 6 7 3.5-.6 6-3.7 6-7V4L8 1z" fill="rgba(255,255,255,.8)"/></svg>
-      <span class="nav-label">ISO 27001</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h10M3 8h7M3 13h5"/></svg>
+      ISO 27001:2022
     </a>
     <a href="isms-nist.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/><path d="M5 8h6M8 5v6" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/></svg>
-      <span class="nav-label">NIST CSF 2.0</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="8,2 14,6 14,10 8,14 2,10 2,6"/></svg>
+      NIST CSF 2.0
     </a>
     <a href="isms-kanban-nis2.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="3" width="4" height="10" rx="1" fill="rgba(255,255,255,.6)"/><rect x="6" y="3" width="4" height="7" rx="1" fill="rgba(255,255,255,.6)"/><rect x="11" y="3" width="4" height="5" rx="1" fill="rgba(255,255,255,.6)"/></svg>
-      <span class="nav-label">NIS2 / DORA</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="12" rx="1"/><rect x="9" y="2" width="5" height="12" rx="1"/></svg>
+      NIS2 / Kanban
+    </a>
+    <a href="isms-dora.html" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2L2 5v4c0 3.5 2.5 6 6 7 3.5-1 6-3.5 6-7V5L8 2z"/></svg>
+      DORA
     </a>
     <div class="nav-section">Management</div>
-    <a href="isms-risk-analyzer.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M8 2L2 13h12L8 2z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M8 7v3M8 11.5v.5" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span class="nav-label">Risikoanalyse</span>
+    <a href="isms-risk-analyzer.html#register" class="nav-item">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l2 5h5l-4 3 1.5 5L8 11l-4.5 3L5 9 1 6h5z"/></svg>
+      Risikomanagement <span class="badge" id="nav-risk-badge"></span>
     </a>
     <a href="isms-assets.html" class="nav-item active">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><rect x="1" y="3" width="14" height="9" rx="1.5" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M5 12v2M11 12v2M3 14h10" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span class="nav-label">Assets</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+      Assets & Inventar
     </a>
     <a href="isms-audit.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M4 2h8a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M5 6h6M5 9h4" stroke="rgba(255,255,255,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span class="nav-label">Audit Log</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1"/><path d="M5 7h6M5 10h4"/></svg>
+      Audit-Log
     </a>
+    <div class="nav-section">Berichte</div>
     <a href="isms-reports.html" class="nav-item">
-      <svg class="nav-icon" fill="none" viewBox="0 0 16 16"><path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="rgba(255,255,255,.6)" stroke-width="1.5" fill="none"/><path d="M10 2v3h3" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/></svg>
-      <span class="nav-label">Reports</span>
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h5l4 4v9H4V2z"/><path d="M9 2v4h4"/></svg>
+      Reports & SoA
     </a>
+    <a href="trust.html" class="nav-item"><span style="margin-right:6px;">🔒</span>Trust Center</a>
   </nav>
-  <div class="sidebar-footer">
-    <div class="user-card">
-      <div class="avatar" id="gx-avatar">GX</div>
-      <div>
-        <div class="user-name" id="gx-name">Benutzer</div>
-        <div class="user-role" id="gx-role">-</div>
+  <div style="padding:10px;border-top:1px solid rgba(255,255,255,0.08);">
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.06);">
+      <div id="gx-avatar" style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#0f9d7e,#1847B1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;">?</div>
+      <div style="flex:1;min-width:0;overflow:hidden;">
+        <div id="gx-name" style="font-size:12px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Benutzer</div>
+        <div id="gx-role" style="font-size:9px;font-family:'DM Mono',monospace;color:#0f9d7e;text-transform:uppercase;letter-spacing:0.08em;">–</div>
       </div>
-      <button onclick="logout()" title="Abmelden" style="background:transparent;border:none;cursor:pointer;padding:5px;border-radius:5px;margin-left:auto;opacity:.6" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.6'">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 14H3a1 1 0 01-1-1V3a1 1 0 011-1h3M11 11l3-3-3-3M14 8H6" stroke="rgba(255,255,255,.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <button onclick="logout()" title="Abmelden" style="background:transparent;border:none;cursor:pointer;padding:5px;border-radius:5px;display:flex;align-items:center;opacity:0.6;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.5"><path d="M6 2H2v12h4"/><path d="M10 11l3-3-3-3"/><line x1="13" y1="8" x2="6" y2="8"/></svg>
       </button>
     </div>
   </div>
@@ -457,10 +514,20 @@ function getAuthHeaders() {
     <option value="warn">Warnung</option>
     <option value="crit">Kritisch</option>
   </select>
-  <button class="btn btn-primary" onclick="document.getElementById('add-modal').style.display='flex'" style="margin-left:auto">
-    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v12M2 8h12"/></svg>
-    Asset hinzufügen
-  </button>
+  <div style="display:flex;gap:8px;margin-left:auto;">
+    <button class="btn btn-ghost btn-sm" onclick="exportAssetsPDF()">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h5l4 4v9H4V2z"/><path d="M9 2v4h4"/></svg>
+      PDF
+    </button>
+    <button class="btn btn-ghost btn-sm" onclick="exportAssetsXLSX()">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h12v10H2z"/><path d="M2 7h12M6 3v10"/></svg>
+      Excel
+    </button>
+    <button class="btn btn-primary" onclick="document.getElementById('modal-headline').textContent='Neues Asset';_editAssetId=null;document.getElementById('modal-delete-btn').style.display='none';document.getElementById('add-modal').style.display='flex'">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v12M2 8h12"/></svg>
+      Asset hinzufügen
+    </button>
+  </div>
 </div>
 
 <div class="asset-grid" id="asset-grid">
@@ -469,33 +536,50 @@ function getAuthHeaders() {
 
 <!-- Add Modal -->
 <div id="add-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:center;justify-content:center;">
-  <div style="background:var(--bg2);border-radius:12px;width:480px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.15);">
+  <div style="background:var(--bg2);border-radius:12px;width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.15);">
     <div style="padding:18px 22px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-      <div style="font-size:15px;font-weight:700;color:var(--navy)">Neues Asset</div>
-      <span onclick="document.getElementById('add-modal').style.display='none'" style="cursor:pointer;font-size:20px;color:var(--text3);line-height:1">×</span>
+      <div id="modal-headline" style="font-size:15px;font-weight:700;color:var(--navy)">Neues Asset</div>
+      <span onclick="closeAssetModal()" style="cursor:pointer;font-size:20px;color:var(--text3);line-height:1">×</span>
     </div>
-    <div style="padding:18px 22px;display:grid;gap:14px;">
+    <div style="padding:18px 22px;display:grid;gap:12px;">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div><label style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:5px;">Asset Name</label>
-        <input id="new-name" style="width:100%;padding:8px 11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;font-size:12px;font-family:'DM Sans',sans-serif;outline:none;" placeholder="z.B. PROD-DB-01"></div>
+        <div><label style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:5px;">Asset Name *</label>
+        <input id="new-name" style="width:100%;padding:8px 11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;font-size:12px;outline:none;box-sizing:border-box;" placeholder="z.B. PROD-DB-01"></div>
         <div><label style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:5px;">Typ</label>
-        <select id="new-type" style="width:100%;padding:8px 11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;font-size:12px;font-family:'DM Sans',sans-serif;outline:none;">
+        <select id="new-type" style="width:100%;padding:8px 11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;font-size:12px;outline:none;">
           <option value="server">Server</option><option value="endpoint">Endpoint</option>
-          <option value="cloud">Cloud</option><option value="network">Netzwerk</option><option value="app">Applikation</option>
+          <option value="cloud">Cloud Service</option><option value="network">Netzwerk</option><option value="app">Applikation</option>
         </select></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
         <div><label style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:5px;">Owner</label>
-        <input id="new-owner" style="width:100%;padding:8px 11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;font-size:12px;font-family:'DM Sans',sans-serif;outline:none;" placeholder="z.B. IT-Team"></div>
+        <input id="new-owner" style="width:100%;padding:8px 11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;font-size:12px;outline:none;box-sizing:border-box;" placeholder="z.B. IT-Team"></div>
         <div><label style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:5px;">Kritikalität</label>
-        <select id="new-crit" style="width:100%;padding:8px 11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;font-size:12px;font-family:'DM Sans',sans-serif;outline:none;">
+        <select id="new-crit" style="width:100%;padding:8px 11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;font-size:12px;outline:none;">
           <option value="high">Hoch</option><option value="med">Mittel</option><option value="low">Niedrig</option>
         </select></div>
       </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div><label style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:5px;">IP / Host</label>
+        <input id="new-ip" style="width:100%;padding:8px 11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;font-size:12px;font-family:'DM Mono',monospace;outline:none;box-sizing:border-box;" placeholder="z.B. 10.0.1.10"></div>
+        <div><label style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:5px;">System / OS</label>
+        <input id="new-os" style="width:100%;padding:8px 11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;font-size:12px;outline:none;box-sizing:border-box;" placeholder="z.B. Ubuntu 22.04"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div><label style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:5px;">Letzter Scan</label>
+        <input id="new-scan" type="date" style="width:100%;padding:8px 11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;font-size:12px;outline:none;box-sizing:border-box;"></div>
+        <div><label style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:5px;">Status</label>
+        <select id="new-status" style="width:100%;padding:8px 11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;font-size:12px;outline:none;">
+          <option value="ok">Konform</option><option value="warn">Warnung</option><option value="crit">Kritisch</option>
+        </select></div>
+      </div>
     </div>
-    <div style="padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;">
-      <button class="btn btn-ghost" onclick="document.getElementById('add-modal').style.display='none'">Abbrechen</button>
-      <button class="btn btn-primary" onclick="addAsset()">Speichern</button>
+    <div style="padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:space-between;gap:8px;">
+      <button id="modal-delete-btn" class="btn btn-ghost" style="color:var(--red);border-color:var(--red);display:none;" onclick="deleteAssetFromModal()">Löschen</button>
+      <div style="display:flex;gap:8px;margin-left:auto;">
+        <button class="btn btn-ghost" onclick="closeAssetModal()">Abbrechen</button>
+        <button class="btn btn-primary" id="modal-save-btn" onclick="saveAssetModal()">Speichern</button>
+      </div>
     </div>
   </div>
 </div>
@@ -506,13 +590,7 @@ function getAuthHeaders() {
   <span id="api-msg">Verbinde mit API...</span>
 </div>
 <script>
- : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
-}
+function getAuthHeaders(){const t=localStorage.getItem('gx_token');return t&&t!=='demo_offline'?{'Authorization':'Bearer '+t,'Content-Type':'application/json'}:{'Content-Type':'application/json'};}
 
 const API = 'http://localhost:3000/api/v1';
 function setApiStatus(ok,msg){const dot=document.getElementById('api-dot');const txt=document.getElementById('api-msg');if(dot)dot.style.background=ok?'var(--green)':'var(--red)';if(txt){txt.textContent=msg;txt.style.color=ok?'var(--green)':'var(--text3)';}}
@@ -541,11 +619,11 @@ const TYPE_LABELS = {server:'Server',endpoint:'Endpoint',cloud:'Cloud Service',n
 function renderAssets(assets) {
   const grid = document.getElementById('asset-grid');
   if (!assets.length) {
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text3);font-family:'DM Mono',monospace;font-size:12px;">Keine Assets gefunden</div>';
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text3);font-family:monospace;font-size:12px;">Keine Assets gefunden</div>';
     return;
   }
   grid.innerHTML = assets.map(a => `
-    <div class="asset-card ${a.type}">
+    <div class="asset-card ${a.type}" data-assetid="${a.id}" style="cursor:pointer">
       <div class="asset-header">
         <div class="asset-icon" style="background:var(--bg3)">${TYPE_ICONS[a.type]||'📦'}</div>
         <span class="asset-status status-${a.status}">${a.status==='ok'?'Konform':a.status==='warn'?'Warnung':'Kritisch'}</span>
@@ -605,21 +683,171 @@ function addAsset() {
   updateStats();
 }
 
-// Try API, fall back to demo data
+
+// ── Asset Exports ─────────────────────────────────────────
+function loadScript(src, cb) {
+  if (document.querySelector('script[src="'+src+'"]')) { cb(); return; }
+  const s = document.createElement('script'); s.src = src;
+  s.onload = cb; document.head.appendChild(s);
+}
+
+function exportAssetsPDF() {
+  loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', function() {
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js', function() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+      const now = new Date().toLocaleDateString('de-DE');
+      doc.setFontSize(16); doc.setFont('helvetica','bold');
+      doc.text('Govrix ISMS — Asset & Inventar', 14, 16);
+      doc.setFontSize(9); doc.setFont('helvetica','normal');
+      doc.text('ISO 27001 A.8.1 · Erstellt: ' + now + ' · Gesamt: ' + allAssets.length + ' Assets', 14, 23);
+      const statusLabel = s => s==='ok'?'Konform':s==='warn'?'Warnung':'Kritisch';
+      const critLabel   = c => c==='high'?'Hoch':c==='med'?'Mittel':'Niedrig';
+      const rows = allAssets.map(a => [a.name, TYPE_LABELS[a.type]||a.type, statusLabel(a.status), critLabel(a.criticality), a.owner, a.ip, a.os, formatDate(a.lastScan), a.iso]);
+      doc.autoTable({
+        startY: 28,
+        head: [['Asset', 'Typ', 'Status', 'Kritikalität', 'Owner', 'IP/Host', 'System', 'Letzter Scan', 'ISO']],
+        body: rows,
+        styles: { fontSize: 8, cellPadding: 2 },
+        headStyles: { fillColor: [22, 32, 64], textColor: 255 },
+        alternateRowStyles: { fillColor: [245, 247, 250] },
+        didDrawCell: (data) => {
+          if (data.section === 'body' && data.column.index === 2) {
+            const v = data.cell.raw;
+            const c = v==='Konform'?[56,161,105]:v==='Warnung'?[214,158,46]:[229,62,62];
+            doc.setTextColor(...c);
+            doc.setFontSize(8);
+          }
+        }
+      });
+      doc.save('govrix-assets-' + now.replace(/\./g,'-') + '.pdf');
+    });
+  });
+}
+
+function exportAssetsXLSX() {
+  loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js', function() {
+    const statusLabel = s => s==='ok'?'Konform':s==='warn'?'Warnung':'Kritisch';
+    const critLabel   = c => c==='high'?'Hoch':c==='med'?'Mittel':'Niedrig';
+    const rows = allAssets.map(a => ({
+      'Asset': a.name,
+      'Typ': TYPE_LABELS[a.type]||a.type,
+      'Status': statusLabel(a.status),
+      'Kritikalität': critLabel(a.criticality),
+      'Owner': a.owner,
+      'IP / Host': a.ip,
+      'System / OS': a.os,
+      'Letzter Scan': formatDate(a.lastScan),
+      'ISO-Referenz': a.iso
+    }));
+    const ws = XLSX.utils.json_to_sheet(rows);
+    ws['!cols'] = [{wch:20},{wch:14},{wch:10},{wch:12},{wch:16},{wch:16},{wch:22},{wch:14},{wch:10}];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Assets');
+    const now = new Date().toLocaleDateString('de-DE').replace(/\./g,'-');
+    XLSX.writeFile(wb, 'govrix-assets-' + now + '.xlsx');
+  });
+}
+
+
+// ── Asset Detail / Edit ───────────────────────────────────
+let _editAssetId = null;
+
+document.addEventListener('click', function(ev) {
+  const card = ev.target.closest('[data-assetid]');
+  if (card) openAssetDetail(card.dataset.assetid);
+});
+
+function openAssetDetail(id) {
+  const a = allAssets.find(x => String(x.id) === String(id));
+  if (!a) return;
+  _editAssetId = id;
+  document.getElementById('modal-headline').textContent = 'Asset bearbeiten';
+  document.getElementById('new-name').value   = a.name || '';
+  document.getElementById('new-type').value   = a.type || 'server';
+  document.getElementById('new-owner').value  = a.owner || '';
+  document.getElementById('new-crit').value   = a.criticality || 'med';
+  document.getElementById('new-ip').value     = a.ip || '';
+  document.getElementById('new-os').value     = a.os || '';
+  document.getElementById('new-status').value = a.status || 'ok';
+  const scan = a.lastScan ? new Date(a.lastScan).toISOString().slice(0,10) : '';
+  document.getElementById('new-scan').value   = scan;
+  document.getElementById('modal-delete-btn').style.display = 'inline-flex';
+  document.getElementById('add-modal').style.display = 'flex';
+}
+
+function closeAssetModal() {
+  _editAssetId = null;
+  document.getElementById('modal-headline').textContent = 'Neues Asset';
+  document.getElementById('modal-delete-btn').style.display = 'none';
+  document.getElementById('add-modal').style.display = 'none';
+  ['new-name','new-owner','new-ip','new-os','new-scan'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value = '';
+  });
+}
+
+function saveAssetModal() {
+  const name = document.getElementById('new-name').value.trim();
+  if (!name) { alert('Bitte Asset-Namen eingeben.'); return; }
+  const assetData = {
+    id:          _editAssetId || Date.now(),
+    name,
+    type:        document.getElementById('new-type').value,
+    owner:       document.getElementById('new-owner').value || '—',
+    criticality: document.getElementById('new-crit').value,
+    ip:          document.getElementById('new-ip').value || '—',
+    os:          document.getElementById('new-os').value || '—',
+    status:      document.getElementById('new-status').value,
+    lastScan:    document.getElementById('new-scan').value || null,
+    iso:         'A.8.1',
+  };
+  if (_editAssetId) {
+    const idx = allAssets.findIndex(x => String(x.id) === String(_editAssetId));
+    if (idx !== -1) allAssets[idx] = assetData;
+  } else {
+    allAssets.unshift(assetData);
+  }
+  closeAssetModal();
+  renderAssets(allAssets);
+  updateStats();
+}
+
+function deleteAssetFromModal() {
+  if (!confirm('Asset wirklich löschen?')) return;
+  allAssets = allAssets.filter(x => String(x.id) !== String(_editAssetId));
+  closeAssetModal();
+  renderAssets(allAssets);
+  updateStats();
+}
+
+// Render demo immediately, then try API
 async function loadAssets() {
+  renderAssets(allAssets);
+  updateStats();
   try {
-    await fetch(API+'/health');
-    setApiStatus(true, 'API verbunden · Demo-Assets');
+    const r = await fetch(API+'/health');
+    if (r.ok) setApiStatus(true, 'API verbunden · Demo-Assets');
+    else setApiStatus(false, 'Demo-Daten');
   } catch(e) {
     setApiStatus(false, 'API nicht erreichbar — Demo-Daten');
   }
-  renderAssets(allAssets);
-  updateStats();
 }
 
 loadAssets();
 
 document.addEventListener('click',function(e){const link=e.target.closest('a[href]');if(!link)return;const href=link.getAttribute('href');if(!href||href.startsWith('#')||href.startsWith('http'))return;if(!href.endsWith('.html')&&!href.includes('.html#'))return;e.preventDefault();document.body.classList.add('page-leaving');setTimeout(()=>{window.location.href=href;},140);});
+
+async function updateNavBadge() {
+  try {
+    const r = await fetch((typeof API !== 'undefined' ? API : 'http://localhost:3000/api/v1') + '/risks', {headers: typeof getAuthHeaders === 'function' ? getAuthHeaders() : {}});
+    const arr = JSON.parse(await r.text());
+    const risks = Array.isArray(arr) ? arr : (arr.value || []);
+    const open = risks.filter(function(r){ return r.status !== 'closed' && r.status !== 'accepted'; }).length;
+    const el = document.getElementById('nav-risk-badge');
+    if (el) { el.textContent = open || ''; el.style.display = open ? '' : 'none'; }
+  } catch(e) {}
+}
+updateNavBadge();
 </script>
 </body>
 </html>
