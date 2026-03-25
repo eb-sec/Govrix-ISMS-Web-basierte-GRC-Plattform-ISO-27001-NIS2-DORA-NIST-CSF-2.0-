@@ -20,6 +20,11 @@
 
 ---
 
+
+![Dashboard](https://github.com/user-attachments/assets/239b6e3d-8815-4966-a84a-f177b0ee586a)
+
+
+
 ## 1. Projektübersicht
 
 Govrix ISMS ist eine lokale Informationssicherheits-Management-Plattform die folgende Frameworks unterstützt:
