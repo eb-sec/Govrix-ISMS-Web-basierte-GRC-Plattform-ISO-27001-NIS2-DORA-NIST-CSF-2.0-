@@ -1,135 +1,134 @@
-# Govrix ISMS — Projektdokumentation
+# Govrix ISMS — Project Documentation
 
-> **Version:** 2.1 · **Stand:** März 2026 · **Umgebung:** Lokal / On-Premise
+> **Version:** 2.1 · **Last updated:** March 2026 · **Environment:** Local / On-Premise
 
 ---
 
-## Inhaltsverzeichnis
+## Table of Contents
 
-1. [Projektübersicht](#1-projektübersicht)
-2. [Systemanforderungen](#2-systemanforderungen)
-3. [Abhängigkeiten](#3-abhängigkeiten)
-4. [Startanleitung](#4-startanleitung)
-5. [Zugangsdaten](#5-zugangsdaten)
-6. [Projektstruktur](#6-projektstruktur)
-7. [Verfügbare Seiten](#7-verfügbare-seiten)
-8. [Backend-Architektur](#8-backend-architektur)
-9. [Bekannte Einschränkungen & Workarounds](#9-bekannte-einschränkungen--workarounds)
-10. [Häufige Probleme](#10-häufige-probleme)
+1. [Project Overview](#1-project-overview)
+2. [System Requirements](#2-system-requirements)
+3. [Dependencies](#3-dependencies)
+4. [Getting Started](#4-getting-started)
+5. [Credentials](#5-credentials)
+6. [Project Structure](#6-project-structure)
+7. [Available Pages](#7-available-pages)
+8. [Backend Architecture](#8-backend-architecture)
+9. [Known Limitations & Workarounds](#9-known-limitations--workarounds)
+10. [Troubleshooting](#10-troubleshooting)
 11. [Changelog](#11-changelog)
 
 ---
 
-
 ![Dashboard](https://github.com/user-attachments/assets/239b6e3d-8815-4966-a84a-f177b0ee586a)
 
+---
 
+## 1. Project Overview
 
-## 1. Projektübersicht
+Govrix ISMS is a local Information Security Management platform supporting the following frameworks:
 
-Govrix ISMS ist eine lokale Informationssicherheits-Management-Plattform die folgende Frameworks unterstützt:
-
-- **ISO 27001:2022** — 93 Controls, Compliance-Tracking, SoA-Export
-- **NIST CSF 2.0** — 54 Subcategories mit Score-Karten
-- **NIS2** — EU 2022/2555, 19 Anforderungen mit Status-Tracking
-- **DORA** — EU 2022/2554, 22 Anforderungen
-- **Risikomanagement** — Risikoregister, KI-Analyse via Ollama
-- **CVE-Bewertung & Risikoanalyse** *(NEU v2.1)* — Live-Daten via NVD-API, LLM-Analyse, automatische Risiko-Eintragung
-- **Maßnahmen-Kanban** — Drag & Drop, Framework-Filter, PDF-Export
-- **Audit-Log** — unveränderliches Aktivitätsprotokoll mit old/new-Value-Tracking
-- **Reports & SoA** — PDF- und Excel-Export für alle Frameworks
-- **Trust Center** — öffentliche Compliance-Übersicht
+- **ISO 27001:2022** — 93 controls, compliance tracking, SoA export
+- **NIST CSF 2.0** — 54 subcategories with score cards
+- **NIS2** — EU 2022/2555, 19 requirements with status tracking
+- **DORA** — EU 2022/2554, 22 requirements
+- **Risk Management** — Risk register, AI analysis via Ollama
+- **CVE Assessment & Risk Analysis** *(NEW v2.1)* — Live data via NVD API, LLM analysis, automatic risk entry
+- **Measures Kanban** — Drag & drop, framework filter, PDF export
+- **Audit Log** — Immutable activity log with old/new value tracking
+- **Reports & SoA** — PDF and Excel export for all frameworks
+- **Trust Center** — Public compliance overview
 
 ---
 
-## 2. Systemanforderungen
+## 2. System Requirements
 
-| Komponente | Minimum |
+| Component | Minimum |
 |---|---|
-| Betriebssystem | Windows 10/11, macOS 12+, Linux |
-| RAM | 8 GB (16 GB empfohlen mit Ollama) |
-| Festplatte | 10 GB frei (inkl. Docker Images + Ollama Modell) |
-| Browser | Chrome, Firefox, Edge (aktuell) |
-| Internetverbindung | Für NVD-API (CVE-Seite) empfohlen, nicht zwingend erforderlich |
+| Operating System | Windows 10/11, macOS 12+, Linux |
+| RAM | 8 GB (16 GB recommended with Ollama) |
+| Disk Space | 10 GB free (incl. Docker images + Ollama model) |
+| Browser | Chrome, Firefox, Edge (current versions) |
+| Internet | Recommended for NVD API (CVE page), not strictly required |
 
 ---
 
-## 3. Abhängigkeiten
+## 3. Dependencies
 
-Das Projekt hat genau **zwei externe Abhängigkeiten**:
+The project has exactly **two external dependencies**:
 
-### 3.1 Docker Desktop *(Pflicht)*
+### 3.1 Docker Desktop *(required)*
 
-| Container | Beschreibung | Port |
+| Container | Description | Port |
 |---|---|---|
-| `isms_postgres` | PostgreSQL 16 Datenbank | 5433 |
-| `isms_api` | NestJS REST-API | 3000 |
+| `isms_postgres` | PostgreSQL 16 database | 5433 |
+| `isms_api` | NestJS REST API | 3000 |
 | `isms_nginx` | Frontend (HTML/JS) | 8080 |
-| `isms_pgadmin` | Datenbank-Verwaltung | 5050 |
+| `isms_pgadmin` | Database management | 5050 |
 
 **Download:** https://www.docker.com/products/docker-desktop
 
-### 3.2 Ollama *(nur für KI-Analyse)*
+### 3.2 Ollama *(AI analysis only)*
 
-Läuft außerhalb von Docker direkt auf dem Host-System.
+Runs outside Docker directly on the host system.
 
-- **Empfohlenes Modell:** `gemma3` (~3,3 GB) oder `qwen2.5:3b` (schneller/kleiner)
+- **Recommended model:** `gemma3` (~3.3 GB) or `qwen2.5:3b` (faster/smaller)
 - **Download:** https://ollama.com
 
 ```powershell
 ollama pull gemma3
-# oder:
+# or:
 ollama pull qwen2.5:3b
 ```
 
-> Ohne Ollama greift die CVE-Seite automatisch auf eine regelbasierte Fallback-Analyse zurück.
+> Without Ollama, the CVE page automatically falls back to a rule-based analysis.
 
-### 3.3 Was NICHT benötigt wird
+### 3.3 What is NOT required
 
-- ❌ Node.js / npm (nur für Backend-Entwicklung)
+- ❌ Node.js / npm (only needed for backend development)
 - ❌ Python / Git
-- ❌ Internetverbindung (nach Setup — außer für NVD-API auf der CVE-Seite)
+- ❌ Internet connection (after setup — except for NVD API on the CVE page)
 
 ---
 
-## 4. Startanleitung
+## 4. Getting Started
 
-### Schritt 1 — Erstinstallation (nur einmalig)
+### Step 1 — Initial Setup (once only)
 
 ```powershell
-# 1. Docker Desktop installieren: https://www.docker.com/products/docker-desktop
+# 1. Install Docker Desktop: https://www.docker.com/products/docker-desktop
 
-# 2. Ollama installieren: https://ollama.com
+# 2. Install Ollama: https://ollama.com
 ollama pull gemma3
 ```
 
-### Schritt 2 — Projekt starten (täglich)
+### Step 2 — Start the Project (daily)
 
 ```powershell
-# PowerShell im Projektordner
+# PowerShell in the project folder
 docker compose up -d
 
-# Ollama in separatem Terminal
+# Ollama in a separate terminal
 ollama serve
 ```
 
 **Browser:** http://localhost:8080
 
-### Schritt 3 — Login
+### Step 3 — Login
 
-| Benutzer | E-Mail | Passwort | Rolle |
+| User | E-Mail | Password | Role |
 |---|---|---|---|
 | Admin | admin@govrix.io | Admin1234! | Administrator |
 | CISO | ciso@govrix.io | Govrix2026! | CISO |
 | Analyst | analyst@govrix.io | Govrix2026! | Analyst |
 
-### Projekt stoppen
+### Stop the Project
 
 ```powershell
 docker compose down
 ```
 
-### Datenbank zurücksetzen
+### Reset the Database
 
 ```powershell
 docker compose down -v
@@ -138,20 +137,20 @@ docker compose up -d
 
 ---
 
-## 5. Zugangsdaten
+## 5. Credentials
 
-| Dienst | URL | Zugangsdaten |
+| Service | URL | Credentials |
 |---|---|---|
-| Frontend | http://localhost:8080 | Login-Seite |
+| Frontend | http://localhost:8080 | Login page |
 | API | http://localhost:3000/api/v1 | JWT Bearer Token |
 | pgAdmin | http://localhost:5050 | admin@mustergmbh.de / admin |
 | PostgreSQL | localhost:5433 | isms_user / changeme_in_prod |
-| Ollama | http://localhost:11434 | kein Login |
-| NVD API | https://services.nvd.nist.gov | kein API-Key |
+| Ollama | http://localhost:11434 | no login |
+| NVD API | https://services.nvd.nist.gov | no API key |
 
 ---
 
-## 6. Projektstruktur
+## 6. Project Structure
 
 ```
 Govrix-isms/
@@ -163,17 +162,17 @@ Govrix-isms/
 │   ├── isms-kanban-nis2.html
 │   ├── isms-dora.html
 │   ├── isms-risk-analyzer.html
-│   ├── isms-cve.html            ← NEU v2.1
+│   ├── isms-cve.html            ← NEW v2.1
 │   ├── isms-assets.html
 │   ├── isms-audit.html
 │   ├── isms-reports.html
 │   └── trust.html
 ├── backend/src/
-│   ├── auth/                    # JWT-Auth, Login, Audit
-│   ├── risks/                   # Risikoregister CRUD + Audit
-│   ├── controls/                # ISO/NIST/NIS2 Controls + Audit
-│   ├── audit/                   # Audit-Log Service
-│   └── nvd/                     # NVD-Proxy Controller ← NEU v2.1
+│   ├── auth/                    # JWT auth, login, audit
+│   ├── risks/                   # Risk register CRUD + audit
+│   ├── controls/                # ISO/NIST/NIS2 controls + audit
+│   ├── audit/                   # Audit log service
+│   └── nvd/                     # NVD proxy controller ← NEW v2.1
 ├── database/
 │   ├── 01_schema.sql
 │   └── seed.sql
@@ -183,137 +182,137 @@ Govrix-isms/
 
 ---
 
-## 7. Verfügbare Seiten
+## 7. Available Pages
 
-| Seite | URL | Beschreibung |
+| Page | URL | Description |
 |---|---|---|
-| Dashboard | /isms-dashboard.html | Übersicht, KPIs, Framework-Scores |
-| ISO 27001 | /isms-iso27001.html | 93 Controls, Compliance-Status |
-| NIST CSF 2.0 | /isms-nist.html | 54 Subcategories, Score-Karten |
-| NIS2 / Kanban | /isms-kanban-nis2.html | Maßnahmen-Board |
-| DORA | /isms-dora.html | DORA Compliance-Tracking |
-| Risikomanagement | /isms-risk-analyzer.html | Risikoregister, KI-Analyse |
-| **CVE & Risiko** | **/isms-cve.html** | **CVE-Bewertung, NVD, LLM ← NEU** |
-| Assets & Inventar | /isms-assets.html | Asset-Verwaltung (Demo-Daten) |
-| Audit-Log | /isms-audit.html | Aktivitätsprotokoll |
-| Reports & SoA | /isms-reports.html | PDF/Excel-Export |
-| Trust Center | /trust.html | Öffentliche Compliance-Übersicht |
+| Dashboard | /isms-dashboard.html | Overview, KPIs, framework scores |
+| ISO 27001 | /isms-iso27001.html | 93 controls, compliance status |
+| NIST CSF 2.0 | /isms-nist.html | 54 subcategories, score cards |
+| NIS2 / Kanban | /isms-kanban-nis2.html | Measures board |
+| DORA | /isms-dora.html | DORA compliance tracking |
+| Risk Management | /isms-risk-analyzer.html | Risk register, AI analysis |
+| **CVE & Risk** | **/isms-cve.html** | **CVE assessment, NVD, LLM ← NEW** |
+| Assets & Inventory | /isms-assets.html | Asset management (demo data) |
+| Audit Log | /isms-audit.html | Activity log |
+| Reports & SoA | /isms-reports.html | PDF/Excel export |
+| Trust Center | /trust.html | Public compliance overview |
 
 ---
 
-## 8. Backend-Architektur
+## 8. Backend Architecture
 
-### API-Endpunkte
+### API Endpoints
 
-| Methode | Pfad | Beschreibung |
+| Method | Path | Description |
 |---|---|---|
-| POST | /api/v1/auth/login | JWT-Token |
-| GET | /api/v1/auth/me | Aktueller User |
-| GET | /api/v1/risks | Alle Risiken |
-| POST | /api/v1/risks | Risiko erstellen |
-| PUT | /api/v1/risks/:id | Risiko aktualisieren |
-| GET | /api/v1/audit-log | Audit-Einträge |
-| GET | /api/v1/nvd/cve?id=CVE-YYYY-N | NVD-Proxy: CVE-Daten ← NEU |
-| GET | /api/v1/nvd/search?q=...&severity=HIGH | NVD-Proxy: Suche ← NEU |
+| POST | /api/v1/auth/login | JWT token |
+| GET | /api/v1/auth/me | Current user |
+| GET | /api/v1/risks | All risks |
+| POST | /api/v1/risks | Create risk |
+| PUT | /api/v1/risks/:id | Update risk |
+| GET | /api/v1/audit-log | Audit entries |
+| GET | /api/v1/nvd/cve?id=CVE-YYYY-N | NVD proxy: CVE data ← NEW |
+| GET | /api/v1/nvd/search?q=...&severity=HIGH | NVD proxy: search ← NEW |
 
-### Datenbank (wichtige Tabellen)
+### Database (key tables)
 
-| Tabelle | Beschreibung |
+| Table | Description |
 |---|---|
-| `users` | Benutzerkonten (id, email, role, tenant_id) |
-| `risks` | Risikoregister — `risk_score` ist GENERATED (likelihood × impact) |
-| `audit_log` | Unveränderlich — kein DELETE/UPDATE erlaubt |
+| `users` | User accounts (id, email, role, tenant_id) |
+| `risks` | Risk register — `risk_score` is GENERATED (likelihood × impact) |
+| `audit_log` | Immutable — no DELETE/UPDATE allowed |
 | `iso_controls` | ISO 27001:2022 |
 | `nist_subcategories` | NIST CSF 2.0 |
 | `nis2_requirements` | NIS2 |
 
-### Enum-Werte
+### Enum Values
 
-| Feld | Werte |
+| Field | Values |
 |---|---|
 | `risks.status` | `open`, `in_treatment`, `accepted`, `closed`, `transferred` |
 | `risks.treatment` | `mitigate`, `accept`, `transfer`, `avoid` |
 | `compliance_status` | `not_started`, `in_progress`, `implemented`, `audited`, `not_applicable` |
 | `action_status` | `open`, `in_progress`, `review`, `done` |
 
-### JWT-Sessions
+### JWT Sessions
 
-Nach jedem `docker compose up --build` werden alle Sessions invalidiert (neuer JWT-Secret).
-**Dauerhafter Fix** — in `docker-compose.yml`:
+After every `docker compose up --build`, all sessions are invalidated (new JWT secret).
+**Permanent fix** — in `docker-compose.yml`:
 
 ```yaml
 environment:
-  JWT_SECRET: "dein-fester-secret-hier"
+  JWT_SECRET: "your-fixed-secret-here"
 ```
 
 ---
 
-## 9. Bekannte Einschränkungen & Workarounds
+## 9. Known Limitations & Workarounds
 
-### CVE-Seite — NVD-API nicht erreichbar (CORS)
+### CVE Page — NVD API unreachable (CORS)
 
-Browser blockiert direkte API-Calls von lokalen Dateien.
+Browser blocks direct API calls from local files.
 
-**Option A — NVD-Proxy im Backend deployen:**
+**Option A — Deploy NVD proxy in the backend:**
 ```powershell
 New-Item -ItemType Directory -Force "backend\src\nvd"
 Copy-Item nvd.controller.ts "backend\src\nvd\nvd.controller.ts"
-# In app.module.ts: NvdController importieren und zu controllers[] hinzufügen
+# In app.module.ts: import NvdController and add to controllers[]
 docker compose up -d --build api
 ```
 
-**Option B — Manuell eintragen:** Auf „✏️ Manuell eintragen" klicken — alle CVE-Felder selbst ausfüllen, Analyse (LLM + Risiko) läuft trotzdem vollständig.
+**Option B — Manual entry:** Click "✏️ Enter manually" — fill in all CVE fields yourself; analysis (LLM + risk) still runs fully.
 
-### CVE-Seite — Risiko-POST 401 nach Rebuild
+### CVE Page — Risk POST 401 after rebuild
 
-JWT-Token abgelaufen. Auf **„🔄 Neu einloggen & Risiko speichern"** klicken — das Assessment wird nach dem Login automatisch gespeichert.
+JWT token expired. Click **"🔄 Re-login & save risk"** — the assessment is saved automatically after login.
 
-### CVE-Seite — Risiko-POST 500 (FK-Constraint)
+### CVE Page — Risk POST 500 (FK constraint)
 
 ```powershell
-# Einmalig ausführen:
+# Run once:
 docker exec -i isms_postgres psql -U isms_user -d isms_db -c "ALTER TABLE risks DROP CONSTRAINT IF EXISTS risks_created_by_fkey;"
 ```
 
-Danach den neuen `risks.service.ts` deployen (enthält permanenten Fix mit User-Validierung).
+Then deploy the new `risks.service.ts` (contains permanent fix with user validation).
 
-### Assets-Seite — nur Demo-Daten
+### Assets Page — demo data only
 
-Kein echtes Backend-API für Assets implementiert — alle Daten sind statisch.
+No real backend API implemented for assets — all data is static.
 
-### Audit-Log — ältere Einträge ohne Werte
+### Audit Log — older entries without values
 
-Einträge vor v2.1 haben `old_value = NULL`. Neue Einträge nach Rebuild enthalten vollständige Daten.
+Entries created before v2.1 have `old_value = NULL`. New entries after rebuild contain complete data.
 
 ---
 
-## 10. Häufige Probleme
+## 10. Troubleshooting
 
-### API nicht erreichbar
+### API not reachable
 ```powershell
 docker compose ps
 docker logs isms_api --tail 50
 ```
 
-### KI-Analyse zeigt nur Fallback
+### AI analysis shows fallback only
 ```powershell
-# Ollama testen
+# Test Ollama
 curl http://localhost:11434/api/tags
 ollama list
 ollama pull gemma3
 ```
 
-### CVE lädt nicht / Suche findet nichts
-- Internetzugang prüfen
-- NVD direkt testen: https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2021-44228
-- Bei Firewall/CORS: NVD-Proxy-Controller deployen (siehe Abschnitt 9)
+### CVE not loading / search returns nothing
+- Check internet access
+- Test NVD directly: https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2021-44228
+- If firewall/CORS: deploy NVD proxy controller (see section 9)
 
-### JWT-Secret nach Rebuild finden
+### JWT secret after rebuild
 ```powershell
 docker exec isms_api env | Select-String "JWT"
 ```
 
-### Port bereits belegt
+### Port already in use
 ```powershell
 netstat -ano | findstr :3000
 ```
@@ -322,37 +321,33 @@ netstat -ano | findstr :3000
 
 ## 11. Changelog
 
-### v2.1 — März 2026
+### v2.1 — March 2026
 
-**Neue Features:**
-- **CVE-Bewertung & Risikoanalyse** (`isms-cve.html`)
-  - Live CVE-Daten via NVD-API
-  - CVE-Suche nach Stichwort + Severity-Filter
-  - Strukturiertes Formular: Exponierung, Datenkategorie (DSGVO), Patch-Status, Netzwerkschutz, Zugriffskontrolle, betroffene Nutzer
-  - Ollama LLM-Analyse auf Deutsch (technische Zusammenfassung, Business Impact, Angriffsweg, Management Summary, Maßnahmen, Evidenzen)
-  - Regelbasierter Fallback wenn Ollama offline
-  - Automatische Risiko-Eintragung (ISO A.8.8)
-  - PDF- und Excel-Export (Assessment + Gesamtverlauf)
-  - Manueller Eingabemodus wenn NVD nicht erreichbar
-  - Verlauf mit bis zu 50 Assessments (localStorage)
-  - Re-Login-Flow bei abgelaufener Session mit automatischem Retry
-- **NVD-Proxy Controller** (`nvd.controller.ts`) — löst CORS-Problem
-- **CVE-Link** in Navbar aller Seiten mit „NEU"-Badge
+**New Features:**
+- **CVE Assessment & Risk Analysis** (`isms-cve.html`)
+  - Live CVE data via NVD API
+  - CVE search by keyword + severity filter
+  - Structured form: exposure, data category (GDPR), patch status, network protection, access control, affected users
+  - Ollama LLM analysis (technical summary, business impact, attack vector, management summary, measures, evidence)
+  - Rule-based fallback when Ollama is offline
+  - Automatic risk entry (ISO A.8.8)
+  - PDF and Excel export (assessment + full history)
+  - Manual input mode when NVD is unreachable
+  - History of up to 50 assessments (localStorage)
+  - Re-login flow on expired session with automatic retry
+- **NVD Proxy Controller** (`nvd.controller.ts`) — resolves CORS issue
+- **CVE link** in navbar of all pages with "NEW" badge
 
-**Backend-Fixes:**
-- `audit.service.ts` — eigenständiger Service, `@Inject(DATABASE_POOL)`
-- `auth.service.ts` — Login schreibt Audit-Log mit IP + User-Agent
-- `risks.service.ts` — Audit-Log, `created_by` NULL-safe mit User-Validierung, IP-Normalisierung (`::ffff:` Prefix), `nist_sub_code` aus INSERT entfernt
-- `controls.service.ts` — Audit-Log für ISO/NIST/NIS2 Updates
-- `risks.controller.ts` — `@UseGuards(JwtAuthGuard)`, IP-Extraktion
+**Backend Fixes:**
+- `audit.service.ts` — standalone service, `@Inject(DATABASE_POOL)`
+- `auth.service.ts` — login writes audit log with IP + user agent
+- `risks.service.ts` — audit log, `created_by` NULL-safe with user validation, IP normalization (`::ffff:` prefix), `nist_sub_code` removed from INSERT
+- `controls.service.ts` — audit log for ISO/NIST/NIS2 updates
+- `risks.controller.ts` — `@UseGuards(JwtAuthGuard)`, IP extraction
 
-**Frontend-Fixes:**
-- Audit-Log: liest `old_value`/`new_value` JSONB-Felder
-- Assets-Seite: Layout-Fix (fehlende `>` in `data-assetid`)
+**Frontend Fixes:**
+- Audit log: reads `old_value`/`new_value` JSONB fields
+- Assets page: layout fix (missing `>` in `data-assetid`)
 
-### v2.0 — Februar 2026
-- Kanban-Board, DORA-Seite, Risiko-KI-Analyse, Trust Center, Reports & SoA, Audit-Log-Grundstruktur
-
----
-
-*Govrix ISMS v2.1 · Masterschool Projekt · © 2026*
+### v2.0 — February 2026
+- Kanban board, DORA page, risk AI analysis, Trust Center, Reports & SoA, audit log base structure
