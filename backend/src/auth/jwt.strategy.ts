@@ -1,19 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(config: ConfigService) {
+  constructor(secret?: string) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: config.get<string>('JWT_SECRET') || 'dev_secret_fuer_lokale_entwicklung_32zeichen',
+      secretOrKey: secret || 'govrix-isms-secret-2026-masterschool-fixed',
     });
   }
 
   async validate(payload: any) {
-    return { sub: payload.sub, email: payload.email, role: payload.role, name: payload.name };
+    return {
+      userId: payload.sub,
+      email: payload.email,
+      role: payload.role,
+      name: payload.name,
+      tenant_id: payload.tenant_id,
+    };
   }
 }

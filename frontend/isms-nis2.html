@@ -56,7 +56,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .user-name { font-size: 12px; font-weight: 600; color: #fff; }
 .user-role { font-size: 10px; color: rgba(255,255,255,0.35); font-family: 'DM Mono', monospace; }
 
-.main { margin-left: 220px; width: calc(100vw - 220px); overflow-x: hidden; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+.main { margin-left:260px; width: calc(100vw - 260px); overflow-x: hidden; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
 .topbar { height: 58px; background: var(--bg2); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
 .page-title { font-size: 17px; font-weight: 600; color: var(--navy); }
 .page-sub { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; margin-top: 1px; }
@@ -270,6 +270,92 @@ body { animation: pageFadeIn 0.2s ease both; }
   font-family: 'DM Mono', monospace;
 }
 
+
+/* ===== EVIDENCE MODAL ===== */
+.ev-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:600;align-items:center;justify-content:center}
+.ev-modal-overlay.open{display:flex}
+.ev-modal-box{background:#fff;border-radius:12px;padding:24px;width:520px;max-width:95vw;max-height:88vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.22)}
+.ev-modal-title{font-size:14px;font-weight:700;color:#111;margin-bottom:4px}
+.ev-modal-sub{font-size:11px;color:#888;margin-bottom:16px}
+.ev-list{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;min-height:32px}
+.ev-item{display:flex;align-items:flex-start;gap:8px;background:#f8f9fb;border:1px solid #e5e7eb;border-radius:6px;padding:8px 10px;font-size:12px}
+.ev-item-icon{font-size:15px;flex-shrink:0}
+.ev-item-body{flex:1;min-width:0}
+.ev-item-name a{font-weight:600;color:#4f6ef7;text-decoration:none;word-break:break-all}
+.ev-item-meta{color:#888;font-size:10px;margin-top:2px}
+.ev-item-desc{color:#555;font-size:11px;margin-top:3px;font-style:italic}
+.ev-item-del{color:#e53e3e;cursor:pointer;font-size:13px;flex-shrink:0;opacity:.6;padding:2px 5px;border-radius:3px}
+.ev-item-del:hover{opacity:1;background:#fee}
+.ev-upload-area{border:2px dashed #d1d5db;border-radius:8px;padding:14px;text-align:center;cursor:pointer;background:#fafbfc;transition:.2s}
+.ev-upload-area:hover{border-color:#4f6ef7;background:#f0f4ff}
+.ev-upload-area input{display:none}
+.ev-upload-label{font-size:12px;color:#888;cursor:pointer}
+.ev-upload-label span{color:#4f6ef7;font-weight:600}
+.ev-desc-input{width:100%;border:1px solid #d1d5db;border-radius:6px;padding:6px 10px;font-size:12px;margin-top:8px;font-family:inherit;box-sizing:border-box}
+.ev-add-btn{margin-top:8px;padding:7px 14px;background:#4f6ef7;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;width:100%}
+.ev-add-btn:hover{opacity:.88}
+.ev-close-btn{background:transparent;border:none;font-size:18px;cursor:pointer;color:#888;padding:2px 6px;border-radius:4px;line-height:1}
+.ev-close-btn:hover{background:#f0f0f0}
+.ev-btn{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border:1px solid #e5e7eb;border-radius:5px;font-size:10px;cursor:pointer;background:#fff;color:#555;transition:.15s}
+.ev-btn:hover{border-color:#4f6ef7;color:#4f6ef7;background:#f0f4ff}
+.ev-badge{display:inline-flex;align-items:center;justify-content:center;background:#4f6ef7;color:#fff;font-size:9px;font-weight:700;border-radius:50%;width:14px;height:14px;margin-left:260px;vertical-align:middle}
+
+
+/* ===== EDIT MODAL (ISO-identisch) ===== */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1000;align-items:center;justify-content:center}
+.modal-box{background:#fff;border-radius:12px;padding:28px;width:560px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.18)}
+.evidence-section{margin-top:16px;padding-top:14px;border-top:1px solid #e2e8f0}
+.evidence-section h4{font-size:12px;font-weight:700;color:#718096;text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px}
+.evidence-list{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.evidence-item{display:flex;align-items:flex-start;gap:8px;background:#f8f9fb;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;font-size:12px}
+.evidence-item-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.evidence-item-body{flex:1;min-width:0}
+.evidence-item-name{font-weight:600;color:#2d3748}
+.evidence-item-meta{color:#718096;font-size:10px;margin-top:2px}
+.evidence-item-desc{color:#4a5568;font-size:11px;margin-top:3px;font-style:italic}
+.evidence-item-del{color:#e53e3e;cursor:pointer;font-size:14px;flex-shrink:0;opacity:.6;padding:2px 4px;border-radius:3px}
+.evidence-item-del:hover{opacity:1;background:#fee}
+.evidence-upload-area{border:2px dashed #cbd5e0;border-radius:8px;padding:14px;text-align:center;cursor:pointer;transition:.2s;background:#fafbfc}
+.evidence-upload-area:hover{border-color:#4299e1;background:#ebf8ff}
+.evidence-upload-area input{display:none}
+.evidence-upload-label{font-size:12px;color:#718096;cursor:pointer}
+.evidence-upload-label span{color:#4299e1;font-weight:600}
+.evidence-desc-input{width:100%;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:12px;margin-top:8px;font-family:inherit;color:#2d3748;box-sizing:border-box}
+.evidence-add-btn{margin-top:8px;padding:7px 14px;background:#4f6ef7;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;width:100%}
+.modal-form-row{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.modal-form-row label{font-size:11px;font-weight:600;color:#718096;text-transform:uppercase;letter-spacing:.04em}
+.modal-form-row select,.modal-form-row input[type=date],.modal-form-row textarea{border:1px solid #e2e8f0;border-radius:7px;padding:8px 10px;font-size:13px;font-family:inherit;color:#2d3748;width:100%;box-sizing:border-box}
+.modal-form-row textarea{min-height:80px;resize:vertical}
+.modal-form-row input[type=range]{accent-color:#4f6ef7;width:100%}
+.modal-btn-cancel{background:#edf2f7;border:1px solid #e2e8f0;border-radius:7px;padding:7px 16px;font-size:12px;cursor:pointer;font-family:inherit;color:#4a5568}
+.modal-btn-save{background:#4f6ef7;color:#fff;border:none;border-radius:7px;padding:7px 18px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+.modal-btn-save:hover{opacity:.88}
+
+/* ===== UNIFIED NAVBAR v3 ===== */
+.sidebar{width:260px!important;min-height:100vh;background:#0f1629!important;display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;box-shadow:2px 0 20px rgba(0,0,0,0.25);}
+.logo{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0;}
+.logo-lockup{display:flex;align-items:center;gap:12px;}
+.logo-icon-box{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#1847B1,#0f9d7e);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;}
+.logo-name{font-size:17px;font-weight:700;color:#fff;}
+.logo-sub{font-size:9px;color:rgba(255,255,255,0.35);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.12em;margin-top:1px;}
+.nav{flex:1;overflow-y:auto;padding:10px 0 8px;scrollbar-width:none;}
+.nav::-webkit-scrollbar{display:none;}
+.nav-section{font-size:9px;font-family:'DM Mono',monospace;font-weight:600;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.12em;padding:14px 18px 5px;}
+.nav-item{display:flex!important;align-items:center;gap:11px;padding:9px 18px!important;margin:1px 8px;border-radius:8px;font-size:13px;font-weight:500;color:rgba(255,255,255,0.65);text-decoration:none!important;transition:all .15s;border:none!important;outline:none;}
+.nav-item:hover{background:rgba(255,255,255,0.07)!important;color:#fff!important;}
+.nav-item.active{background:rgba(24,71,177,0.35)!important;color:#fff!important;font-weight:600;}
+.nav-icon{width:20px;height:20px;flex-shrink:0;opacity:0.55;}
+.nav-item:hover .nav-icon,.nav-item.active .nav-icon{opacity:1;}
+.nav-badge{margin-left:auto;min-width:18px;height:18px;background:#e53e3e;color:#fff;border-radius:9px;font-size:9px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;padding:0 5px;}
+.nav-badge:empty{display:none;}
+.sidebar-footer{padding:12px;border-top:1px solid rgba(255,255,255,0.07);flex-shrink:0;}
+.user-card{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.06);}
+.user-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#0f9d7e,#1847B1);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;}
+.user-name{font-size:12px;font-weight:600;color:#fff;}
+.user-role{font-size:9px;font-family:'DM Mono',monospace;color:#0f9d7e;text-transform:uppercase;}
+.logout-btn{background:transparent;border:none;cursor:pointer;padding:6px;border-radius:6px;opacity:0.5;transition:opacity .15s;flex-shrink:0;display:flex;align-items:center;}
+.logout-btn:hover{opacity:1;}
+
 </style>
 <style>
 
@@ -314,79 +400,26 @@ body { animation: pageFadeIn 0.2s ease both; }
 </head>
 <body>
 <aside class="sidebar">
-  <div class="logo">
-    <div class="logo-lockup">
-      <div class="logo-icon-box">GX</div>
-      <div>
-        <div class="logo-name">Govrix</div>
-        <div class="logo-sub">ISMS Platform</div>
-      </div>
-    </div>
-  </div>
-
+  <div class="logo"><div class="logo-lockup"><div class="logo-icon-box">GX</div><div><div class="logo-name">Govrix</div><div class="logo-sub">ISMS Platform</div></div></div></div>
   <nav class="nav">
     <div class="nav-section">Übersicht</div>
-    <a href="isms-dashboard.html" class="nav-item">
-      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
-      Dashboard
-    </a>
+    <a href="isms-dashboard.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H9z"/></svg>Dashboard</a>
     <div class="nav-section">Frameworks</div>
-    <a href="isms-iso27001.html" class="nav-item">
-      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h10M3 8h7M3 13h5"/></svg>
-      ISO 27001:2022
-    </a>
-    <a href="isms-nist.html" class="nav-item">
-      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="8,2 14,6 14,10 8,14 2,10 2,6"/></svg>
-      NIST CSF 2.0
-    </a>
-    <a href="isms-nis2.html" class="nav-item active">
-      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="12" rx="1"/><rect x="9" y="2" width="5" height="12" rx="1"/></svg>
-      NIS2 / Kanban
-    </a>
-    <a href="isms-dora.html" class="nav-item">
-      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2L2 5v4c0 3.5 2.5 6 6 7 3.5-1 6-3.5 6-7V5L8 2z"/></svg>
-      DORA
-    </a>
+    <a href="isms-iso27001.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h10M3 8h7M3 13h5"/></svg>ISO 27001:2022</a>
+    <a href="isms-nist.html" class="nav-item "><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l6 4v4l-6 4-6-4V6z"/></svg>NIST CSF 2.0</a>
+    <a href="isms-nis2.html" class="nav-item active"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l2 5h5l-4 3.5 1.5 5L8 11l-4.5 3.5 1.5-5L1 6h5z"/></svg>NIS2</a>
+    <a href="isms-dora.html" class="nav-item "><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2L2 5v4c0 3.5 2.5 6 6 7 3.5-1 6-3.5 6-7V5L8 2z"/></svg>DORA</a>
     <div class="nav-section">Management</div>
-    <a href="isms-risk-analyzer.html#register" class="nav-item">
-      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l2 5h5l-4 3 1.5 5L8 11l-4.5 3L5 9 1 6h5z"/></svg>
-      Risikomanagement <span class="badge" id="nav-risk-badge"></span>
-    </a>
-    <a href="isms-cve.html" class="nav-item">
-      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg>
-      CVE &amp; Risiko
-    </a>
-    <a href="isms-assets.html" class="nav-item">
-      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
-      Assets & Inventar
-    </a>
-    <a href="isms-kanban-nis2.html#kanban" class="nav-item">
-      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2l-8 8M6 10H3v-3M14 2l-4 12-2-5-5-2 11-5z"/></svg>
-      Maßnahmen <span class="badge" id="nav-action-badge"></span>
-    </a>
-    <a href="isms-audit.html" class="nav-item">
-      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1"/><path d="M5 7h6M5 10h4"/></svg>
-      Audit-Log
-    </a>
+    <a href="isms-risk-analyzer.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l2 5h5l-4 3 1.5 5L8 11l-4.5 3L5 9 1 6h5z"/></svg>Risikomanagement<span class="nav-badge" id="nav-risk-badge"></span></a>
+    <a href="isms-kanban-nis2.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2h5v12H2zM9 2h5v12H9z"/></svg>NIS2 Kanban</a>
+    <a href="isms-cve.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2a6 6 0 100 12A6 6 0 008 2zM8 5v3l2 2"/></svg>CVE &amp; Risiko</a>
+    <a href="isms-assets.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2a3 3 0 100 6 3 3 0 000-6zM2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>Assets &amp; Inventar</a>
+    <a href="isms-audit.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h12v10H2zM5 7h6M5 10h4"/></svg>Audit-Log</a>
     <div class="nav-section">Berichte</div>
-    <a href="isms-reports.html" class="nav-item">
-      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h5l4 4v9H4V2z"/><path d="M9 2v4h4"/></svg>
-      Reports & SoA
-    </a>
-    <a href="trust.html" class="nav-item"><span style="margin-right:6px;">🔒</span>Trust Center</a>
+    <a href="isms-reports.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h5l4 4v9H4V2zM9 2v4h4"/></svg>Reports &amp; SoA</a>
+    <a href="trust.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l1.5 3h3l-2.5 2 1 3L8 8.5 5 10l1-3L3.5 5h3z"/></svg>Trust Center</a>
   </nav>
-  <div style="padding:10px;border-top:1px solid rgba(255,255,255,0.08);">
-    <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.06);">
-      <div id="gx-avatar" style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#0f9d7e,#1847B1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;">?</div>
-      <div style="flex:1;min-width:0;overflow:hidden;">
-        <div id="gx-name" style="font-size:12px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Benutzer</div>
-        <div id="gx-role" style="font-size:9px;font-family:'DM Mono',monospace;color:#0f9d7e;text-transform:uppercase;letter-spacing:0.08em;">–</div>
-      </div>
-      <button onclick="logout()" title="Abmelden" style="background:transparent;border:none;cursor:pointer;padding:5px;border-radius:5px;display:flex;align-items:center;opacity:0.6;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.5"><path d="M6 2H2v12h4"/><path d="M10 11l3-3-3-3"/><line x1="13" y1="8" x2="6" y2="8"/></svg>
-      </button>
-    </div>
-  </div>
+  <div class="sidebar-footer"><div class="user-card"><div class="user-avatar" id="gx-avatar">?</div><div style="flex:1;min-width:0"><div class="user-name" id="gx-name">Benutzer</div><div class="user-role" id="gx-role">–</div></div><button class="logout-btn" onclick="logout()" title="Abmelden"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.5"><path d="M6 2H2v12h4"/><path d="M10 11l3-3-3-3"/><line x1="13" y1="8" x2="6" y2="8"/></svg></button></div></div>
 </aside>
 <script>
 // Auth - runs immediately after sidebar HTML is parsed
@@ -430,7 +463,7 @@ function getAuthHeaders() {
     <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent4),#7c3aed)"></div>
     <div style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:3px">NIS2-Richtlinie</div>
     <div style="font-size:28px;font-weight:800;color:var(--accent4);margin-bottom:4px">50%</div>
-    <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Umsetzungsstand · 2/8 Artikel vollständig</div>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Umsetzungsstand · 7/21 Artikel vollständig</div>
     <div style="padding:10px 14px;background:var(--bg3);border-radius:8px;border-left:3px solid var(--red)">
       <div style="font-size:11px;font-weight:600;color:var(--text);margin-bottom:2px">⚠️ Art. 23 — Meldepflicht</div>
       <div style="font-size:11px;color:var(--text3)">24h-Erstmeldung noch nicht implementiert — kritisch</div>
@@ -440,7 +473,7 @@ function getAuthHeaders() {
     <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent2),var(--accent))"></div>
     <div style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:3px">DORA — Digital Operational Resilience Act</div>
     <div style="font-size:28px;font-weight:800;color:var(--accent2);margin-bottom:4px">44%</div>
-    <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Umsetzungsstand · 0/6 Artikel vollständig</div>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Umsetzungsstand · 7/21 Artikel vollständig</div>
     <div style="padding:10px 14px;background:var(--bg3);border-radius:8px;border-left:3px solid var(--yellow)">
       <div style="font-size:11px;font-weight:600;color:var(--text);margin-bottom:2px">⚠️ Art. 17 — ICT Incident Reporting</div>
       <div style="font-size:11px;color:var(--text3)">Meldeprozess noch nicht dokumentiert</div>
@@ -454,80 +487,177 @@ function getAuthHeaders() {
     <a href="isms-nis2.html" class="section-hint" style="color:var(--accent2);text-decoration:none">→ Maßnahmen anzeigen</a>
   </div>
   <table class="fw-table">
-    <thead><tr><th>Artikel</th><th>Anforderung</th><th>Status</th><th>Fortschritt</th><th>Owner</th></tr></thead>
-    <tbody><tr>
-      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 5</span></td>
-      <td style="font-weight:500;color:var(--text)">Risikorahmen für Cybersicherheit</td>
+    <thead><tr><th>Artikel</th><th>Anforderung</th><th>Status</th><th>Fortschritt</th><th>Owner</th><th style="text-align:center">Nachweise</th></tr></thead>
+    <tbody>
+    <tr data-ref="Art. 2" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 2','Anwendungsbereich & Schwellenwerte')">
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 2</span></td>
+      <td style="font-weight:500;color:var(--text)">Anwendungsbereich & Schwellenwerte</td>
       <td><span class="fw-badge badge-ok">Umgesetzt</span></td>
-      <td><div style="display:flex;align-items:center;gap:8px;">
-        <div class="prog-bar"><div class="prog-fill" style="width:95%;background:var(--green)"></div></div>
-        <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">95%</span>
-      </div></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:95%;background:var(--green)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">95%</span></div></td>
+      <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">Legal</td>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 2','nis2','Anwendungsbereich & Schwellenwerte')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 3" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 3','Wesentliche Einrichtungen (Essential)')">
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 3</span></td>
+      <td style="font-weight:500;color:var(--text)">Wesentliche Einrichtungen (Essential)</td>
+      <td><span class="fw-badge badge-ok">Umgesetzt</span></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:90%;background:var(--green)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">90%</span></div></td>
       <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">CISO</td>
-    </tr><tr>
-      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 6</span></td>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 3','nis2','Wesentliche Einrichtungen (Essential)')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 4" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 4','Wichtige Einrichtungen (Important)')">
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 4</span></td>
+      <td style="font-weight:500;color:var(--text)">Wichtige Einrichtungen (Important)</td>
+      <td><span class="fw-badge badge-ok">Umgesetzt</span></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:90%;background:var(--green)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">90%</span></div></td>
+      <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">CISO</td>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 4','nis2','Wichtige Einrichtungen (Important)')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 5" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 5','Nationales Rahmenwerk')">
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 5</span></td>
       <td style="font-weight:500;color:var(--text)">Nationales Rahmenwerk</td>
       <td><span class="fw-badge badge-ok">Umgesetzt</span></td>
-      <td><div style="display:flex;align-items:center;gap:8px;">
-        <div class="prog-bar"><div class="prog-fill" style="width:90%;background:var(--green)"></div></div>
-        <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">90%</span>
-      </div></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:95%;background:var(--green)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">95%</span></div></td>
       <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">Mgmt</td>
-    </tr><tr>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 5','nis2','Nationales Rahmenwerk')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 6" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 6','Nationales Koordinierungszentrum')">
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 6</span></td>
+      <td style="font-weight:500;color:var(--text)">Nationales Koordinierungszentrum</td>
+      <td><span class="fw-badge badge-ok">Umgesetzt</span></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:85%;background:var(--green)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">85%</span></div></td>
+      <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">CISO</td>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 6','nis2','Nationales Koordinierungszentrum')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 10" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 10','CSIRT — Aufgaben & Anforderungen')">
       <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 10</span></td>
-      <td style="font-weight:500;color:var(--text)">CSIRT & Incident Handling</td>
+      <td style="font-weight:500;color:var(--text)">CSIRT — Aufgaben & Anforderungen</td>
       <td><span class="fw-badge badge-partial">Teilweise</span></td>
-      <td><div style="display:flex;align-items:center;gap:8px;">
-        <div class="prog-bar"><div class="prog-fill" style="width:60%;background:var(--yellow)"></div></div>
-        <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">60%</span>
-      </div></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:60%;background:var(--yellow)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">60%</span></div></td>
       <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">IT-Sec</td>
-    </tr><tr>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 10','nis2','CSIRT — Aufgaben & Anforderungen')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 13" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 13','Zustaendige Behoerden & zentraler Kontakt')">
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 13</span></td>
+      <td style="font-weight:500;color:var(--text)">Zustaendige Behoerden & zentraler Kontakt</td>
+      <td><span class="fw-badge badge-ok">Umgesetzt</span></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:80%;background:var(--green)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">80%</span></div></td>
+      <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">Legal</td>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 13','nis2','Zustaendige Behoerden & zentraler Kontakt')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 14" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 14','Europaeisches Netzwerk der Verbindungsbeauftragten')">
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 14</span></td>
+      <td style="font-weight:500;color:var(--text)">Europaeisches Netzwerk der Verbindungsbeauftragten</td>
+      <td><span class="fw-badge badge-open">Offen</span></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:20%;background:var(--red)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">20%</span></div></td>
+      <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">Mgmt</td>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 14','nis2','Europaeisches Netzwerk der Verbindungsbeauftragten')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 17" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 17','Sicherheitsanforderungen fuer Einrichtungen')">
       <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 17</span></td>
-      <td style="font-weight:500;color:var(--text)">Sicherheitsmaßnahmen KMU</td>
+      <td style="font-weight:500;color:var(--text)">Sicherheitsanforderungen fuer Einrichtungen</td>
       <td><span class="fw-badge badge-partial">Teilweise</span></td>
-      <td><div style="display:flex;align-items:center;gap:8px;">
-        <div class="prog-bar"><div class="prog-fill" style="width:55%;background:var(--yellow)"></div></div>
-        <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">55%</span>
-      </div></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:55%;background:var(--yellow)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">55%</span></div></td>
+      <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">IT-Sec</td>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 17','nis2','Sicherheitsanforderungen fuer Einrichtungen')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 18" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 18','Technische & operative Sicherheitsmassnahmen')">
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 18</span></td>
+      <td style="font-weight:500;color:var(--text)">Technische & operative Sicherheitsmassnahmen</td>
+      <td><span class="fw-badge badge-partial">Teilweise</span></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:50%;background:var(--yellow)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">50%</span></div></td>
       <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">IT-Ops</td>
-    </tr><tr>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 18','nis2','Technische & operative Sicherheitsmassnahmen')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 20" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 20','Schulung der Leitungsebene')">
       <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 20</span></td>
       <td style="font-weight:500;color:var(--text)">Schulung der Leitungsebene</td>
       <td><span class="fw-badge badge-open">Offen</span></td>
-      <td><div style="display:flex;align-items:center;gap:8px;">
-        <div class="prog-bar"><div class="prog-fill" style="width:20%;background:var(--red)"></div></div>
-        <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">20%</span>
-      </div></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:20%;background:var(--red)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">20%</span></div></td>
       <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">HR</td>
-    </tr><tr>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 20','nis2','Schulung der Leitungsebene')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 21" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 21','Cybersicherheitsmassnahmen (10 Bereiche)')">
       <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 21</span></td>
-      <td style="font-weight:500;color:var(--text)">Cybersicherheitsmaßnahmen</td>
+      <td style="font-weight:500;color:var(--text)">Cybersicherheitsmassnahmen (10 Bereiche)</td>
       <td><span class="fw-badge badge-partial">Teilweise</span></td>
-      <td><div style="display:flex;align-items:center;gap:8px;">
-        <div class="prog-bar"><div class="prog-fill" style="width:65%;background:var(--yellow)"></div></div>
-        <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">65%</span>
-      </div></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:65%;background:var(--yellow)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">65%</span></div></td>
       <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">IT-Sec</td>
-    </tr><tr>
-      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 23</span></td>
-      <td style="font-weight:500;color:var(--text)">Meldepflichten (24h/72h)</td>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 21','nis2','Cybersicherheitsmassnahmen (10 Bereiche)')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 22" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 22','Koordinierte Risikoabschaetzung Lieferketten')">
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 22</span></td>
+      <td style="font-weight:500;color:var(--text)">Koordinierte Risikoabschaetzung Lieferketten</td>
       <td><span class="fw-badge badge-open">Offen</span></td>
-      <td><div style="display:flex;align-items:center;gap:8px;">
-        <div class="prog-bar"><div class="prog-fill" style="width:10%;background:var(--red)"></div></div>
-        <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">10%</span>
-      </div></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:10%;background:var(--red)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">10%</span></div></td>
       <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">CISO</td>
-    </tr><tr>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 22','nis2','Koordinierte Risikoabschaetzung Lieferketten')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 23" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 23','Meldepflichten (24h / 72h / 1 Monat)')">
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 23</span></td>
+      <td style="font-weight:500;color:var(--text)">Meldepflichten (24h / 72h / 1 Monat)</td>
+      <td><span class="fw-badge badge-open">Offen</span></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:10%;background:var(--red)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">10%</span></div></td>
+      <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">CISO</td>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 23','nis2','Meldepflichten (24h / 72h / 1 Monat)')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 24" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 24','Datenbank Domaennamen-Registrierung')">
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 24</span></td>
+      <td style="font-weight:500;color:var(--text)">Datenbank Domaennamen-Registrierung</td>
+      <td><span class="fw-badge badge-open">N/A</span></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:0%;background:var(--text3)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">0%</span></div></td>
+      <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">—</td>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 24','nis2','Datenbank Domaennamen-Registrierung')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 25" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 25','Europaeische Zertifizierungsschemata')">
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 25</span></td>
+      <td style="font-weight:500;color:var(--text)">Europaeische Zertifizierungsschemata</td>
+      <td><span class="fw-badge badge-open">Offen</span></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:15%;background:var(--red)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">15%</span></div></td>
+      <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">IT-Sec</td>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 25','nis2','Europaeische Zertifizierungsschemata')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 26" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 26','Informationsaustausch')">
       <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 26</span></td>
       <td style="font-weight:500;color:var(--text)">Informationsaustausch</td>
       <td><span class="fw-badge badge-open">Offen</span></td>
-      <td><div style="display:flex;align-items:center;gap:8px;">
-        <div class="prog-bar"><div class="prog-fill" style="width:5%;background:var(--red)"></div></div>
-        <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">5%</span>
-      </div></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:5%;background:var(--red)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">5%</span></div></td>
       <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">Mgmt</td>
-    </tr></tbody>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 26','nis2','Informationsaustausch')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 27" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 27','Freiwilliger Informationsaustausch')">
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 27</span></td>
+      <td style="font-weight:500;color:var(--text)">Freiwilliger Informationsaustausch</td>
+      <td><span class="fw-badge badge-open">Offen</span></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:5%;background:var(--red)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">5%</span></div></td>
+      <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">Mgmt</td>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 27','nis2','Freiwilliger Informationsaustausch')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 32" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 32','Aufsichtsmassnahmen Wesentliche Einrichtungen')">
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 32</span></td>
+      <td style="font-weight:500;color:var(--text)">Aufsichtsmassnahmen Wesentliche Einrichtungen</td>
+      <td><span class="fw-badge badge-partial">Teilweise</span></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:40%;background:var(--yellow)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">40%</span></div></td>
+      <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">Legal</td>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 32','nis2','Aufsichtsmassnahmen Wesentliche Einrichtungen')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 33" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 33','Aufsichtsmassnahmen Wichtige Einrichtungen')">
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 33</span></td>
+      <td style="font-weight:500;color:var(--text)">Aufsichtsmassnahmen Wichtige Einrichtungen</td>
+      <td><span class="fw-badge badge-partial">Teilweise</span></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:35%;background:var(--yellow)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">35%</span></div></td>
+      <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">Legal</td>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 33','nis2','Aufsichtsmassnahmen Wichtige Einrichtungen')">📎</span></td>
+    </tr>
+    <tr data-ref="Art. 34" style="cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openModal('Art. 34','Sanktionen & Bussgelder (bis 10 Mio. / 2%)')">
+      <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 34</span></td>
+      <td style="font-weight:500;color:var(--text)">Sanktionen & Bussgelder (bis 10 Mio. / 2%)</td>
+      <td><span class="fw-badge badge-ok">Umgesetzt</span></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar"><div class="prog-fill" style="width:70%;background:var(--green)"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">70%</span></div></td>
+      <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">Legal</td>
+      <td style="text-align:center"><span class="ev-btn" onclick="event.stopPropagation();openEvidenceModal('Art. 34','nis2','Sanktionen & Bussgelder (bis 10 Mio. / 2%)')">📎</span></td>
+    </tr>
+    </tbody>
   </table>
 </div>
 
@@ -537,7 +667,7 @@ function getAuthHeaders() {
     <a href="isms-kanban-nis2.html#dora" class="section-hint" style="color:var(--accent2);text-decoration:none">→ DORA-Maßnahmen</a>
   </div>
   <table class="fw-table">
-    <thead><tr><th>Artikel</th><th>Anforderung</th><th>Status</th><th>Fortschritt</th><th>Owner</th></tr></thead>
+    <thead><tr><th>Artikel</th><th>Anforderung</th><th>Status</th><th>Fortschritt</th><th>Owner</th><th style="text-align:center">Nachweise</th></tr></thead>
     <tbody><tr>
       <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 5</span></td>
       <td style="font-weight:500;color:var(--text)">ICT Risk Management Framework</td>
@@ -547,6 +677,8 @@ function getAuthHeaders() {
         <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">70%</span>
       </div></td>
       <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">IT-Ops</td>
+    
+      <td style="text-align:center"><span data-ev-ref="Art. 5" class="ev-btn" onclick="openEvidenceModal('Art. 5','nis2','ICT Risk Management Framework')">📎</span></td>
     </tr><tr>
       <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 11</span></td>
       <td style="font-weight:500;color:var(--text)">Backup & Recovery</td>
@@ -556,6 +688,8 @@ function getAuthHeaders() {
         <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">55%</span>
       </div></td>
       <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">IT-Ops</td>
+    
+      <td style="text-align:center"><span data-ev-ref="Art. 11" class="ev-btn" onclick="openEvidenceModal('Art. 11','nis2','Backup & Recovery')">📎</span></td>
     </tr><tr>
       <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 17</span></td>
       <td style="font-weight:500;color:var(--text)">Incident Meldung</td>
@@ -565,6 +699,8 @@ function getAuthHeaders() {
         <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">15%</span>
       </div></td>
       <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">IT-Sec</td>
+    
+      <td style="text-align:center"><span data-ev-ref="Art. 17" class="ev-btn" onclick="openEvidenceModal('Art. 17','nis2','Incident Meldung')">📎</span></td>
     </tr><tr>
       <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 25</span></td>
       <td style="font-weight:500;color:var(--text)">Drittparteien-Management</td>
@@ -574,6 +710,8 @@ function getAuthHeaders() {
         <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">45%</span>
       </div></td>
       <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">Einkauf</td>
+    
+      <td style="text-align:center"><span data-ev-ref="Art. 25" class="ev-btn" onclick="openEvidenceModal('Art. 25','nis2','Drittparteien-Management')">📎</span></td>
     </tr><tr>
       <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 28</span></td>
       <td style="font-weight:500;color:var(--text)">Konzentrationsrisiko</td>
@@ -583,6 +721,8 @@ function getAuthHeaders() {
         <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">20%</span>
       </div></td>
       <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">Mgmt</td>
+    
+      <td style="text-align:center"><span data-ev-ref="Art. 28" class="ev-btn" onclick="openEvidenceModal('Art. 28','nis2','Konzentrationsrisiko')">📎</span></td>
     </tr><tr>
       <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2)">Art. 30</span></td>
       <td style="font-weight:500;color:var(--text)">Vertragliche Vereinbarungen</td>
@@ -592,6 +732,8 @@ function getAuthHeaders() {
         <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">60%</span>
       </div></td>
       <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">Legal</td>
+    
+      <td style="text-align:center"><span data-ev-ref="Art. 30" class="ev-btn" onclick="openEvidenceModal('Art. 30','nis2','Vertragliche Vereinbarungen')">📎</span></td>
     </tr></tbody>
   </table>
 </div>
@@ -603,14 +745,6 @@ function getAuthHeaders() {
   <span id="api-msg">Verbinde mit API...</span>
 </div>
 <script>
- : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
-} : { 'Content-Type': 'application/json' };
-}
-
 const API = 'http://localhost:3000/api/v1';
 function setApiStatus(ok,msg){const d=document.getElementById('api-dot'),t=document.getElementById('api-msg');if(d)d.style.background=ok?'var(--green)':'var(--red)';if(t){t.textContent=msg;t.style.color=ok?'var(--green)':'var(--text3)';}}
 function formatDate(d){if(!d)return'—';return new Date(d).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit'});}
@@ -621,7 +755,157 @@ async function loadNIS2() {
     setApiStatus(true,'API verbunden · Demo-Scores');
   } catch { setApiStatus(false,'API nicht erreichbar — Demo-Daten'); }
 }
-loadNIS2();
+loadNIS2(); /* ===== MODAL + EVIDENCE ===== */
+var gxCurrentRef = null;
+var gxPendingFiles = [];
+var gxFwType = 'nis2';
+var gxApiEndpoint = '/controls/nis2/';
+
+function openModal(ref, title) {
+  gxCurrentRef = ref;
+  document.getElementById('modal-ref').textContent = ref;
+  document.getElementById('modal-title').textContent = title;
+  var saved = JSON.parse(localStorage.getItem('gx_'+gxFwType+'_'+ref) || '{}');
+  document.getElementById('modal-status').value = saved.status || 'not_started';
+  var pct = saved.completion_pct !== undefined ? saved.completion_pct : 0;
+  document.getElementById('modal-pct').value = pct;
+  document.getElementById('modal-pct-label').textContent = pct + '%';
+  document.getElementById('modal-due').value = saved.due_date || '';
+  document.getElementById('modal-notes').value = saved.notes || '';
+  document.getElementById('modal-msg').textContent = '';
+  document.getElementById('edit-modal').style.display = 'flex';
+  renderEvidenceListModal(ref);
+  gxPendingFiles = [];
+  document.getElementById('evidence-file-input').value = '';
+  document.getElementById('evidence-desc').value = '';
+}
+
+function closeModal() {
+  document.getElementById('edit-modal').style.display = 'none';
+  gxCurrentRef = null;
+  gxPendingFiles = [];
+}
+
+
+function refreshRowsFromStorage(fwType) {
+  document.querySelectorAll('tr[data-ref]').forEach(function(tr) {
+    var ref = tr.getAttribute('data-ref');
+    var saved = JSON.parse(localStorage.getItem('gx_' + fwType + '_' + ref) || 'null');
+    if (!saved) return;
+    var tds = tr.querySelectorAll('td');
+    if (tds.length < 4) return;
+    // td[2] = status badge
+    var s = saved.status || 'not_started';
+    var labels = {implemented:'Umgesetzt',audited:'Auditiert',in_progress:'In Bearbeitung',not_started:'Nicht begonnen',not_applicable:'N/A'};
+    var cls = {implemented:'badge-ok',audited:'badge-ok',in_progress:'badge-partial',not_applicable:'badge-na'}[s] || 'badge-open';
+    tds[2].innerHTML = '<span class="fw-badge ' + cls + '">' + (labels[s]||s) + '</span>';
+    // td[3] = progress bar
+    var pct = parseInt(saved.completion_pct) || 0;
+    var col = pct >= 75 ? 'var(--green)' : pct >= 40 ? 'var(--yellow)' : 'var(--red)';
+    tds[3].innerHTML = '<div style="display:flex;align-items:center;gap:8px">'
+      + '<div class="prog-bar"><div class="prog-fill" style="width:' + pct + '%;background:' + col + '"></div></div>'
+      + '<span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)">' + pct + '%</span>'
+      + '</div>';
+  });
+}
+
+async function saveFromModal() {
+  if (!gxCurrentRef) return;
+  var btn = document.getElementById('modal-save-btn');
+  var msg = document.getElementById('modal-msg');
+  btn.textContent = 'Speichere...'; btn.disabled = true;
+  var body = {
+    status: document.getElementById('modal-status').value,
+    completion_pct: parseInt(document.getElementById('modal-pct').value),
+    due_date: document.getElementById('modal-due').value || null,
+    notes: document.getElementById('modal-notes').value || null
+  };
+  localStorage.setItem('gx_'+gxFwType+'_'+gxCurrentRef, JSON.stringify(body));
+  refreshRowsFromStorage(gxFwType);
+  try {
+    var apiBase = typeof API !== 'undefined' ? API : 'http://localhost:3000/api/v1';
+    var res = await fetch(apiBase + gxApiEndpoint + encodeURIComponent(gxCurrentRef), {
+      method: 'PUT', headers: getAuthHeaders(), body: JSON.stringify(body)
+    });
+    if (!res.ok) throw new Error('API Fehler');
+    msg.textContent = 'Gespeichert ✓'; msg.style.color = '#38a169';
+  } catch(e) {
+    msg.textContent = 'Lokal gespeichert ✓'; msg.style.color = '#38a169';
+  }
+  btn.textContent = 'Speichern'; btn.disabled = false;
+  setTimeout(closeModal, 800);
+}
+
+async function renderEvidenceListModal(ref) {
+  var el = document.getElementById('evidence-list-modal');
+  if (!el) return;
+  el.innerHTML = '<div style="font-size:11px;color:#718096;text-align:center;padding:8px">Lade Nachweise…</div>';
+  try {
+    var apiBase = typeof API !== 'undefined' ? API : 'http://localhost:3000/api/v1';
+    var res = await fetch(apiBase+'/evidence/control/'+encodeURIComponent(ref)+'?type='+gxFwType, {headers:getAuthHeaders()});
+    if (!res.ok) throw new Error();
+    var list = await res.json();
+    if (!list.length) { el.innerHTML='<div style="font-size:11px;color:#718096;text-align:center;padding:6px">Noch keine Nachweise hinterlegt</div>'; return; }
+    el.innerHTML = list.map(function(e) {
+      var icon = e.file_name.endsWith('.pdf')?'📄':e.file_name.match(/\.docx?$/i)?'📝':e.file_name.match(/\.xlsx?$/i)?'📊':e.file_name.match(/\.(png|jpg|jpeg)$/i)?'🖼️':'📎';
+      var kb = e.file_size<1048576?Math.round(e.file_size/1024)+'KB':(e.file_size/1048576).toFixed(1)+'MB';
+      var date = new Date(e.uploaded_at).toLocaleDateString('de-DE');
+      var apiBase2 = typeof API !== 'undefined' ? API : 'http://localhost:3000/api/v1';
+      return '<div class="evidence-item"><div class="evidence-item-icon">'+icon+'</div><div class="evidence-item-body"><div class="evidence-item-name"><a href="'+apiBase2+'/evidence/'+e.id+'/download" target="_blank" style="color:#4f6ef7;text-decoration:none">'+e.file_name+'</a></div><div class="evidence-item-meta">'+date+' · '+kb+'</div>'+(e.description?'<div class="evidence-item-desc">'+e.description+'</div>':'')+' </div><span class="evidence-item-del" onclick="gxDeleteEvidence(\''+e.id+'\')" title="Entfernen">✕</span></div>';
+    }).join('');
+  } catch(e) {
+    el.innerHTML = '<div style="font-size:11px;color:#718096;text-align:center;padding:6px">Nachweise nach Backend-Start verfügbar</div>';
+  }
+}
+
+function handleEvidenceFiles(input) {
+  gxPendingFiles = Array.from(input.files);
+  if (gxPendingFiles.length > 0)
+    document.getElementById('evidence-desc').placeholder = gxPendingFiles.map(function(f){return f.name;}).join(', ')+' — Beschreibung (optional)';
+}
+
+async function addEvidence() {
+  if (!gxCurrentRef) return;
+  if (gxPendingFiles.length === 0) { alert('Bitte zuerst eine Datei auswählen.'); return; }
+  var btn = document.querySelector('.evidence-add-btn');
+  btn.textContent = 'Wird hochgeladen…'; btn.disabled = true;
+  try {
+    var formData = new FormData();
+    gxPendingFiles.forEach(function(f) { formData.append('files', f); });
+    formData.append('controlRef', gxCurrentRef);
+    formData.append('controlType', gxFwType);
+    var desc = document.getElementById('evidence-desc').value.trim();
+    if (desc) formData.append('description', desc);
+    var token = localStorage.getItem('gx_token');
+    var apiBase = typeof API !== 'undefined' ? API : 'http://localhost:3000/api/v1';
+    var res = await fetch(apiBase+'/evidence/upload-multi', {method:'POST', headers:token?{Authorization:'Bearer '+token}:{}, body:formData});
+    if (!res.ok) throw new Error('Upload fehlgeschlagen');
+    gxPendingFiles = [];
+    document.getElementById('evidence-file-input').value = '';
+    document.getElementById('evidence-desc').value = '';
+    document.getElementById('evidence-desc').placeholder = 'Beschreibung (optional)';
+    await renderEvidenceListModal(gxCurrentRef);
+  } catch(e) { alert('Upload-Fehler: '+e.message); }
+  finally { btn.textContent = '+ Nachweis hinzufügen'; btn.disabled = false; }
+}
+
+async function gxDeleteEvidence(id) {
+  if (!confirm('Nachweis wirklich entfernen?')) return;
+  try {
+    var apiBase = typeof API !== 'undefined' ? API : 'http://localhost:3000/api/v1';
+    await fetch(apiBase+'/evidence/'+id, {method:'DELETE', headers:getAuthHeaders()});
+    await renderEvidenceListModal(gxCurrentRef);
+  } catch(e) { alert('Fehler: '+e.message); }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  refreshRowsFromStorage('nis2');
+  var overlay = document.getElementById('edit-modal');
+  if (overlay) overlay.addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+});
+
+loadEvSummary('nis2');
 
 
 document.addEventListener('click', function(e) {
@@ -663,6 +947,206 @@ async function updateNavBadge() {
   } catch(e) {}
 }
 updateNavBadge();
+
 </script>
+<script>
+/* ===== EVIDENCE SYSTEM ===== */
+var evCurrentRef = null;
+var evCurrentType = 'iso';
+var evCurrentTitle = '';
+var evPendingFiles = [];
+var evSummary = {};
+
+function getAuthHeadersEv(){
+  var t = localStorage.getItem('gx_token');
+  return t ? {Authorization:'Bearer '+t} : {};
+}
+
+async function loadEvSummary(type){
+  try{
+    var h = getAuthHeadersEv();
+    h['Content-Type'] = 'application/json';
+    var r = await fetch('http://localhost:3000/api/v1/evidence/summary?type='+type, {headers:h});
+    if(r.ok) evSummary = await r.json();
+  }catch(e){}
+  updateEvBadges();
+}
+
+function openEvidenceModal(ref, type, title){
+  evCurrentRef = ref;
+  evCurrentType = type;
+  evCurrentTitle = title;
+  evPendingFiles = [];
+  document.getElementById('ev-file-input').value = '';
+  document.getElementById('ev-desc').value = '';
+  document.getElementById('ev-modal-title').textContent = '📎 Nachweise — '+ref;
+  document.getElementById('ev-modal-sub').textContent = title;
+  document.getElementById('ev-modal').classList.add('open');
+  renderEvList();
+}
+
+function closeEvidenceModal(){
+  document.getElementById('ev-modal').classList.remove('open');
+  evCurrentRef = null;
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  var overlay = document.getElementById('ev-modal');
+  if(overlay) overlay.addEventListener('click', function(e){ if(e.target===this) closeEvidenceModal(); });
+});
+
+async function renderEvList(){
+  var el = document.getElementById('ev-list');
+  el.innerHTML = '<div style="font-size:11px;color:#888;text-align:center;padding:8px">Lade Nachweise…</div>';
+  try{
+    var h = getAuthHeadersEv();
+    h['Content-Type'] = 'application/json';
+    var r = await fetch('http://localhost:3000/api/v1/evidence/control/'+encodeURIComponent(evCurrentRef)+'?type='+evCurrentType, {headers:h});
+    if(!r.ok) throw new Error('API Fehler '+r.status);
+    var list = await r.json();
+    if(!list.length){ el.innerHTML='<div style="font-size:11px;color:#888;text-align:center;padding:8px">Noch keine Nachweise hinterlegt</div>'; return; }
+    el.innerHTML = list.map(function(e){
+      var icon = e.file_name.match(/\.pdf$/i)?'📄':e.file_name.match(/\.docx?$/i)?'📝':e.file_name.match(/\.xlsx?$/i)?'📊':e.file_name.match(/\.(png|jpg|jpeg)$/i)?'🖼️':'📎';
+      var kb = e.file_size<1048576 ? Math.round(e.file_size/1024)+'KB' : (e.file_size/1048576).toFixed(1)+'MB';
+      var date = new Date(e.uploaded_at).toLocaleDateString('de-DE');
+      return '<div class="ev-item">'+
+        '<div class="ev-item-icon">'+icon+'</div>'+
+        '<div class="ev-item-body">'+
+          '<div class="ev-item-name"><a href="http://localhost:3000/api/v1/evidence/'+e.id+'/download" target="_blank">'+e.file_name+'</a></div>'+
+          '<div class="ev-item-meta">'+date+' · '+kb+' · '+e.uploaded_by+'</div>'+
+          (e.description?'<div class="ev-item-desc">'+e.description+'</div>':'')+
+        '</div>'+
+        '<span class="ev-item-del" data-evid="'+e.id+'" onclick="deleteEvItem(this)" title="Entfernen">✕</span>'+
+      '</div>';
+    }).join('');
+  }catch(e){
+    el.innerHTML='<div style="font-size:11px;color:#c00;text-align:center;padding:8px">Fehler: '+e.message+'</div>';
+  }
+}
+
+function handleEvFiles(input){
+  evPendingFiles = Array.from(input.files);
+  if(evPendingFiles.length){
+    document.getElementById('ev-desc').placeholder = evPendingFiles.map(function(f){return f.name;}).join(', ')+' — Beschreibung (optional)';
+  }
+}
+
+async function addEvidence(){
+  if(!evCurrentRef) return;
+  if(!evPendingFiles.length){ alert('Bitte zuerst eine Datei auswählen.'); return; }
+  var btn = document.querySelector('.ev-add-btn');
+  btn.textContent='Wird hochgeladen…'; btn.disabled=true;
+  try{
+    var fd = new FormData();
+    evPendingFiles.forEach(function(f){ fd.append('files',f); });
+    fd.append('controlRef', evCurrentRef);
+    fd.append('controlType', evCurrentType);
+    var desc = document.getElementById('ev-desc').value.trim();
+    if(desc) fd.append('description', desc);
+    var r = await fetch('http://localhost:3000/api/v1/evidence/upload-multi', {method:'POST', headers:getAuthHeadersEv(), body:fd});
+    if(!r.ok){ var err=await r.json().catch(()=>{}); throw new Error(err?.message||'Upload fehlgeschlagen'); }
+    evPendingFiles=[];
+    document.getElementById('ev-file-input').value='';
+    document.getElementById('ev-desc').value='';
+    document.getElementById('ev-desc').placeholder='Beschreibung des Nachweises (optional)';
+    await loadEvSummary(evCurrentType);
+    await renderEvList();
+  }catch(e){ alert('Upload-Fehler: '+e.message); }
+  finally{ btn.textContent='+ Nachweis hinzufügen'; btn.disabled=false; }
+}
+
+async function deleteEvItem(el){
+  if(!confirm('Nachweis wirklich entfernen?')) return;
+  var id = el.getAttribute('data-evid');
+  try{
+    var h = getAuthHeadersEv(); h['Content-Type']='application/json';
+    var r = await fetch('http://localhost:3000/api/v1/evidence/'+id, {method:'DELETE', headers:h});
+    if(!r.ok) throw new Error('Löschen fehlgeschlagen');
+    await loadEvSummary(evCurrentType);
+    await renderEvList();
+  }catch(e){ alert('Fehler: '+e.message); }
+}
+
+function updateEvBadges(){
+  document.querySelectorAll('[data-ev-ref]').forEach(function(el){
+    var ref = el.getAttribute('data-ev-ref');
+    var count = evSummary[ref]||0;
+    el.innerHTML = count>0
+      ? '📎<span class="ev-badge">'+count+'</span>'
+      : '📎';
+  });
+}
+
+</script>
+
+<!-- Evidence Modal -->
+<div class="ev-modal-overlay" id="ev-modal">
+  <div class="ev-modal-box">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">
+      <div>
+        <div class="ev-modal-title" id="ev-modal-title">Nachweise</div>
+        <div class="ev-modal-sub" id="ev-modal-sub"></div>
+      </div>
+      <button class="ev-close-btn" onclick="closeEvidenceModal()">✕</button>
+    </div>
+    <div class="ev-list" id="ev-list">
+      <div style="font-size:11px;color:#888;text-align:center;padding:8px">Lade…</div>
+    </div>
+    <div class="ev-upload-area" onclick="document.getElementById('ev-file-input').click()">
+      <input type="file" id="ev-file-input" multiple accept=".pdf,.docx,.xlsx,.png,.jpg,.jpeg,.txt,.csv,.zip" onchange="handleEvFiles(this)">
+      <div class="ev-upload-label">📁 <span>Datei auswählen</span> oder hier ablegen<br><small style="font-size:10px;opacity:.7">PDF, Word, Excel, Bild, ZIP · max 25MB</small></div>
+    </div>
+    <input type="text" class="ev-desc-input" id="ev-desc" placeholder="Beschreibung des Nachweises (optional)">
+    <button class="ev-add-btn" onclick="addEvidence()">+ Nachweis hinzufügen</button>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal-box">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+      <span id="modal-ref" style="font-size:11px;font-family:'DM Mono',monospace;color:#718096"></span>
+      <button class="modal-btn-cancel" style="padding:4px 10px;font-size:11px" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modal-title" style="font-size:15px;font-weight:700;color:#2d3748;margin-bottom:18px"></div>
+    <div class="modal-form-row">
+      <label>Status</label>
+      <select id="modal-status">
+        <option value="not_started">Nicht begonnen</option>
+        <option value="in_progress">In Bearbeitung</option>
+        <option value="implemented">Umgesetzt</option>
+        <option value="audited">Auditiert</option>
+        <option value="not_applicable">N/A</option>
+      </select>
+    </div>
+    <div class="modal-form-row">
+      <label>Fortschritt: <span id="modal-pct-label">0%</span></label>
+      <input type="range" id="modal-pct" min="0" max="100" step="5" oninput="document.getElementById('modal-pct-label').textContent=this.value+'%'">
+    </div>
+    <div class="modal-form-row">
+      <label>Fälligkeitsdatum</label>
+      <input type="date" id="modal-due">
+    </div>
+    <div class="modal-form-row">
+      <label>Notizen</label>
+      <textarea id="modal-notes" placeholder="Implementierungsnotizen..."></textarea>
+    </div>
+    <div class="evidence-section">
+      <h4>📎 Nachweise (Evidence)</h4>
+      <div class="evidence-list" id="evidence-list-modal"></div>
+      <div class="evidence-upload-area" onclick="document.getElementById('evidence-file-input').click()">
+        <input type="file" id="evidence-file-input" multiple accept=".pdf,.docx,.xlsx,.png,.jpg,.jpeg,.txt,.csv,.zip" onchange="handleEvidenceFiles(this)">
+        <div class="evidence-upload-label">📁 <span>Datei auswählen</span> oder hier ablegen<br><small style="font-size:10px;opacity:.7">PDF, Word, Excel, Bild, ZIP</small></div>
+      </div>
+      <input type="text" class="evidence-desc-input" id="evidence-desc" placeholder="Beschreibung des Nachweises (optional)">
+      <button class="evidence-add-btn" onclick="addEvidence()">+ Nachweis hinzufügen</button>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px">
+      <span id="modal-msg" style="font-size:11px;align-self:center"></span>
+      <button class="modal-btn-cancel" onclick="closeModal()">Abbrechen</button>
+      <button class="modal-btn-save" id="modal-save-btn" onclick="saveFromModal()">Speichern</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>

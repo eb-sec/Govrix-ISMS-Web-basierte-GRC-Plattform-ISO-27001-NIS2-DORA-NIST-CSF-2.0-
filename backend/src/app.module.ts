@@ -8,6 +8,7 @@ import { ActionsModule } from './actions/actions.module';
 import { AuditModule } from './audit/audit.module';
 import { AuthModule } from './auth/auth.module';
 import { AiModule } from './ai/ai.module';
+import { EvidenceModule } from './evidence/evidence.module';  // ← NEU
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AiModule } from './ai/ai.module';
     AuditModule,
     AuthModule,
     AiModule,
+    EvidenceModule,  // ← NEU
   ],
 })
 export class AppModule {}

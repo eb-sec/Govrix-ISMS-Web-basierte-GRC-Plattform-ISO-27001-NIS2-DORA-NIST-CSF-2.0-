@@ -50,7 +50,7 @@ services:
     environment:
       NODE_ENV: ${NODE_ENV:-development}
       DATABASE_URL: postgresql://isms_user:${DB_PASSWORD:-changeme_in_prod}@postgres:5432/isms_db
-      JWT_SECRET: ${JWT_SECRET:-dev_secret_min_32_chars_change_in_prod}
+      JWT_SECRET: govrix-isms-secret-2026-masterschool-fixed
       JWT_EXPIRY: 8h
       ENTRA_CLIENT_ID: ${ENTRA_CLIENT_ID:-}
       ENTRA_CLIENT_SECRET: ${ENTRA_CLIENT_SECRET:-}
